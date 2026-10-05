@@ -6,3 +6,4 @@ node_modules/
 public/dictionaries/
 src/data/dictionaries.json
 __pycache__/
+src/data/installers.json

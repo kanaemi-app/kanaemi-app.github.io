@@ -2,8 +2,15 @@
 import "../styles/fonts.css";
 import "../styles/landing.css";
 import Demo from "../components/landing/Demo.astro";
+import { byOs, packageLabel, type Installers } from "../lib/installers";
 
-const releases = "https://github.com/kanaemi-app/kanaemi/releases";
+const installers = Object.values(
+  import.meta.glob<Installers>("../data/installers.json", { eager: true, import: "default" }),
+)[0];
+if (!installers) {
+  throw new Error("src/data/installers.json is missing; run `npm run fetch`");
+}
+const packagesByOs = new Map(byOs(installers.packages).map((g) => [g.os, g.packages]));
 const repository = "https://github.com/kanaemi-app/kanaemi";
 const title = "Kanaemi | どの OS でも同じ打ち方の日本語入力";
 const description =
@@ -52,9 +59,9 @@ const variants = [
 ];
 
 const platforms = [
-  { name: "macOS", via: "InputMethodKit", file: ".pkg" },
-  { name: "Windows", via: "Text Services Framework・x64 と arm64", file: ".msi" },
-  { name: "Linux", via: "IBus・GNOME ほか", file: ".deb・.rpm" },
+  { os: "macos", name: "macOS", via: "Apple シリコン・InputMethodKit" },
+  { os: "windows", name: "Windows", via: "Text Services Framework" },
+  { os: "linux", name: "Linux", via: "IBus・GNOME ほか" },
 ];
 ---
 
@@ -104,7 +111,7 @@ const platforms = [
             Kanaemi（かなえみ）は、SKK の打ち方をもとにした日本語入力です。macOS・Windows・Linux で、キーの意味も変換の結果も変わりません。
           </p>
           <div class="actions">
-            <a class="button is-primary" href={releases}>ダウンロード</a>
+            <a class="button is-primary" href="#install">ダウンロード</a>
             <a class="button" href="/docs/">打ち方を読む</a>
           </div>
         </div>
@@ -187,10 +194,10 @@ const platforms = [
         </ul>
       </section>
 
-      <section class="platforms" aria-labelledby="platforms-title">
+      <section class="platforms" id="install" aria-labelledby="platforms-title">
         <h2 id="platforms-title">インストール</h2>
         <p class="section-lede">
-          OS ごとのふつうの入れ方で配っています。入れたあと、入力ソースに Kanaemi を足してください。辞書は別に置きます。
+          OS ごとのふつうの入れ方で配っています。入れたあと、入力ソースに Kanaemi を足してください。辞書は、設定アプリから入れます。
         </p>
         <ul class="platform-list">
           {
@@ -198,14 +205,39 @@ const platforms = [
               <li>
                 <h3>{p.name}</h3>
                 <p class="via">{p.via}</p>
-                <p class="file">{p.file}</p>
+                {(packagesByOs.get(p.os) ?? []).length > 0 && (
+                  <ul class="downloads">
+                    {(packagesByOs.get(p.os) ?? []).map((pkg) => (
+                      <li>
+                        <a href={pkg.url} title={pkg.file}>
+                          {packageLabel(pkg)}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {new Set((packagesByOs.get(p.os) ?? []).map((pkg) => pkg.arch)).size > 1 && (
+                  <p class="choose">
+                    <a href="/docs/install/#どれを選ぶか">どれを選ぶか分からないとき</a>
+                  </p>
+                )}
               </li>
             ))
           }
         </ul>
+        {
+          installers.version === null ? (
+            <p class="section-lede">
+              まだリリースしていません。<a href={installers.releases}>GitHub のリリース</a> を見てください。
+            </p>
+          ) : (
+            <p class="section-lede">
+              Kanaemi <a href={`${installers.releases}/tag/${installers.version}`}>{installers.version}</a> のインストーラーです。
+            </p>
+          )
+        }
         <div class="actions">
-          <a class="button is-primary" href={releases}>リリースから取ってくる</a>
-          <a class="button" href="/docs/install/">入れ方を読む</a>
+          <a class="button is-primary" href="/docs/install/">入れ方を読む</a>
           <a class="button" href="/docs/dictionaries/">辞書を入れる</a>
         </div>
       </section>

@@ -43,6 +43,7 @@ scripts/
 ├── guide/                     # draws public/guide
 ├── sync-config.sh             # copies the settings template
 ├── fetch_dictionaries.py      # fetches the latest kanaemi-dict release (runs before dev and build)
+├── fetch_installers.py        # reads the catalog of Kanaemi's latest release (runs before dev and build)
 └── check-links.py             # checks every internal link and #fragment in dist/
 ```
 
@@ -62,6 +63,12 @@ The usage illustrations in `public/guide/` show the default keys too. Change `sc
 ## The official dictionaries
 
 The site serves the dictionaries of the latest [kanaemi-dict](https://github.com/kanaemi-app/kanaemi-dict) release itself. `scripts/fetch_dictionaries.py` runs before `npm run dev` and `npm run build`: it reads the release's catalog (`index.json`, the one the settings app of Kanaemi reads), downloads the zips into `public/dictionaries/`, checks their files against the catalog's SHA-256, and describes them, with their Japanese labels, in `src/data/dictionaries.json`. Both are generated and not committed. Without the network, the files fetched before are used; set `KANAEMI_DICT_RELEASE` to fetch from another release URL.
+
+## The installers
+
+`scripts/fetch_installers.py` reads the catalog (`index.json`) of Kanaemi's latest release into `src/data/installers.json`, from which the landing page and `/docs/install/` link each installer directly on GitHub, named by OS and CPU. The installers themselves are not copied. A release without a catalog counts as none, and the pages then say no release is out yet.
+
+The releases of Kanaemi and kanaemi-dict run the deploy workflow (`workflow_dispatch`) once their files are attached, so the site reads the new catalogs right away.
 
 ## Writing the documentation
 

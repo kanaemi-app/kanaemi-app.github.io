@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "fetch": "python3 scripts/fetch_dictionaries.py",
+    "fetch": "python3 scripts/fetch_dictionaries.py && python3 scripts/fetch_installers.py",
     "predev": "npm run fetch",
     "dev": "astro dev",
     "prebuild": "npm run fetch",

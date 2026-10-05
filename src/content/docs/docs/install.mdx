@@ -4,15 +4,26 @@ description: OS ごとのインストーラーで Kanaemi を入れ、入力ソ�
 ---
 
 import { Steps, Tabs, TabItem } from "@astrojs/starlight/components";
+import InstallerDownloads from "../../../components/InstallerDownloads.astro";
 
-Kanaemi は、OS ごとのふつうの入れ方（インストーラーやパッケージ）で配っています。[GitHub のリリース](https://github.com/kanaemi-app/kanaemi/releases) から、自分の OS のファイルを取ってきてください。
+Kanaemi は、OS ごとのふつうの入れ方（インストーラーやパッケージ）で配っています。自分の OS と CPU に合うファイルをダウンロードしてください。macOS 向けは Apple シリコンの Mac だけで、Intel の Mac 向けはありません。
 
-| OS | ファイル |
-| --- | --- |
-| macOS | `Kanaemi-<版>.pkg` |
-| Windows | `Kanaemi-<版>-x64.msi`・`Kanaemi-<版>-arm64.msi` |
-| Linux（Debian・Ubuntu） | `.deb` |
-| Linux（Fedora など） | `.rpm` |
+<InstallerDownloads />
+
+## どれを選ぶか
+
+Windows と Linux は、パソコンの CPU によってファイルが分かれています。ほとんどのパソコンは「Intel・AMD の CPU」です。Snapdragon などの Arm の CPU を積んだパソコンだけ、「Arm の CPU」を選んでください。
+
+どちらか分からないときは、次の場所で確かめられます。
+
+| OS | 確かめる場所 | Intel・AMD の CPU | Arm の CPU |
+| --- | --- | --- | --- |
+| Windows | 「設定 › システム › バージョン情報」の「システムの種類」 | 「x64 ベース プロセッサ」 | 「ARM ベース プロセッサ」 |
+| Linux | ターミナルで `uname -m` | `x86_64` | `aarch64` |
+
+Mac は、メニューバーの Apple メニューの「この Mac について」で確かめられます。「チップ」に「Apple M1」などと出ていれば Apple シリコンです。「プロセッサ」に Intel と出る Mac では、Kanaemi は使えません。
+
+## 入れて、入力ソースに足す
 
 入れただけでは使えません。どの OS でも、入れたあとに入力ソース（キーボード）として足します。
 

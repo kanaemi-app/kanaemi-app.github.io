@@ -1,0 +1,68 @@
+---
+/**
+ * The installers of Kanaemi's latest release, from its catalog, linked
+ * directly on GitHub and named by OS and CPU rather than by file name.
+ */
+import { byOs, packageLabel, type Installers } from "../lib/installers";
+
+const found = Object.values(import.meta.glob<Installers>("../data/installers.json", { eager: true, import: "default" }));
+if (found.length === 0) {
+  throw new Error("src/data/installers.json is missing; run `npm run fetch`");
+}
+const installers = found[0];
+const groups = byOs(installers.packages);
+const size = (bytes: number) => `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+---
+
+{
+  installers.version === null ? (
+    <p>
+      Kanaemi はまだリリースしていません。<a href={installers.releases}>GitHub のリリース</a> を見てください。
+    </p>
+  ) : (
+    <>
+      <table>
+        <thead>
+          <tr>
+            <th>OS</th>
+            <th>ダウンロード</th>
+          </tr>
+        </thead>
+        <tbody>
+          {groups.map((g) => (
+            <tr>
+              <td>{g.label}</td>
+              <td>
+                {g.packages.map((p) => (
+                  <span class="installer">
+                    <a href={p.url} title={p.file}>
+                      {packageLabel(p)}
+                    </a>
+                    <span class="installer-size">{size(p.size)}</span>
+                  </span>
+                ))}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="installer-release">
+        Kanaemi <a href={`${installers.releases}/tag/${installers.version}`}>{installers.version}</a> のインストーラーです。
+      </p>
+    </>
+  )
+}
+
+<style>
+  .installer {
+    display: block;
+  }
+  .installer-size,
+  .installer-release {
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-3);
+  }
+  .installer-size {
+    margin-inline-start: 0.6em;
+  }
+</style>

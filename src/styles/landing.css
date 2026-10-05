@@ -361,7 +361,7 @@ main h2 {
   margin: 2rem 0 0;
   padding: 0;
 }
-.platform-list li {
+.platform-list > li {
   padding: 1.25rem 1.5rem;
   border-radius: 1.25rem;
   background: var(--wash);
@@ -374,9 +374,18 @@ main h2 {
   color: var(--muted);
   font-size: 0.95rem;
 }
-.platform-list .file {
-  font-family: var(--kanaemi-font-mono);
-  font-size: 0.875rem;
+.platform-list .downloads {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  font-size: 0.95rem;
+}
+.platform-list .downloads a {
+  font-weight: 700;
+}
+.platform-list .choose {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
 }
 
 /* The illustrations are for handing out, so the page lists them as links
