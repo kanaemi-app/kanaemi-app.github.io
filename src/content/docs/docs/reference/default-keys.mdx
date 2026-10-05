@@ -1,0 +1,36 @@
+---
+title: 既定のキー
+description: 設定を書かないときの、場面ごとのキーの割り当て。
+---
+
+import DefaultKeys from "../../../../components/DefaultKeys.astro";
+
+設定を書かないときの割り当てです。この表は、Kanaemi の設定ファイルのひな形をもとにしています。変え方は [キーバインド](/docs/settings/keys/) を見てください。
+
+`Cmd` は Windows と Linux では <kbd>Win</kbd> キー、`Option` は Windows と Linux では <kbd>Alt</kbd> キーです。
+
+## 読みを打っているとき
+
+<DefaultKeys scene="reading" />
+
+## 候補を選んでいるとき
+
+<DefaultKeys scene="candidates" />
+
+## 語を登録しているとき
+
+<DefaultKeys scene="registration" />
+
+## かなモードで何も打っていないとき
+
+<DefaultKeys scene="kana" />
+
+## ABC モードで何も打っていないとき
+
+<DefaultKeys scene="abc" />
+
+## ふだん
+
+何も打っていないとき、押したキーを置き換えてアプリに送ります。
+
+<DefaultKeys scene="application" />

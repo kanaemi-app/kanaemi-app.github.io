@@ -1,0 +1,87 @@
+---
+title: インストール
+description: OS ごとのインストーラーで Kanaemi を入れ、入力ソースに足す。
+---
+
+import { Steps, Tabs, TabItem } from "@astrojs/starlight/components";
+
+Kanaemi は、OS ごとのふつうの入れ方（インストーラーやパッケージ）で配っています。[GitHub のリリース](https://github.com/kanaemi-app/kanaemi/releases) から、自分の OS のファイルを取ってきてください。
+
+| OS | ファイル |
+| --- | --- |
+| macOS | `Kanaemi-<版>.pkg` |
+| Windows | `Kanaemi-<版>-x64.msi`・`Kanaemi-<版>-arm64.msi` |
+| Linux（Debian・Ubuntu） | `.deb` |
+| Linux（Fedora など） | `.rpm` |
+
+入れただけでは使えません。どの OS でも、入れたあとに入力ソース（キーボード）として足します。
+
+<Tabs syncKey="os">
+<TabItem label="macOS">
+
+<Steps>
+
+1. `Kanaemi-<版>.pkg` を開き、インストーラーに従って入れる。
+
+2. 「システム設定 › キーボード › 入力ソース」の「編集…」を開き、「＋」から「日本語」の下にある Kanaemi を足す。
+
+   一覧に出てこないときは、[困ったとき](/docs/troubleshooting/#macos-で入力ソースの一覧に出ない) を見てください。
+
+3. メニューバーの入力メニューで Kanaemi を選ぶ。
+
+</Steps>
+
+Kanaemi がアプリにキーを送る機能（[ふだんの置き換え](/docs/settings/keys/#ふだん) など）には、アクセシビリティの許可が要ります。使うときは「システム設定 › プライバシーとセキュリティ › アクセシビリティ」で Kanaemi を許可してください。
+
+</TabItem>
+<TabItem label="Windows">
+
+<Steps>
+
+1. 自分のマシンに合う `.msi`（ふつうは x64、Arm のマシンなら arm64）を開き、インストーラーに従って入れる。
+
+2. 「設定 › 時刻と言語 › 言語と地域」で日本語の「言語のオプション」を開き、「キーボードの追加」から Kanaemi を足す。
+
+3. タスクバーの入力インジケーター（<kbd>Win</kbd>＋<kbd>Space</kbd>）で Kanaemi を選ぶ。
+
+</Steps>
+
+設定アプリは、スタートメニューの「Kanaemi Settings」から開けます。
+
+</TabItem>
+<TabItem label="Linux">
+
+<Steps>
+
+1. パッケージを入れる。
+
+   ```sh
+   # Debian・Ubuntu
+   sudo apt install ./kanaemi_*.deb
+
+   # Fedora など
+   sudo dnf install ./kanaemi-*.rpm
+   ```
+
+2. GNOME なら、「設定 › キーボード › 入力ソース」の「＋」から「日本語」の下にある Kanaemi を足す。ほかのデスクトップでは、IBus の設定（`ibus-setup`）から足す。
+
+3. 入力ソースを Kanaemi に切り替える。
+
+</Steps>
+
+X11 の GTK3 のアプリでは、IBus の入力モジュール（`ibus-gtk3`）が入っていないと、キーが Kanaemi に届きません。
+
+</TabItem>
+</Tabs>
+
+## 次に
+
+Kanaemi は辞書がなくても動きますが、変換しても候補が出ません。[辞書を入れる](/docs/dictionaries/) に進んでください。
+
+## 消すには
+
+- macOS：入力ソースから Kanaemi を外し、`/Library/Input Methods/Kanaemi.app` を消す（`sudo rm -rf "/Library/Input Methods/Kanaemi.app"`）。
+- Windows：「設定 › アプリ」から Kanaemi をアンインストールする。
+- Linux：入れたときと同じパッケージマネージャーで消す（`sudo apt remove kanaemi` など）。
+
+どの OS でも、[設定のフォルダ](/docs/settings/folder/) は消さずに残ります。設定や登録した語ごと消すときは、このフォルダも消してください。

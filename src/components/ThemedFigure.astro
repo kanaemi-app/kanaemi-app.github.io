@@ -1,0 +1,18 @@
+---
+interface Props {
+  /** File name under public/guide without the extension; the `-dark` pair must exist. */
+  name: string;
+  alt: string;
+  caption?: string;
+  width?: number;
+  height?: number;
+}
+
+const { name, alt, caption, width = 1200, height = 675 } = Astro.props;
+---
+
+<figure class="figure-themed">
+  <img class="on-light" src={`/guide/${name}.svg`} alt={alt} width={width} height={height} loading="lazy" />
+  <img class="on-dark" src={`/guide/${name}-dark.svg`} alt={alt} width={width} height={height} loading="lazy" />
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>

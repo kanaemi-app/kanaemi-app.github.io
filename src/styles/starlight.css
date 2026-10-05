@@ -1,0 +1,101 @@
+/* Starlight's palette, rebuilt from the brand colours (kanaemi-brand README):
+   ink #1D2433 / #E8EAF0, smile #D9502E / #F2704B, auxiliary #5A6272 / #A3AAB8.
+   Starlight names its scale from the dark theme, so in light mode
+   --sl-color-white is the ink and --sl-color-black is the paper. */
+:root {
+  --sl-font: var(--kanaemi-font-body);
+  --sl-font-mono: var(--kanaemi-font-mono);
+
+  --sl-color-accent-low: #4a2a26;
+  --sl-color-accent: #f2704b;
+  --sl-color-accent-high: #ffd3c4;
+  --sl-color-white: #e8eaf0;
+  --sl-color-gray-1: #d3d7e0;
+  --sl-color-gray-2: #a3aab8;
+  --sl-color-gray-3: #7d8596;
+  --sl-color-gray-4: #555d6e;
+  --sl-color-gray-5: #3a4252;
+  --sl-color-gray-6: #262e3e;
+  --sl-color-black: #1d2433;
+}
+
+:root[data-theme="light"] {
+  --sl-color-accent-low: #fbe1d8;
+  --sl-color-accent: #c4441f;
+  --sl-color-accent-high: #7a2a13;
+  --sl-color-white: #1d2433;
+  --sl-color-gray-1: #2c3444;
+  --sl-color-gray-2: #474f60;
+  --sl-color-gray-3: #5a6272;
+  --sl-color-gray-4: #8a91a0;
+  --sl-color-gray-5: #c8ccd5;
+  --sl-color-gray-6: #eef0f4;
+  --sl-color-gray-7: #f6f7f9;
+  --sl-color-black: #ffffff;
+}
+
+.sl-markdown-content {
+  line-height: 1.85;
+}
+
+.sl-markdown-content :is(h1, h2, h3, h4),
+h1#_top {
+  word-break: auto-phrase;
+  text-wrap: balance;
+  font-family: var(--kanaemi-font-display);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* Japanese runs on longer lines than Latin at the same width; keep prose to
+   roughly forty full-width characters. */
+.sl-markdown-content > :is(p, ul, ol) {
+  max-width: 42em;
+}
+
+.sl-markdown-content kbd {
+  padding: 0.05em 0.45em;
+  border: 1.5px solid var(--sl-color-gray-4);
+  border-bottom-width: 3px;
+  border-radius: 0.4em;
+  font-family: var(--kanaemi-font-display);
+  font-size: 0.85em;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  color: var(--sl-color-white);
+  background: var(--sl-color-black);
+}
+
+/* The preedit as Kanaemi draws it: marks as text, no decoration besides the
+   dotted underline the illustrations use. */
+.preedit {
+  font-weight: 700;
+  border-bottom: 2px dotted currentColor;
+  padding-bottom: 0.05em;
+}
+.preedit.is-candidate {
+  color: var(--sl-color-accent);
+}
+
+/* Illustrations come as a light and a dark pair; show the one matching the
+   site's own theme, not the OS's. */
+.figure-themed {
+  margin-block: 1.5rem;
+}
+.figure-themed img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  border: 1px solid var(--sl-color-gray-5);
+}
+:root[data-theme="light"] .figure-themed .on-dark,
+:root:not([data-theme="light"]) .figure-themed .on-light {
+  display: none;
+}
+.figure-themed figcaption {
+  margin-top: 0.5rem;
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-3);
+}

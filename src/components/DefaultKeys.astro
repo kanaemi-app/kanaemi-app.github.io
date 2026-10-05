@@ -1,0 +1,65 @@
+---
+import template from "../data/config.toml?raw";
+import { functionAnchor, keyLabel, parseDefaultKeys } from "../lib/default-keys";
+
+interface Props {
+  /** The `[keys.<scene>]` table to show. */
+  scene: string;
+}
+
+const found = parseDefaultKeys(template).find((s) => s.scene === Astro.props.scene);
+if (!found) {
+  throw new Error(`the settings template has no [keys.${Astro.props.scene}]`);
+}
+const { scene, title, bindings } = found;
+---
+
+<p>{title}。設定ファイルでは <code>[keys.{scene}]</code>。</p>
+<table>
+  <thead>
+    <tr>
+      <th>{scene === "application" ? "送るキー" : "機能"}</th>
+      <th>キー</th>
+    </tr>
+  </thead>
+  <tbody>
+    {
+      bindings.map(({ action, keys }) => (
+        <tr>
+          <td>
+            {action.startsWith("@") ? (
+              <a href={`/docs/reference/functions/#${functionAnchor(action)}`}>
+                <code>{action}</code>
+              </a>
+            ) : (
+              <code>{keyLabel(action).join("＋")}</code>
+            )}
+          </td>
+          <td class="caps">
+            {keys.map((key) => (
+              <span class="chord" title={key}>
+                {keyLabel(key).map((cap, i) => (
+                  <>
+                    {i > 0 && "＋"}
+                    <kbd>{cap}</kbd>
+                  </>
+                ))}
+              </span>
+            ))}
+          </td>
+        </tr>
+      ))
+    }
+  </tbody>
+</table>
+
+<style>
+  .caps {
+    line-height: 2.2;
+  }
+  .chord {
+    display: inline-block;
+    margin-inline-end: 0.9em;
+    white-space: nowrap;
+  }
+</style>

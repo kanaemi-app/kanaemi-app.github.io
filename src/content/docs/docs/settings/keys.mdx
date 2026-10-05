@@ -1,0 +1,147 @@
+---
+title: キーバインド
+description: 場面ごとに、押したキーへ機能を割り当てる。修飾キーの単独押し、押さえたまま、ふだんの置き換え。
+---
+
+import ThemedFigure from "../../../../components/ThemedFigure.astro";
+
+Kanaemi のキーは、すべて設定で変えられます。修飾キーの単独押しも含めて、どのキーの割り当ても同じように外したり、別の機能に付け替えたりできます。
+
+## 書き方
+
+[設定ファイル](/docs/settings/config/) の `[keys.<場面>]` に、`"押したキー" = "@機能"` と書きます。書いた割り当ては既定の割り当てに足され、同じキーなら置き換わります。`"@none"` は割り当てを外します。
+
+```toml
+[keys.reading]
+"ctrl+space" = "@next"   # 足す
+"shift+space" = "@none"  # 外す
+```
+
+### 場面
+
+| 場面 | いつ |
+| --- | --- |
+| `reading` | 読みを打っているとき |
+| `candidates` | 候補を選んでいるとき |
+| `registration` | 語を登録しているとき（登録する文字列を打っているとき） |
+| `kana` | かなモードで、何も打っていないとき |
+| `abc` | ABC モードで、何も打っていないとき |
+| `application` | ふだん。何も打っていないときに、押したキーを別のキーに置き換えて送る（[下を見る](#ふだん)） |
+
+場面に合わない機能は書けません。どの場面でどの機能が使えるかは [機能](/docs/reference/functions/) にあります。
+
+### キーの名前
+
+- 1 文字のキー：`"a"`・`"0"`・`";"`
+- 名前のあるキー：`space`・`enter`・`esc`・`backspace`・`delete`・`left`・`right`・`up`・`down`・`home`・`end`・`f1`〜`f12`・`eisu`（英数）・`kana`（かな）・`henkan`（変換）・`muhenkan`（無変換）
+- 修飾キーとの組み合わせ：`+` でつなぐ。修飾キーは `ctrl`・`cmd`・`alt`・`shift`（`"ctrl+h"`・`"shift+space"`）
+- 左右の修飾キーそのもの：`left-shift`・`right-shift`・`left-ctrl`・`right-ctrl`・`left-cmd`・`right-cmd`・`left-alt`・`right-alt`
+
+`cmd` は Windows と Linux では <kbd>Win</kbd> キー、`alt` は macOS では <kbd>Option</kbd> です。
+
+## 修飾キー
+
+Shift・Ctrl・Cmd（Win）・Option（Alt）は、左右それぞれに、押したときと単独押しとで別々に機能を割り当てられます。
+
+- `left-shift` のように書くと、押したときに働きます。
+- `left-shift#tap` のように `#tap` を付けると、単独押しで働きます。単独押しは、ほかの修飾キーを押さえずに押し、ほかのキーを押さずに離したときです。
+- 押してから離すまでが `tap_timeout_ms`（既定は 300 ミリ秒）を超えたら、単独押しになりません。
+- どちらの割り当てが働いても、キー自体はアプリにも渡ります。
+
+既定では、左の Shift の単独押しが ABC モード、右の Shift の単独押しがかなモードです。
+
+## 押さえたまま
+
+文字を打つキー（Space を含む）は、押さえたままにも機能を割り当てられます。SandS（Space を押さえている間は Shift、単独で押すと Space）のようなもので、Shift の代わりに、割り当てた機能が働きます。`#hold` を付けて書きます。
+
+- 押さえたまま文字を打つと、その機能を働かせてから文字を打ちます。
+- 単独で押すと、そのキーのふだんの割り当てのまま働きます。ただし、押したときではなく離したときに働きます。
+- 速く打ってキーが重なったときは、文字のキーを先に離せば押さえたまま、押さえたキーを先に離せば単独で押してから文字を打ったものとします。
+- `tap_timeout_ms` より長く押さえて、何も打たずに離したときは、何もしません。
+
+### SandS で使う
+
+SKK で SandS を使ってきた人は、Space を押さえたまま打つことで、<kbd>;</kbd> の代わりに読みや送り仮名を始められます。Shift で読みを示していた指の動きが、そのまま使えます。
+
+<ThemedFigure name="sands" alt="Space を押さえたまま k を押してから anji と打つと読み「›かんじ」になり、ka と打ってから Space を押さえたまま k を押して u と打つと「»書く」に変換する。Space を単独で押せば、いつもどおり変換や空白になる" />
+
+| 打つキー | 結果 | ; で打つなら |
+| --- | --- | --- |
+| <kbd>Space</kbd> を押さえたまま `k`、離して `anji` | <span class="preedit">›かんじ</span> | `;kanji` |
+| `ka`、<kbd>Space</kbd> を押さえたまま `k`、離して `u` | <span class="preedit is-candidate">»書く</span> | `;ka;ku` |
+| 候補を選んでいるときに <kbd>Space</kbd> を押さえたまま `k` … | 候補を確定して、次の読みを始める | `»漢字;k` … |
+
+既定では割り当てていないので、使うときは足してください。
+
+- 設定アプリ：キーバインドの「読みを始める」に「Space を押さえたまま」を足します。読みを始める機能が働くすべての場面に、まとめて割り当てます。
+- 設定ファイル：場面ごとに `"space#hold" = "@begin"` を書きます。
+
+```toml
+[keys.kana]
+"space#hold" = "@begin"
+
+[keys.reading]
+"space#hold" = "@begin"
+
+[keys.candidates]
+"space#hold" = "@begin"
+
+[keys.registration]
+"space#hold" = "@begin"
+```
+
+Space を単独で押したときは、これまでどおり変換・次の候補・空白として働きます。ただし、押したときではなく離したときに働くようになります。<kbd>;</kbd> の割り当てはそのまま残るので、両方を使い分けられます。
+
+## 割り当てのないキー
+
+- 文字のキーは、その文字を打ちます。候補を選んでいるときは、選んでいる候補を確定してから打ちます。
+- Space・Enter・矢印などは、読み・候補・登録する文字列があるあいだは何もしません。
+- Ctrl・Cmd（Win）・Option（Alt）付きのキーは、入力中は何もしません。`[keys] pass_while_composing` に書いた修飾キー（`"cmd"`・`"ctrl"`・`"alt"`）付きのキーは、確定してからアプリに渡します。
+- ほかのキー（Tab など）は、未確定文字列をそのままにしてアプリに渡します。
+
+```toml
+[keys]
+pass_while_composing = ["cmd"]  # 入力中に Cmd+S を押しても、確定してから保存される
+```
+
+## ふだん
+
+何も打っていないときは、押したキーを別のキーに置き換えてアプリに送れます。どの OS のどのアプリでも、同じキー（Emacs のキーなど）で操作できるようにするためです。ここだけは機能ではなく、送るキーの名前を書きます。
+
+```toml
+[keys.application]
+"ctrl+h" = "backspace"
+"ctrl+n" = "down"
+"ctrl+p" = "up"
+```
+
+既定では、Emacs 風の <kbd>Ctrl</kbd>＋<kbd>H</kbd>・<kbd>D</kbd>・<kbd>B</kbd>・<kbd>F</kbd>・<kbd>A</kbd>・<kbd>E</kbd>・<kbd>N</kbd>・<kbd>P</kbd>・<kbd>M</kbd> を置き換えます（[既定のキー](/docs/reference/default-keys/#ふだん)）。置き換えの対象は、文字のキーや F キーを除いた、名前のあるキーだけです。
+
+macOS では、キーを送るのにアクセシビリティの許可が要ります。許可がないときは、押したキーをそのままアプリに渡します。
+
+## AZIK で使う
+
+用意されたローマ字の表 `azik` は、<kbd>;</kbd> で「っ」を打ちます。AZIK を使うときは、<kbd>;</kbd> を `@begin` から外し、読みを始めるキーを別に割り当ててください。
+
+```toml
+[romaji]
+tables = ["full-width", "hepburn", "kunrei", "input-aids", "z-symbols", "azik"]
+
+[keys.kana]
+";" = "@none"
+"right-alt#tap" = "@begin"
+
+[keys.reading]
+";" = "@none"
+"right-alt#tap" = "@begin"
+
+[keys.candidates]
+";" = "@none"
+"right-alt#tap" = "@begin"
+
+[keys.registration]
+";" = "@none"
+"right-alt#tap" = "@begin"
+```
+
+この例では、右の Option（Alt）の単独押しで読みを始めます。

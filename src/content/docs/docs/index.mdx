@@ -1,0 +1,37 @@
+---
+title: Kanaemi とは
+description: Kanaemi がどんな日本語入力で、何ができるか。
+---
+
+import ThemedFigure from "../../../components/ThemedFigure.astro";
+
+Kanaemi（かなえみ）は、macOS・Windows・Linux で同じように使える日本語入力（IME）です。読みの区切りを自分で決めて 1 語ずつ確定する [SKK](http://openlab.jp/skk/) の打ち方をもとにしています。
+
+<ThemedFigure name="convert" alt="; を押してから kanji と打つと読み「›かんじ」になり、Space で「»漢字」に変換し、Enter で「漢字」と確定する" />
+
+## SKK と同じところ
+
+- ふだんはローマ字で打ったかなが、その場で確定します。
+- 漢字にしたい語だけ、<kbd>;</kbd> から打ちはじめて変換します。
+- 候補がなければ、その場で語を登録して確定まで進めます。
+
+## SKK と違うところ
+
+- 活用した語も、送り仮名の始まりを示さずに読みのまま変換できます。`;kaita` と打って変換すれば「書いた」が出ます。
+- 候補を文脈に合わせて並べます。この入力欄で最後に選んだ表記や、よく選ぶ表記が前に出ます。
+- モードはかなと ABC の 2 つだけです。カタカナや英数は、確定するときに選びます。
+- キーの意味も、変換の結果も、OS によらず同じです。設定ファイルを別のマシンに持っていけば、そのまま同じ打ち方になります。
+
+## 動く環境
+
+| OS | 仕組み |
+| --- | --- |
+| macOS | InputMethodKit |
+| Windows | Text Services Framework（x64・arm64） |
+| Linux | IBus（GNOME などのデスクトップ） |
+
+## 次に読む
+
+1. [インストール](/docs/install/) で Kanaemi を入れ、入力ソースに足す。
+2. [辞書を入れる](/docs/dictionaries/) で、変換に使う辞書を置く。
+3. [モード](/docs/usage/modes/) と [読みと変換](/docs/usage/convert/) で、打ち方を覚える。

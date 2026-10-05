@@ -1,0 +1,14 @@
+/* The faces of the logo (kanaemi-brand): Quicksand for Latin, Zen Maru Gothic
+   for Japanese. Quicksand comes first so that ASCII picks it up, while
+   Japanese falls through to Zen Maru Gothic. */
+@import "@fontsource/quicksand/500.css";
+@import "@fontsource/quicksand/700.css";
+@import "@fontsource/zen-maru-gothic/400.css";
+@import "@fontsource/zen-maru-gothic/500.css";
+@import "@fontsource/zen-maru-gothic/700.css";
+
+:root {
+  --kanaemi-font-display: "Quicksand", "Zen Maru Gothic", system-ui, sans-serif;
+  --kanaemi-font-body: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", system-ui, sans-serif;
+  --kanaemi-font-mono: ui-monospace, "SFMono-Regular", "Menlo", "Consolas", monospace;
+}

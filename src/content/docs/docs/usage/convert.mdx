@@ -1,0 +1,73 @@
+---
+title: 読みと変換
+description: ; で読みを始め、Space で変換し、Enter で確定する。
+---
+
+import ThemedFigure from "../../../../components/ThemedFigure.astro";
+
+かなモードでは、打ったかながそのまま確定します。漢字にしたい語だけ、<kbd>;</kbd> から打ちます。
+
+<ThemedFigure name="convert" alt="; を押してから kanji と打つと読み「›かんじ」になり、Space で「»漢字」に変換し、Enter で「漢字」と確定する" />
+
+## 打ち方
+
+1. <kbd>;</kbd> を押して、読みを打つ。`;kanji` → <span class="preedit">›かんじ</span>
+2. <kbd>Space</kbd> で変換する。→ <span class="preedit is-candidate">»漢字</span>
+3. <kbd>Enter</kbd> で確定する。→ 漢字
+
+`›` は読みを打っている印、`»` は候補を選んでいる印です。Kanaemi は、今どの場面にいるかを、色や下線ではなくこの印の文字で示します。印の文字は [設定で変えられます](/docs/settings/config/#未確定文字列の印)。
+
+## 読みを打っているあいだ
+
+| キー | すること |
+| --- | --- |
+| <kbd>Space</kbd>・<kbd>Ctrl</kbd>＋<kbd>N</kbd>・<kbd>変換</kbd> | 変換する |
+| <kbd>Shift</kbd>＋<kbd>Space</kbd>・<kbd>Ctrl</kbd>＋<kbd>P</kbd> | 変換して、最後の候補を選ぶ |
+| <kbd>Enter</kbd>・<kbd>Ctrl</kbd>＋<kbd>J</kbd> | 読みをかなのまま確定する |
+| <kbd>Esc</kbd>・<kbd>Ctrl</kbd>＋<kbd>G</kbd> | 読みを取り消す |
+| <kbd>Backspace</kbd>・<kbd>Ctrl</kbd>＋<kbd>H</kbd> | カーソルの前の 1 文字を消す |
+| <kbd>←</kbd> <kbd>→</kbd>・<kbd>Ctrl</kbd>＋<kbd>B</kbd> <kbd>Ctrl</kbd>＋<kbd>F</kbd> | カーソルを動かす |
+| <kbd>F6</kbd>〜<kbd>F10</kbd> | ひらがな・カタカナ・半角カタカナ・全角英数・半角英数で確定する |
+
+読みの途中にカーソルを動かして、文字を足したり消したりできます。変換と確定は、カーソルの位置によらず読み全体で行います。
+
+## ; のはたらき
+
+<kbd>;</kbd> は、今の場面によって意味が変わります。
+
+<ThemedFigure name="semicolon" alt="; は、何も打っていないときは読みを始め、読みの途中では送り仮名の始まりになり、候補を選んでいるときは確定して次の読みを始め、読みを始めたすぐあとでは ; の文字を打つ" width={1200} height={820} />
+
+| いつ | すること | 例 |
+| --- | --- | --- |
+| 何も打っていないとき | 読みを始める | `;kanji` → <span class="preedit">›かんじ</span> |
+| 読みの途中 | [送り仮名](/docs/usage/okurigana/) の始まりにして、すぐ変換する | `;ka;ku` → <span class="preedit is-candidate">»書く</span> |
+| 候補を選んでいるとき | 候補を確定して、次の読みを始める | <span class="preedit is-candidate">»漢字</span> <kbd>;</kbd> → 漢字<span class="preedit">›</span> |
+| 読みを始めたすぐあと | <kbd>;</kbd> の文字を打つ | `;;` → ； |
+
+候補を選んでいるときの <kbd>;</kbd> を使うと、Enter を挟まずに語を続けて打っていけます。
+
+:::tip[SandS で打つ]
+<kbd>;</kbd> の代わりに、Space を押さえたまま打ちはじめることもできます。SKK で SandS を使ってきた人は、同じ指の動きのまま読みや送り仮名を始められます。既定では有効になっていないので、[SandS で使う](/docs/settings/keys/#sands-で使う) を見て設定を足してください。
+:::
+
+## 活用した語
+
+活用した語も、送り仮名を示さずに読みのまま変換できます。
+
+- `;kaita` <kbd>Space</kbd> → 書いた
+- `;tabenakatta` <kbd>Space</kbd> → 食べなかった
+
+辞書にある語幹（書・食べ）と、その活用型で後ろに付いてよい読みを組み合わせて候補を作ります。送り仮名の始まりを示すと、候補が絞れて、変換もすぐに始まります（[送り仮名](/docs/usage/okurigana/)）。
+
+## 数字や記号から始める
+
+読みは数字や記号からも始められます。`;1ko` と打つと読み <span class="preedit">›１こ</span> になり、変換すると「1個」「１個」「一個」などが出ます（[数を含む語](/docs/usage/numbers/)）。
+
+## 変換しない語
+
+<kbd>;</kbd> から始めずに打った文字は、かなのまま確定します。助詞や送り仮名をいちいち変換する必要はありません。
+
+```
+watashiha;kanji
+→ わたしは›かんじ
+```
