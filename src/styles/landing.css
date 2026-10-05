@@ -399,6 +399,40 @@ main h2 {
 .guide-list li:last-child {
   border-bottom: 2px solid var(--wash);
 }
+/* A look at the file before downloading it: each link shows the picture it
+   points at, above the link, on hover or keyboard focus, and only where
+   there is a pointer that hovers. */
+.guide-file {
+  position: relative;
+}
+.guide-preview {
+  display: none;
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.5rem);
+  z-index: 2;
+  width: min(26rem, calc(100vw - 2rem));
+  padding: 0.5rem;
+  border: 2px solid var(--rule);
+  border-radius: 1rem;
+  background: var(--paper);
+  line-height: 0;
+  pointer-events: none;
+}
+.guide-preview.is-tall {
+  width: min(15rem, calc(100vw - 2rem));
+}
+.guide-preview img {
+  width: 100%;
+  height: auto;
+  border-radius: 0.6rem;
+}
+@media (hover: hover) {
+  .guide-file:hover .guide-preview,
+  .guide-file:focus-visible .guide-preview {
+    display: block;
+  }
+}
 .guide-title {
   font-weight: 700;
 }

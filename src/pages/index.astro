@@ -34,16 +34,21 @@ const principles = [
 ];
 
 const guides = [
-  { name: "cheatsheet", title: "つかいかた（1 枚にまとめたもの）" },
-  { name: "shift", title: "左右の Shift でモードを選ぶ" },
-  { name: "convert", title: "; で読みを始め、Space で変換" },
-  { name: "semicolon", title: "; のはたらき" },
-  { name: "sands", title: "SandS で打つ（Space を押さえたまま）" },
+  { name: "cheatsheet", title: "つかいかた（1 枚にまとめたもの）", width: 1080, height: 1620 },
+  { name: "shift", title: "左右の Shift でモードを選ぶ", width: 1200, height: 675 },
+  { name: "convert", title: "; で読みを始め、Space で変換", width: 1200, height: 675 },
+  { name: "semicolon", title: "; のはたらき", width: 1200, height: 820 },
+  { name: "sands", title: "SandS で打つ（Space を押さえたまま）", width: 1200, height: 675 },
 ];
 
 const formats = [
   { label: "PNG", ext: "png" },
   { label: "SVG", ext: "svg" },
+];
+
+const variants = [
+  { label: "ライト", suffix: "" },
+  { label: "ダーク", suffix: "-dark" },
 ];
 
 const platforms = [
@@ -219,8 +224,17 @@ const platforms = [
                   {formats.map((f) => (
                     <span class="guide-format">
                       {f.label}
-                      <a href={`/guide/${g.name}.${f.ext}`} download>ライト</a>
-                      <a href={`/guide/${g.name}-dark.${f.ext}`} download>ダーク</a>
+                      {variants.map((v) => {
+                        const href = `/guide/${g.name}${v.suffix}.${f.ext}`;
+                        return (
+                          <a class="guide-file" href={href} download>
+                            {v.label}
+                            <span class={g.height > g.width ? "guide-preview is-tall" : "guide-preview"} aria-hidden="true">
+                              <img src={href} alt="" width={g.width} height={g.height} loading="lazy" />
+                            </span>
+                          </a>
+                        );
+                      })}
                     </span>
                   ))}
                 </span>
