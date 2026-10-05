@@ -1,0 +1,463 @@
+/* The landing page. Colours are the brand's (kanaemi-brand README); --rule and
+   --wash are tints of the ink on the paper, not new hues. */
+:root {
+  color-scheme: light;
+  --paper: #ffffff;
+  --ink: #1d2433;
+  --smile: #d9502e;
+  --muted: #5a6272;
+  --rule: #d2d3d6;
+  --wash: #f1f2f4;
+  --smile-tint: #f4cbc0;
+  --measure: 38rem;
+  --page: 72rem;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #1d2433;
+    --ink: #e8eaf0;
+    --smile: #f2704b;
+    --muted: #a3aab8;
+    --rule: #3e4555;
+    --wash: #252c3b;
+    --smile-tint: #6b3a33;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #1d2433;
+  --ink: #e8eaf0;
+  --smile: #f2704b;
+  --muted: #a3aab8;
+  --rule: #3e4555;
+  --wash: #252c3b;
+  --smile-tint: #6b3a33;
+}
+
+.on-dark {
+  display: none;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .on-light {
+    display: none;
+  }
+  :root:not([data-theme="light"]) .on-dark {
+    display: revert;
+  }
+}
+:root[data-theme="dark"] .on-light {
+  display: none;
+}
+:root[data-theme="dark"] .on-dark {
+  display: revert;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--kanaemi-font-body);
+  font-size: 1.0625rem;
+  line-height: 1.85;
+  color: var(--ink);
+  background: var(--paper);
+  font-feature-settings: "palt" 0;
+  line-break: strict;
+  word-break: auto-phrase;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration-color: var(--rule);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25em;
+}
+a:hover {
+  text-decoration-color: var(--smile);
+}
+a:focus-visible,
+.button:focus-visible {
+  outline: 3px solid var(--smile);
+  outline-offset: 3px;
+  border-radius: 0.4rem;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  text-wrap: balance;
+  font-family: var(--kanaemi-font-display);
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+}
+
+code {
+  font-family: var(--kanaemi-font-mono);
+  font-size: 0.9em;
+  padding: 0.1em 0.35em;
+  border-radius: 0.35em;
+  background: var(--wash);
+}
+
+kbd {
+  font-family: var(--kanaemi-font-display);
+  font-size: 0.88em;
+  font-weight: 700;
+  padding: 0.05em 0.45em;
+  border: 1.5px solid var(--muted);
+  border-bottom-width: 3px;
+  border-radius: 0.4em;
+  white-space: nowrap;
+}
+
+.pe {
+  font-weight: 700;
+  white-space: nowrap;
+  border-bottom: 2px dotted currentColor;
+}
+.pe.is-candidate {
+  color: var(--smile);
+}
+
+.skip {
+  position: absolute;
+  left: -100vw;
+}
+.skip:focus {
+  left: var(--gutter);
+  top: 0.75rem;
+  z-index: 1;
+  padding: 0.25rem 0.75rem;
+  background: var(--paper);
+}
+
+.site-header,
+main > section,
+.site-footer {
+  width: 100%;
+  max-width: var(--page);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 1.25rem;
+}
+.brand {
+  display: block;
+  line-height: 0;
+}
+.brand img {
+  width: clamp(8.5rem, 22vw, 11rem);
+}
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.25rem 1.5rem;
+  font-size: 0.95rem;
+}
+.site-nav a {
+  text-decoration: none;
+}
+.site-nav a:hover {
+  color: var(--smile);
+}
+
+/* Hero: the claim on the left, the demo it proves on the right. */
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4.5rem);
+  padding-block: clamp(2rem, 6vw, 5rem) clamp(2rem, 5vw, 4rem);
+}
+.hero h1 {
+  font-size: clamp(2.1rem, 4.6vw, 3.6rem);
+  line-height: 1.22;
+  letter-spacing: 0.01em;
+}
+.hero h1 span {
+  display: inline-block;
+}
+.lede {
+  max-width: 30rem;
+  margin: 1.5rem 0 0;
+  font-size: 1.125rem;
+  color: var(--muted);
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+.button {
+  display: inline-block;
+  padding: 0.6rem 1.35rem 0.55rem;
+  border: 2.5px solid var(--ink);
+  border-radius: 0.9rem;
+  box-shadow: 0 4px 0 var(--rule);
+  font-family: var(--kanaemi-font-display);
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--paper);
+  transition: transform 80ms ease, box-shadow 80ms ease;
+}
+.button:hover {
+  border-color: var(--smile);
+}
+.button:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--rule);
+}
+.button.is-primary {
+  color: var(--paper);
+  background: var(--ink);
+}
+.button.is-primary:hover {
+  background: var(--smile);
+  border-color: var(--smile);
+}
+
+main > section + section {
+  padding-top: clamp(3.5rem, 8vw, 6.5rem);
+}
+main > section:last-child {
+  padding-bottom: clamp(3.5rem, 8vw, 6.5rem);
+}
+main h2 {
+  font-size: clamp(1.75rem, 3.4vw, 2.5rem);
+}
+.section-lede {
+  max-width: var(--measure);
+  margin: 1rem 0 0;
+  color: var(--muted);
+}
+
+/* The keys to learn: each row leads with the keycaps it is about. */
+.key-list {
+  margin: 2.5rem 0 0;
+  display: grid;
+  gap: 0;
+}
+.key-row {
+  display: grid;
+  grid-template-columns: minmax(12rem, 18rem) minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem 2.5rem;
+  padding-block: 1.75rem;
+  border-top: 2px solid var(--wash);
+}
+.key-row:last-child {
+  border-bottom: 2px solid var(--wash);
+}
+.key-caps {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+.cap {
+  display: inline-grid;
+  place-items: center;
+  min-width: 3.5rem;
+  height: 3.5rem;
+  padding-inline: 0.9rem;
+  border: 3.5px solid var(--ink);
+  border-radius: 0.95rem;
+  box-shadow: 0 5px 0 var(--rule);
+  font-family: var(--kanaemi-font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  background: var(--paper);
+}
+.cap.is-wide {
+  font-size: 1.05rem;
+}
+.cap.is-space {
+  min-width: 7rem;
+}
+.cap-plus {
+  font-family: var(--kanaemi-font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--smile);
+}
+.cap.is-hot {
+  border-color: var(--smile);
+  color: var(--smile);
+  box-shadow: 0 5px 0 var(--smile-tint);
+}
+.key-row dd {
+  margin: 0;
+}
+.key-row h3 {
+  font-size: 1.3rem;
+}
+.key-row p {
+  max-width: var(--measure);
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+}
+.more {
+  margin: 1.5rem 0 0;
+}
+
+/* Principles: a plain list. Each statement is short enough to stand as the
+   heading; the reason sits beside it on wide screens. */
+.principle-list {
+  list-style: none;
+  margin: 2rem 0 0;
+  padding: 0;
+}
+.principle-list li {
+  display: grid;
+  grid-template-columns: minmax(12rem, 18rem) minmax(0, 1fr);
+  gap: 0.5rem 2.5rem;
+  padding-block: 1.4rem;
+  border-top: 2px solid var(--wash);
+}
+.principle-list li:last-child {
+  border-bottom: 2px solid var(--wash);
+}
+.principle-list h3 {
+  font-size: 1.2rem;
+}
+.principle-list p {
+  max-width: var(--measure);
+  margin: 0;
+  color: var(--muted);
+}
+
+.platform-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem;
+  margin: 2rem 0 0;
+  padding: 0;
+}
+.platform-list li {
+  padding: 1.25rem 1.5rem;
+  border-radius: 1.25rem;
+  background: var(--wash);
+}
+.platform-list h3 {
+  font-size: 1.4rem;
+}
+.platform-list p {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+.platform-list .file {
+  font-family: var(--kanaemi-font-mono);
+  font-size: 0.875rem;
+}
+
+/* The illustrations are for handing out, so the page lists them as links
+   rather than showing them again. */
+.guide-list {
+  list-style: none;
+  max-width: 52rem;
+  margin: 2rem 0 0;
+  padding: 0;
+}
+.guide-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 2rem;
+  padding-block: 0.9rem;
+  border-top: 2px solid var(--wash);
+}
+.guide-list li:last-child {
+  border-bottom: 2px solid var(--wash);
+}
+.guide-title {
+  font-weight: 700;
+}
+.guide-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.75rem;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+.guide-format a {
+  margin-inline-start: 0.75em;
+  color: var(--ink);
+}
+
+.site-footer {
+  display: grid;
+  gap: 1.25rem;
+  padding-block: 2.5rem 3rem;
+  border-top: 2px solid var(--wash);
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.footer-brand p {
+  margin: 0;
+}
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+}
+.footer-legal {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 52rem) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .key-row,
+  .principle-list li {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 30rem) {
+  .site-nav a[href^="https://github.com"] {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

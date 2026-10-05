@@ -1,0 +1,335 @@
+---
+/**
+ * The hero's typing demo: plays a sentence through the demo engine once it
+ * scrolls into view, then lets the reader type into it.
+ */
+---
+
+<div class="demo" data-demo>
+  <div class="demo-cap" tabindex="0" role="textbox" aria-readonly="true" aria-label="Kanaemi で打つデモ。フォーカスするとキーボードで打てます" data-demo-cap>
+    <p class="demo-line" aria-live="polite">
+      <span data-demo-committed>どこでも、同じ打ち方で日本語を書く。</span><span class="demo-preedit" data-demo-preedit></span><span class="demo-caret" aria-hidden="true"></span>
+    </p>
+    <svg class="demo-smile" viewBox="0 0 120 24" aria-hidden="true" data-demo-smile>
+      <path d="M6 6 Q60 34 114 6" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"></path>
+    </svg>
+    <div class="demo-keys" aria-hidden="true" data-demo-keys></div>
+  </div>
+  <div class="demo-foot">
+    <p class="demo-hint" data-demo-hint>
+      枠をクリックすると、自分で打てます。<kbd>;</kbd> で読みを始め、<kbd>Space</kbd> で変換し、<kbd>Enter</kbd> で確定します。
+    </p>
+    <button type="button" class="demo-replay" data-demo-replay>もう一度見る</button>
+  </div>
+  <p class="demo-words">
+    このデモの辞書にある語：かんじ・にほんご・へんかん・にゅうりょく・おなじ・うちかた・わたし・つかう・きしゃ。送り仮名は ;ka;ku・;yo;mu・;hana;su・;hashi;ru
+  </p>
+</div>
+
+<script>
+  import { DemoEngine } from "../../lib/demo-engine";
+
+  const DICTIONARY: Record<string, string[]> = {
+    かんじ: ["漢字", "感じ", "幹事"],
+    にほんご: ["日本語"],
+    へんかん: ["変換", "返還"],
+    にゅうりょく: ["入力"],
+    おなじ: ["同じ"],
+    うちかた: ["打ち方"],
+    わたし: ["私", "渡し"],
+    つかう: ["使う"],
+    きしゃ: ["記者", "汽車", "貴社"],
+    "か*く": ["書く", "描く", "欠く"],
+    "よ*む": ["読む", "詠む"],
+    "はな*す": ["話す", "離す", "放す"],
+    "はし*る": ["走る"],
+  };
+
+  // どこでも、 / ;onaji ␣ / ;utikata ␣ / de / ;nihongo ␣ / wo / ;ka;ku / ⏎ / .
+  const SCRIPT = [
+    ..."dokodemo,",
+    ";", ..."onaji", "Space",
+    ";", ..."utikata", "Space",
+    ..."de",
+    ";", ..."nihongo", "Space",
+    ..."wo",
+    ";", ..."ka", ";", ..."ku",
+    "Enter",
+    ".",
+  ];
+
+  const LABELS: Record<string, string> = { Space: "Space", Enter: "Enter", Escape: "Esc", Backspace: "⌫" };
+
+  for (const root of document.querySelectorAll<HTMLElement>("[data-demo]")) {
+    const cap = root.querySelector<HTMLElement>("[data-demo-cap]")!;
+    const committed = root.querySelector<HTMLElement>("[data-demo-committed]")!;
+    const preedit = root.querySelector<HTMLElement>("[data-demo-preedit]")!;
+    const keys = root.querySelector<HTMLElement>("[data-demo-keys]")!;
+    const replay = root.querySelector<HTMLButtonElement>("[data-demo-replay]")!;
+
+    let engine = new DemoEngine(DICTIONARY);
+    let playing = 0;
+
+    const render = () => {
+      committed.textContent = engine.committed;
+      preedit.textContent = engine.preedit;
+      preedit.classList.toggle("is-candidate", engine.scene === "candidates");
+    };
+
+    const showKey = (key: string) => {
+      const kbd = document.createElement("kbd");
+      kbd.textContent = LABELS[key] ?? key;
+      if (key === ";") kbd.classList.add("is-hot");
+      keys.append(kbd);
+      while (keys.childElementCount > 14) keys.firstElementChild!.remove();
+    };
+
+    const press = (key: string) => {
+      engine.press(key);
+      showKey(key);
+      render();
+    };
+
+    const reset = () => {
+      engine = new DemoEngine(DICTIONARY);
+      keys.replaceChildren();
+      root.classList.remove("is-done");
+      render();
+    };
+
+    // Wait on the empty frame, its caret blinking, so the reader sees where
+    // the typing will happen before it starts.
+    const START_DELAY = 1200;
+
+    const play = async (delay = 0) => {
+      const run = ++playing;
+      reset();
+      root.classList.add("is-waiting");
+      await new Promise((r) => setTimeout(r, delay));
+      root.classList.remove("is-waiting");
+      if (run !== playing) return;
+      for (const key of SCRIPT) {
+        const pause = key === "Space" || key === "Enter" ? 520 : key === ";" ? 260 : 95;
+        await new Promise((r) => setTimeout(r, pause));
+        if (run !== playing) return;
+        press(key);
+      }
+      root.classList.add("is-done");
+    };
+
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) {
+      // Leave the finished sentence in place; nothing moves unless asked.
+      root.classList.add("is-done");
+    } else {
+      reset();
+      const seen = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          seen.disconnect();
+          play(START_DELAY);
+        }
+      });
+      seen.observe(root);
+    }
+
+    replay.addEventListener("click", () => play());
+
+    cap.addEventListener("focus", () => {
+      if (playing && !root.classList.contains("is-done")) playing++;
+      reset();
+      root.classList.remove("is-waiting");
+      root.classList.add("is-typing");
+    });
+    cap.addEventListener("blur", () => root.classList.remove("is-typing"));
+    cap.addEventListener("keydown", (event) => {
+      if (event.metaKey || event.ctrlKey || event.altKey) return;
+      const key =
+        event.key === " " ? "Space" : event.key.length === 1 ? event.key.toLowerCase() : event.key;
+      if (key === "Tab") return;
+      if (key.length === 1 || key in LABELS) {
+        event.preventDefault();
+        press(key);
+      }
+    });
+  }
+</script>
+
+<style>
+  .demo {
+    --cap-radius: 2rem;
+    width: 100%;
+  }
+
+  /* The keycap of the logo, drawn as the frame of the demo: a thick ink
+     outline with the key's solid lower edge. */
+  .demo-cap {
+    position: relative;
+    display: grid;
+    gap: 1.25rem;
+    align-content: space-between;
+    min-height: 15rem;
+    padding: clamp(1.25rem, 3vw, 2rem) clamp(1.25rem, 3.5vw, 2.25rem) 1.25rem;
+    border: 5px solid var(--ink);
+    border-radius: var(--cap-radius);
+    background: var(--paper);
+    box-shadow: 0 9px 0 var(--rule);
+    cursor: text;
+    outline: none;
+    transition: box-shadow 120ms ease, transform 120ms ease;
+  }
+  .demo-cap:focus-visible,
+  .demo.is-typing .demo-cap {
+    border-color: var(--smile);
+    box-shadow: 0 9px 0 var(--smile-tint);
+  }
+
+  .demo-line {
+    margin: 0;
+    font-size: clamp(1.45rem, 3.4vw, 2.15rem);
+    font-weight: 700;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+    min-height: 3em;
+    word-break: auto-phrase;
+    line-break: strict;
+  }
+  .demo-preedit {
+    border-bottom: 3px dotted currentColor;
+  }
+  .demo-preedit:empty {
+    border: 0;
+  }
+  .demo-preedit.is-candidate {
+    color: var(--smile);
+  }
+  .demo-caret {
+    display: inline-block;
+    width: 3px;
+    height: 1.1em;
+    margin-inline-start: 2px;
+    vertical-align: -0.15em;
+    background: var(--ink);
+    opacity: 0;
+  }
+  .demo.is-typing .demo-caret,
+  .demo.is-waiting .demo-caret {
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink {
+    50% {
+      opacity: 1;
+    }
+  }
+
+  /* The one flourish: when the sentence is done, the smile of the logo draws
+     itself under it. */
+  .demo-smile {
+    display: block;
+    width: 4.5rem;
+    height: 1rem;
+    margin-top: -0.75rem;
+    color: var(--smile);
+    opacity: 0;
+  }
+  .demo-smile path {
+    stroke-dasharray: 130;
+    stroke-dashoffset: 130;
+  }
+  .demo.is-done:not(.is-typing) .demo-smile {
+    opacity: 1;
+  }
+  .demo.is-done:not(.is-typing) .demo-smile path {
+    animation: draw 520ms cubic-bezier(0.3, 0.7, 0.2, 1) forwards;
+  }
+  @keyframes draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .demo.is-done .demo-smile path {
+      animation: none;
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .demo-keys {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.35rem;
+    min-height: 2.1rem;
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, #000 3rem);
+    justify-content: flex-end;
+  }
+  .demo-keys :global(kbd) {
+    flex: none;
+    min-width: 2rem;
+    padding: 0.2rem 0.5rem;
+    border: 2px solid var(--muted);
+    border-radius: 0.5rem;
+    box-shadow: 0 3px 0 var(--rule);
+    font-family: var(--kanaemi-font-display);
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-align: center;
+    color: var(--ink);
+    background: var(--paper);
+  }
+  .demo-keys :global(kbd.is-hot) {
+    border-color: var(--smile);
+    color: var(--smile);
+  }
+
+  .demo-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .demo-hint {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--muted);
+  }
+  .demo-hint kbd {
+    font-family: var(--kanaemi-font-display);
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .demo-replay {
+    padding: 0.3rem 0;
+    border: 0;
+    border-bottom: 2px solid var(--rule);
+    font: inherit;
+    font-size: 0.95rem;
+    color: var(--ink);
+    background: none;
+    cursor: pointer;
+  }
+  .demo-replay:hover {
+    border-color: var(--smile);
+  }
+  .demo-replay:focus-visible {
+    outline: 3px solid var(--smile);
+    outline-offset: 3px;
+  }
+  .demo-words {
+    margin: 0.75rem 0 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+    display: none;
+  }
+  .demo.is-typing .demo-words,
+  .demo:focus-within .demo-words {
+    display: block;
+  }
+
+  @media (hover: none) {
+    .demo-hint {
+      visibility: hidden;
+    }
+  }
+</style>

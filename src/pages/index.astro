@@ -1,0 +1,252 @@
+---
+import "../styles/fonts.css";
+import "../styles/landing.css";
+import Demo from "../components/landing/Demo.astro";
+
+const releases = "https://github.com/kanaemi-app/kanaemi/releases";
+const repository = "https://github.com/kanaemi-app/kanaemi";
+const title = "Kanaemi | どの OS でも同じ打ち方の日本語入力";
+const description =
+  "Kanaemi は、SKK の打ち方をもとにした日本語入力です。macOS・Windows・Linux で、キーの意味も変換の結果も変わりません。";
+const og = new URL("/og.png", Astro.site).href;
+
+const principles = [
+  {
+    title: "どの OS でも同じ",
+    body: "キーの意味も、変換の結果も、OS によらず同じです。設定のフォルダを別のマシンに持っていけば、そのまま同じ打ち方になります。",
+  },
+  {
+    title: "頼んだときだけ変換する",
+    body: "打ったそばから画面が変わるライブ変換も、打つたびに出る予測候補もありません。変換するのは ; で読みを示したときだけです。",
+  },
+  {
+    title: "流れを止めずに辞書を育てる",
+    body: "候補になければ、その場で語を登録して確定まで進めます。別の画面を開きに行く必要はありません。",
+  },
+  {
+    title: "入力を外に出さない",
+    body: "IME はパスワード以外のすべての入力を見ます。Kanaemi の変換は手元で完結し、入力を外へ送りません。",
+  },
+  {
+    title: "止まらない",
+    body: "IME が止まると文字を打てなくなります。内部で何が起きても、押したキーはアプリに届け、文字を打てる状態を保ちます。",
+  },
+];
+
+const guides = [
+  { name: "cheatsheet", title: "つかいかた（1 枚にまとめたもの）" },
+  { name: "shift", title: "左右の Shift でモードを選ぶ" },
+  { name: "convert", title: "; で読みを始め、Space で変換" },
+  { name: "semicolon", title: "; のはたらき" },
+  { name: "sands", title: "SandS で打つ（Space を押さえたまま）" },
+];
+
+const formats = [
+  { label: "PNG", ext: "png" },
+  { label: "SVG", ext: "svg" },
+];
+
+const platforms = [
+  { name: "macOS", via: "InputMethodKit", file: ".pkg" },
+  { name: "Windows", via: "Text Services Framework・x64 と arm64", file: ".msi" },
+  { name: "Linux", via: "IBus・GNOME ほか", file: ".deb・.rpm" },
+];
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="canonical" href={Astro.site} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={Astro.site} />
+    <meta property="og:image" content={og} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline>
+      // Follow the theme chosen in the docs (Starlight keeps it here), else the OS.
+      try {
+        const theme = localStorage.getItem("starlight-theme");
+        if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">本文へ</a>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Kanaemi">
+        <img class="on-light" src="/logo/kanaemi-logo-horizontal.svg" alt="" width="200" height="56" />
+        <img class="on-dark" src="/logo/kanaemi-logo-horizontal-dark.svg" alt="" width="200" height="56" />
+      </a>
+      <nav class="site-nav" aria-label="サイト">
+        <a href="/docs/">ドキュメント</a>
+        <a href="/docs/install/">インストール</a>
+        <a href={repository}>GitHub</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <h1 id="hero-title"><span>どの OS でも</span><span>同じ打ち方の日本語入力</span></h1>
+          <p class="lede">
+            Kanaemi（かなえみ）は、SKK の打ち方をもとにした日本語入力です。macOS・Windows・Linux で、キーの意味も変換の結果も変わりません。
+          </p>
+          <div class="actions">
+            <a class="button is-primary" href={releases}>ダウンロード</a>
+            <a class="button" href="/docs/">打ち方を読む</a>
+          </div>
+        </div>
+        <div class="hero-demo">
+          <Demo />
+        </div>
+      </section>
+
+      <section class="keys" aria-labelledby="keys-title">
+        <h2 id="keys-title">覚えるキーは Shift と ; だけ</h2>
+        <p class="section-lede">
+          モードは、かなと ABC の 2 つだけです。読みを打つ、候補を選ぶ、語を登録するといった状態には、モードを切り替えずに、打つキーに応じて入ったり抜けたりします。
+        </p>
+
+        <dl class="key-list">
+          <div class="key-row">
+            <dt class="key-caps">
+              <span class="cap is-wide">左 Shift</span>
+              <span class="cap is-wide is-hot">右 Shift</span>
+            </dt>
+            <dd>
+              <h3>左右の Shift でモードを選ぶ</h3>
+              <p>
+                Shift だけをポンと押して離すと、左は ABC モード、右はかなモードになります。今どちらのモードかを気にせず、打ちたいモードの側を押せば、そのモードに入れます。
+              </p>
+            </dd>
+          </div>
+          <div class="key-row">
+            <dt class="key-caps">
+              <span class="cap is-hot">;</span>
+            </dt>
+            <dd>
+              <h3>漢字にしたい語だけ ; から打つ</h3>
+              <p>
+                ふだんは打ったかながそのまま確定します。<code>;kanji</code> と打てば読み <span class="pe">›かんじ</span>、<kbd>Space</kbd> で <span class="pe is-candidate">»漢字</span>、<kbd>Enter</kbd> で確定します。助詞は変換せずに、かなのまま確定します。
+              </p>
+            </dd>
+          </div>
+          <div class="key-row">
+            <dt class="key-caps">
+              <span class="cap">ka</span>
+              <span class="cap is-hot">;</span>
+              <span class="cap">ku</span>
+            </dt>
+            <dd>
+              <h3>読みの途中の ; は送り仮名</h3>
+              <p>
+                <code>;ka;ku</code> と打つと、送り仮名を打ったそばで <span class="pe is-candidate">»書く</span> に変換します。示さなくても、<code>;kaita</code> のように活用した語は読みのまま変換できます。
+              </p>
+            </dd>
+          </div>
+          <div class="key-row">
+            <dt class="key-caps">
+              <span class="cap is-wide is-hot is-space">Space</span>
+              <span class="cap-plus" aria-hidden="true">+</span>
+              <span class="cap is-hot">k</span>
+            </dt>
+            <dd>
+              <h3>SandS の指づかいでも打てる</h3>
+              <p>
+                SKK で SandS を使ってきたなら、<kbd>;</kbd> の代わりに Space を押さえたまま打ちはじめられます。Space を単独で押せば、いつもどおり変換や空白になります。設定アプリで「読みを始める」に「Space を押さえたまま」を足すだけで使えます（<a href="/docs/settings/keys/#sands-で使う">設定のしかた</a>）。
+              </p>
+            </dd>
+          </div>
+        </dl>
+        <p class="more"><a href="/docs/usage/convert/">打ち方をくわしく読む</a></p>
+      </section>
+
+      <section class="principles" aria-labelledby="principles-title">
+        <h2 id="principles-title">大事にしていること</h2>
+        <ul class="principle-list">
+          {
+            principles.map((p) => (
+              <li>
+                <h3>{p.title}</h3>
+                <p>{p.body}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <section class="platforms" aria-labelledby="platforms-title">
+        <h2 id="platforms-title">インストール</h2>
+        <p class="section-lede">
+          OS ごとのふつうの入れ方で配っています。入れたあと、入力ソースに Kanaemi を足してください。辞書は別に置きます。
+        </p>
+        <ul class="platform-list">
+          {
+            platforms.map((p) => (
+              <li>
+                <h3>{p.name}</h3>
+                <p class="via">{p.via}</p>
+                <p class="file">{p.file}</p>
+              </li>
+            ))
+          }
+        </ul>
+        <div class="actions">
+          <a class="button is-primary" href={releases}>リリースから取ってくる</a>
+          <a class="button" href="/docs/install/">入れ方を読む</a>
+          <a class="button" href="/docs/dictionaries/">辞書を入れる</a>
+        </div>
+      </section>
+
+      <section class="sheet" aria-labelledby="sheet-title">
+        <h2 id="sheet-title">打ち方の画像</h2>
+        <p class="section-lede">
+          モードの切り替え、変換、<kbd>;</kbd> のはたらきを画像にしました。手元に置いたり、人に勧めたりするときにどうぞ。どれもライトとダークがあります。
+        </p>
+        <ul class="guide-list">
+          {
+            guides.map((g) => (
+              <li>
+                <span class="guide-title">{g.title}</span>
+                <span class="guide-links">
+                  {formats.map((f) => (
+                    <span class="guide-format">
+                      {f.label}
+                      <a href={`/guide/${g.name}.${f.ext}`} download>ライト</a>
+                      <a href={`/guide/${g.name}-dark.${f.ext}`} download>ダーク</a>
+                    </span>
+                  ))}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-brand">
+        <img class="on-light" src="/logo/kanaemi-icon.svg" alt="" width="40" height="40" />
+        <img class="on-dark" src="/logo/kanaemi-icon-dark.svg" alt="" width="40" height="40" />
+        <p>名前は「かな」と「笑み」から。emi を逆から読むと ime になります。</p>
+      </div>
+      <nav class="footer-nav" aria-label="フッター">
+        <a href="/docs/">ドキュメント</a>
+        <a href="/docs/concept/">考え方</a>
+        <a href={repository}>ソースコード</a>
+        <a href="https://github.com/kanaemi-app/kanaemi-dict">辞書</a>
+        <a href={`${repository}/issues`}>不具合を知らせる</a>
+      </nav>
+      <p class="footer-legal">
+        Kanaemi のソフトウェアは MIT ライセンスです。Kanaemi の名前とロゴは、<a href="https://github.com/kanaemi-app/kanaemi-brand/blob/main/TRADEMARKS.ja.md">商標ポリシー</a>に従って使えます。
+      </p>
+    </footer>
+  </body>
+</html>
