@@ -21,6 +21,7 @@ Kanaemi の設定、辞書、登録した語は、すべて 1 つのフォルダ
 | `custom.tsv` | ユーザーカスタム辞書。[登録した語](/docs/usage/register/) と、出さないようにした語が入る |
 | `dictionaries/` | [辞書](/docs/dictionaries/) のファイル。中にフォルダを作ってもよい |
 | `romaji/` | 自分で書いた [ローマ字の表](/docs/settings/romaji/) |
+| `ranking.model` | [並べ替えのモデル](/docs/usage/candidates/#並び方)。基本辞書と組で入る。なくてもよい |
 | `selections.tsv` | [何度も選んだ候補](/docs/usage/candidates/#並び方) の記録。Kanaemi が作る |
 
 利用者が打った語を含むファイル（`custom.tsv`・`selections.tsv`）は、Kanaemi が持ち主だけ読み書きできるようにして作ります。

@@ -4,11 +4,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "fetch": "python3 scripts/fetch_dictionaries.py",
+    "predev": "npm run fetch",
     "dev": "astro dev",
+    "prebuild": "npm run fetch",
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "test": "node --test 'src/lib/*.test.ts'",
+    "test": "node --test 'src/lib/*.test.ts' && python3 -m unittest discover -s scripts -p 'test_*.py'",
     "check-links": "python3 scripts/check-links.py",
     "astro": "astro"
   },

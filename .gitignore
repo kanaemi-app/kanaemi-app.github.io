@@ -3,3 +3,6 @@ dist/
 .astro/
 node_modules/
 .DS_Store
+public/dictionaries/
+src/data/dictionaries.json
+__pycache__/

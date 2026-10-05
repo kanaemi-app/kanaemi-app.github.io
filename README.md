@@ -28,7 +28,8 @@ src/
 ├── components/
 │   ├── landing/Demo.astro     # the typing demo in the hero
 │   ├── ThemedFigure.astro     # light/dark illustration pair for the docs
-│   └── DefaultKeys.astro      # default key table, built from src/data/config.toml
+│   ├── DefaultKeys.astro      # default key table, built from src/data/config.toml
+│   └── DictionaryDownloads.astro # download table of the official dictionaries
 ├── content/docs/docs/         # the documentation, served under /docs/
 ├── data/config.toml           # Kanaemi's settings template, copied from the kanaemi repository
 ├── lib/
@@ -41,6 +42,7 @@ public/
 scripts/
 ├── guide/                     # draws public/guide
 ├── sync-config.sh             # copies the settings template
+├── fetch_dictionaries.py      # fetches the latest kanaemi-dict release (runs before dev and build)
 └── check-links.py             # checks every internal link and #fragment in dist/
 ```
 
@@ -56,6 +58,10 @@ just sync-config ~/src/kanaemi
 ```
 
 The usage illustrations in `public/guide/` show the default keys too. Change `scripts/guide/gen.py` and redraw them with `just guide`.
+
+## The official dictionaries
+
+The site serves the dictionaries of the latest [kanaemi-dict](https://github.com/kanaemi-app/kanaemi-dict) release itself. `scripts/fetch_dictionaries.py` runs before `npm run dev` and `npm run build`: it reads the release's catalog (`index.json`, the one the settings app of Kanaemi reads), downloads the zips into `public/dictionaries/`, checks their files against the catalog's SHA-256, and describes them, with their Japanese labels, in `src/data/dictionaries.json`. Both are generated and not committed. Without the network, the files fetched before are used; set `KANAEMI_DICT_RELEASE` to fetch from another release URL.
 
 ## Writing the documentation
 

@@ -1,0 +1,114 @@
+---
+/**
+ * The dictionaries of the latest kanaemi-dict release, in the order of its
+ * catalog, as fetched into
+ * public/dictionaries/ by scripts/fetch_dictionaries.py, linked by their
+ * Japanese labels rather than their file names.
+ */
+interface Dictionary {
+  name: string;
+  base: boolean;
+  file: string;
+  size: number;
+  label: string;
+  model: boolean;
+}
+interface Manifest {
+  /** null while kanaemi-dict has no release with a catalog. */
+  tag: string | null;
+  url: string;
+  dictionaries: Dictionary[];
+}
+
+const found = Object.values(import.meta.glob<Manifest>("../data/dictionaries.json", { eager: true, import: "default" }));
+if (found.length === 0) {
+  throw new Error("src/data/dictionaries.json is missing; run `npm run fetch`");
+}
+const manifest = found[0];
+const base = manifest.dictionaries.find((d) => d.base);
+const additional = manifest.dictionaries.filter((d) => !d.base);
+
+const size = (bytes: number) =>
+  bytes >= 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
+---
+
+{
+  manifest.tag === null && (
+    <p class="dictionary-release">
+      公式辞書はまだ配っていません。<a href={manifest.url}>kanaemi-dict のリリース</a> を見てください。
+    </p>
+  )
+}
+
+{
+  base && (
+    <p class="dictionary-base">
+      <a class="dictionary-download" href={`/dictionaries/${base.file}`} download>
+        基本辞書をダウンロード
+      </a>
+      <span class="dictionary-size">zip・{size(base.size)}{base.model && "・並べ替えのモデル入り"}</span>
+    </p>
+  )
+}
+
+{additional.length > 0 && (
+<table class="dictionary-table">
+  <thead>
+    <tr>
+      <th>追加辞書</th>
+      <th>大きさ</th>
+    </tr>
+  </thead>
+  <tbody>
+    {
+      additional.map((d) => (
+        <tr>
+          <td>
+            <a href={`/dictionaries/${d.file}`} download title={d.file}>
+              {d.label}
+            </a>
+          </td>
+          <td>{size(d.size)}</td>
+        </tr>
+      ))
+    }
+  </tbody>
+</table>
+)}
+
+{
+  manifest.tag !== null && (
+    <p class="dictionary-release">
+      kanaemi-dict の <a href={manifest.url}>{manifest.tag}</a> の辞書です。
+    </p>
+  )
+}
+
+<style>
+  .dictionary-base {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1rem;
+  }
+  .dictionary-download {
+    display: inline-block;
+    padding: 0.45rem 1.1rem;
+    border: 2px solid var(--sl-color-white);
+    border-radius: 0.8rem;
+    font-family: var(--kanaemi-font-display);
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--sl-color-black);
+    background: var(--sl-color-white);
+  }
+  .dictionary-download:hover {
+    border-color: var(--sl-color-accent);
+    background: var(--sl-color-accent);
+  }
+  .dictionary-size,
+  .dictionary-release {
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-3);
+  }
+</style>

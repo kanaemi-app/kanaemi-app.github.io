@@ -8,7 +8,7 @@ description: どの辞書を、どの順で使うかを決める。
 順番を決めたいとき、一部の辞書だけを使いたいときは、[設定ファイル](/docs/settings/config/) に `dictionaries` を書きます。
 
 ```toml
-dictionaries = ["custom", "base.kdic", "railway.tsv", "sub/place.tsv"]
+dictionaries = ["custom", "kanaemi-base.kdic", "kanaemi-railway.tsv", "my/words.tsv"]
 ```
 
 - `dictionaries` フォルダの中のファイル名で書きます。中のフォルダは `/` でつなぎます。
