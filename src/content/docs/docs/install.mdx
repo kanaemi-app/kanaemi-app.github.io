@@ -44,6 +44,14 @@ Mac は、メニューバーの Apple メニューの「この Mac について�
 
 </Steps>
 
+[Homebrew](https://brew.sh/) を使っているなら、1 の代わりに次を流しても入れられます。この入れ方では、はじめて開くときの警告は出ません。
+
+```sh
+brew install --cask kanaemi-app/tap/kanaemi
+```
+
+インストーラーで入れた Kanaemi がすでにあると、Homebrew は上書きせずに止まります。そのときは `--force` を付けてください（`brew install --cask --force kanaemi-app/tap/kanaemi`）。置き換わるのはアプリだけで、[設定のフォルダ](/docs/settings/folder/) はそのまま残ります。
+
 Kanaemi がアプリにキーを送る機能（[ふだんの置き換え](/docs/settings/keys/#ふだん) など）には、アクセシビリティの許可が要ります。使うときは「システム設定 › プライバシーとセキュリティ › アクセシビリティ」で Kanaemi を許可してください。
 
 </TabItem>
@@ -129,7 +137,7 @@ Kanaemi は辞書がなくても動きますが、変換しても候補が出ま
 
 ## 消すには
 
-- macOS：入力ソースから Kanaemi を外し、`~/Library/Input Methods/Kanaemi.app` を消す（`rm -rf ~/Library/Input\ Methods/Kanaemi.app`）。
+- macOS：入力ソースから Kanaemi を外し、`~/Library/Input Methods/Kanaemi.app` を消す（`rm -rf ~/Library/Input\ Methods/Kanaemi.app`）。Homebrew で入れたときは `brew uninstall --cask kanaemi` で消す。
 - Windows：「設定 › アプリ」から Kanaemi をアンインストールする。
 - Linux：入れたときと同じパッケージマネージャーで消す（`sudo apt remove kanaemi` など）。
 
