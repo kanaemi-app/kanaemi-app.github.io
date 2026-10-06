@@ -15,7 +15,9 @@
 
 # 辞書の一覧。dictionaries フォルダの中のファイル名で書き（中のフォルダは / でつなぐ。"sub/a.tsv"）、先の方が優先度が高い。
 # "custom" はユーザーカスタム辞書の位置で、書かなければ先頭になる。
-# 一覧を書かなければ、ユーザーカスタム辞書のあとに、dictionaries フォルダ（中のフォルダも含む）の .tsv と .kdic を名前の順に読む。
+# "builtin:名前" は、かなえみに入っている組み込みの辞書の位置（date・time・year・random）。書いたものだけを使う。
+# 一覧を書かなければ、ユーザーカスタム辞書のあとに、dictionaries フォルダ（中のフォルダも含む）の .tsv と .kdic を名前の順に読み、
+# 最後に組み込みの辞書をすべて使う。
 # 同じ名前の .kdic がある .tsv は読まない。一覧を書くと、それがこの既定の代わりになる：使うフォルダの辞書も書くこと。
 #dictionaries = ["custom"]
 
@@ -23,24 +25,34 @@
 #mode_indicator = true
 
 # 未確定文字列の印。空でない文字列で、改行とタブを含まない。
+# hold だけは空にもでき、空なら見えない幅のない文字（U+200B）を置く。
 #[marks]
 #reading = "›"
 #candidate = "»"
 #okurigana = "*"
 #registration = " « "
 #cursor = "|"
+#hold = ""
 
 # 上から順に重ねるローマ字の表。用意された表の名前か、romaji フォルダの表のファイル名。
 # 用意された表：full-width・hepburn・kunrei・input-aids・z-symbols・azik。
 # azik は ; で っ を打つ。使うときは、; を @begin から外し、@begin を別のキーに割り当てる。
 #[romaji]
 #tables = ["full-width", "hepburn", "kunrei", "input-aids", "z-symbols"]
+# 読みの外で確定するとき、かなにならないローマ字の打ちかけを打ったとおりに残すか（arew で確定すると「あれw」）。
+# false なら捨てる（「あれ」）。読みの中の打ちかけは、いつも捨てる。
+#keep_unfinished = true
 
 # 外からの操作。エディタなどのプログラムが、このポート（127.0.0.1）につないで、モードを知り、変える。
 # 書かなければ待たない。つないできた相手は確かめないので、同じマシンのどのプログラムでもモードを読み、変えられる。
 # 下の番号は例で、既定値ではない。使わないポートを選ぶこと。
 #[control]
 #port = 50123
+
+# 使わない関数。functions フォルダの関数はファイル名（拡張子を除く）で、組み込みの関数は "builtin:名前" で書く。
+# functions フォルダの関数を外すと、同じ名前の組み込みの関数があればそれを使う。
+#[functions]
+#disabled = []
 
 #[keys]
 # 入力中、割り当てのない Cmd・Ctrl・Option 付きのキーは何もしない。
@@ -56,7 +68,8 @@
 # @commit-hiragana・@commit-katakana・@commit-half-katakana・@commit-full-alphanumeric・@commit-alphanumeric（読みをその形にして確定する）・
 # @select-1〜@select-9（その番号の候補を確定）・
 # @register（登録を始める）・@forget（その候補を以後出さない）・@abc（確定して ABC モードへ）・@kana（かなモードへ）・
-# @begin（読みを始める。読みの中では送り仮名を始め、候補を選んでいるときは確定して次の読みを始める）。
+# @begin（読みを始める。読みの中では送り仮名を始め、候補を選んでいるときは確定して次の読みを始める）・
+# @undo-commit（直前に確定した候補を、選び直せるように戻す）。
 # 割り当てたキーは、ローマ字の表より先に機能として働く。場面に合わない機能は書けない。
 
 # 読みを打っているとき
@@ -163,6 +176,7 @@
 #"eisu" = "@abc"
 #"muhenkan" = "@abc"
 #";" = "@begin"
+#"shift+backspace" = "@undo-commit"
 
 # ABC モードで、何も打っていないとき
 #[keys.abc]

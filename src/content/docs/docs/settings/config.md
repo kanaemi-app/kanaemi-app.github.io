@@ -28,7 +28,9 @@ Kanaemi は設定なしで使えるように作ってあります。変えたい
 | `mode_indicator` | `true` | モードが切り替わったとき、カーソルの近くに「かな」「ABC」を出すか |
 | `[marks]` | 下を見る | 未確定文字列の印 |
 | `[romaji] tables` | `["full-width", "hepburn", "kunrei", "input-aids", "z-symbols"]` | 重ねるローマ字の表。[ローマ字の表](/docs/settings/romaji/) |
+| `[romaji] keep_unfinished` | `true` | 読みの外で確定するとき、かなにならないローマ字の打ちかけを打ったとおりに残すか。[表にないとき](/docs/settings/romaji/#表にないとき) |
 | `[control] port` | （書かない） | 外からの操作を待つポート。[外からの操作](/docs/integrations/control/) |
+| `[functions] disabled` | `[]` | 使わない関数。[関数を足す](/docs/settings/functions/#使わないようにする) |
 | `[keys] pass_while_composing` | `[]` | ここに書いた修飾キー（`"cmd"`・`"ctrl"`・`"alt"`）付きで割り当てのないキーを、入力中は確定してからアプリに渡す |
 | `[keys] tap_timeout_ms` | `300` | 単独押しとみなす、押してから離すまでの長さ（ミリ秒） |
 | `[keys.*]` | [既定のキー](/docs/reference/default-keys/) | キーバインド。[キーバインド](/docs/settings/keys/) |
@@ -44,7 +46,10 @@ candidate = "»"      # 候補の前
 okurigana = "*"      # 送り仮名の始まり
 registration = " « " # 読みと登録する文字列の間
 cursor = "|"         # 読みの途中のカーソル（末尾のときは出さない）
+hold = ""            # 押さえたままか決まるまで、末尾に出す
 ```
+
+`hold` は、[押さえたまま](/docs/settings/keys/#押さえたまま) に割り当てたキーを押したとき、押さえたままか単独で押したのかが決まるまで、未確定文字列の末尾に出す印です。押さえたまま打って待っている文字は、印の後ろに続きます。`hold` だけは空にでき、既定は空です。空のときは、見えない幅のない文字（U+200B）を置きます。
 
 | 印 | 例 |
 | --- | --- |
@@ -53,6 +58,7 @@ cursor = "|"         # 読みの途中のカーソル（末尾のときは出さ
 | 送り仮名の始まり | <span class="preedit">›か*く</span> |
 | 登録 | <span class="preedit">»きしゃ « 記者</span> |
 | カーソル | <span class="preedit">›かん\|じ</span> |
+| 押さえたまま（`hold = "_"` のとき） | <span class="preedit">›かん_j</span> |
 
 ## 例
 

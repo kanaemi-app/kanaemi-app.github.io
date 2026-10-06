@@ -3,17 +3,18 @@ title: 辞書の一覧
 description: どの辞書を、どの順で使うかを決める。
 ---
 
-辞書の一覧を書かなければ、Kanaemi はユーザーカスタム辞書のあとに、`dictionaries` フォルダ（中のフォルダも含む）の辞書をファイル名の順に使います。たいていはこれで足ります。
+辞書の一覧を書かなければ、Kanaemi はユーザーカスタム辞書のあとに、`dictionaries` フォルダ（中のフォルダも含む）の辞書をファイル名の順に使い、最後に [組み込みの辞書](/docs/usage/builtin/) をすべて使います。たいていはこれで足ります。
 
 順番を決めたいとき、一部の辞書だけを使いたいときは、[設定ファイル](/docs/settings/config/) に `dictionaries` を書きます。
 
 ```toml
-dictionaries = ["custom", "kanaemi-base.kdic", "kanaemi-railway.tsv", "my/words.tsv"]
+dictionaries = ["custom", "kanaemi-base.kdic", "kanaemi-railway.tsv", "my/words.tsv", "builtin:date", "builtin:time"]
 ```
 
 - `dictionaries` フォルダの中のファイル名で書きます。中のフォルダは `/` でつなぎます。
 - 先に書いた辞書ほど優先度が高くなります。同じ表記の候補が複数の辞書にあれば、優先度の高い辞書のものを使います。
 - `"custom"` はユーザーカスタム辞書（登録した語）の位置です。書かなければ先頭に置きます。
+- `"builtin:名前"` は組み込みの辞書（`date`・`time`・`year`・`random`）の位置です。書いたものだけを使います。
 - 書いた一覧が、既定の代わりになります。一覧に書かなかった辞書は使いません。
 - 一覧にある辞書が読めなければ、飛ばしてログに残します。
 

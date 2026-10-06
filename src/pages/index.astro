@@ -11,8 +11,7 @@ if (!installers) {
   throw new Error("src/data/installers.json is missing; run `npm run fetch`");
 }
 const packagesByOs = new Map(byOs(installers.packages).map((g) => [g.os, g.packages]));
-const repository = "https://github.com/kanaemi-app/kanaemi";
-const title = "Kanaemi | どの OS でも同じ打ち方の日本語入力";
+const repository = "https://github.com/kanaemi-app/kanaemi";const title = "Kanaemi | どの OS でも同じ打ち方の日本語入力";
 const description =
   "Kanaemi は、SKK の打ち方をもとにした日本語入力です。macOS・Windows・Linux で、キーの意味も変換の結果も変わりません。";
 const og = new URL("/og.png", Astro.site).href;
@@ -46,6 +45,8 @@ const guides = [
   { name: "convert", title: "; で読みを始め、Space で変換", width: 1200, height: 675 },
   { name: "semicolon", title: "; のはたらき", width: 1200, height: 820 },
   { name: "sands", title: "SandS で打つ（Space を押さえたまま）", width: 1200, height: 675 },
+  { name: "undo", title: "確定した候補を選び直す", width: 1200, height: 675 },
+  { name: "functions", title: "Luau の関数で語を作る", width: 1200, height: 675 },
 ];
 
 const formats = [
@@ -59,7 +60,12 @@ const variants = [
 ];
 
 const platforms = [
-  { os: "macos", name: "macOS", via: "Apple シリコン・InputMethodKit" },
+  {
+    os: "macos",
+    name: "macOS",
+    via: "Apple シリコン・InputMethodKit",
+    brew: "brew install --cask kanaemi-app/tap/kanaemi",
+  },
   { os: "windows", name: "Windows", via: "Text Services Framework" },
   { os: "linux", name: "Linux", via: "IBus・GNOME ほか" },
 ];
@@ -163,6 +169,14 @@ const platforms = [
               </p>
             </dd>
           </div>
+        </dl>
+        <p class="more"><a href="/docs/usage/convert/">打ち方をくわしく読む</a></p>
+      </section>
+
+      <section class="keys" aria-labelledby="more-title">
+        <h2 id="more-title">SandS・登録・選び直し・関数辞書</h2>
+
+        <dl class="key-list">
           <div class="key-row">
             <dt class="key-caps">
               <span class="cap is-wide is-hot is-space">Space</span>
@@ -176,8 +190,51 @@ const platforms = [
               </p>
             </dd>
           </div>
+          <div class="key-row">
+            <dt class="key-caps">
+              <span class="cap is-hot">0</span>
+              <span class="key-result">
+                <span class="cap-plus" aria-hidden="true">→</span>
+                <span class="pe is-candidate">»かなえみ «</span>
+              </span>
+            </dt>
+            <dd>
+              <h3>0 を押せば、その場で登録</h3>
+              <p>
+                打ちたい語が候補になければ、候補を選んでいるときに <kbd>0</kbd> を押します。すぐにその読みで語を登録する場面に入り、登録した語をそのまま確定します。候補を最後まで回る必要も、別の画面を開く必要もありません（<a href="/docs/usage/register/">語を登録する</a>）。
+              </p>
+            </dd>
+          </div>
+          <div class="key-row">
+            <dt class="key-caps">
+              <span class="cap is-wide is-hot">Shift</span>
+              <span class="cap-plus" aria-hidden="true">+</span>
+              <span class="cap is-wide is-hot">Backspace</span>
+            </dt>
+            <dd>
+              <h3>確定したあとで選び直す</h3>
+              <p>
+                違う候補で確定してしまったら、何も打っていないときに <kbd>Shift</kbd>＋<kbd>Backspace</kbd> を押します。直前の確定が候補を選ぶ場面に戻り、そのまま選び直せます（<a href="/docs/usage/candidates/#確定した候補を選び直す">選び直し方</a>）。
+              </p>
+            </dd>
+          </div>
+          <div class="key-row">
+            <dt class="key-caps">
+              <span class="cap is-hot">;</span>
+              <span class="cap">2026nen</span>
+              <span class="key-result">
+                <span class="cap-plus" aria-hidden="true">→</span>
+                <span class="pe is-candidate">»令和8年</span>
+              </span>
+            </dt>
+            <dd>
+              <h3>変換のたびに、関数で語を作る</h3>
+              <p>
+                <code>;2026nen</code> で 令和8年、<code>;kyou</code> で今日の日付。辞書の表記に置き場所を書くと、変換するたびに Luau の関数を呼んで埋めます。自分の関数も、functions フォルダに置くだけで足せます（<a href="/docs/usage/builtin/">日付や時刻を打つ</a>・<a href="/docs/settings/functions/">関数を足す</a>）。
+              </p>
+            </dd>
+          </div>
         </dl>
-        <p class="more"><a href="/docs/usage/convert/">打ち方をくわしく読む</a></p>
       </section>
 
       <section class="principles" aria-labelledby="principles-title">
@@ -221,6 +278,12 @@ const platforms = [
                     <a href="/docs/install/#どれを選ぶか">どれを選ぶか分からないとき</a>
                   </p>
                 )}
+                {p.brew && (
+                  <div class="brew">
+                    <p>Homebrew でも入れられます。この入れ方では警告が出ません。</p>
+                    <code>{p.brew}</code>
+                  </div>
+                )}
               </li>
             ))
           }
@@ -245,7 +308,7 @@ const platforms = [
       <section class="sheet" aria-labelledby="sheet-title">
         <h2 id="sheet-title">打ち方の画像</h2>
         <p class="section-lede">
-          モードの切り替え、変換、<kbd>;</kbd> のはたらきを画像にしました。手元に置いたり、人に勧めたりするときにどうぞ。どれもライトとダークがあります。
+          モードの切り替え、変換、<kbd>;</kbd> のはたらき、選び直しや関数を画像にしました。手元に置いたり、人に勧めたりするときにどうぞ。どれもライトとダークがあります。
         </p>
         <ul class="guide-list">
           {
