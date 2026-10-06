@@ -48,6 +48,7 @@ export default defineConfig({
             { label: "候補を選ぶ", slug: "docs/usage/candidates" },
             { label: "語を登録する", slug: "docs/usage/register" },
             { label: "数を含む語", slug: "docs/usage/numbers" },
+            { label: "日付や時刻を打つ", slug: "docs/usage/builtin" },
           ],
         },
         {
@@ -58,6 +59,7 @@ export default defineConfig({
             { label: "キーバインド", slug: "docs/settings/keys" },
             { label: "ローマ字の表", slug: "docs/settings/romaji" },
             { label: "辞書の一覧", slug: "docs/settings/dictionaries" },
+            { label: "関数を足す", slug: "docs/settings/functions" },
             { label: "設定アプリ", slug: "docs/settings/app" },
           ],
         },
@@ -74,6 +76,7 @@ export default defineConfig({
             { label: "機能", slug: "docs/reference/functions" },
             { label: "既定のキー", slug: "docs/reference/default-keys" },
             { label: "テキストの辞書の形式", slug: "docs/reference/text-dictionary" },
+            { label: "表記の置き場所", slug: "docs/reference/placeholders" },
             { label: "ローマ字の表の形式", slug: "docs/reference/romaji-table" },
           ],
         },
