@@ -52,7 +52,7 @@ brew install --cask kanaemi-app/tap/kanaemi
 
 インストーラーで入れた Kanaemi がすでにあると、Homebrew は上書きせずに止まります。そのときは `--force` を付けてください（`brew install --cask --force kanaemi-app/tap/kanaemi`）。置き換わるのはアプリだけで、[設定のフォルダ](/docs/settings/folder/) はそのまま残ります。
 
-Kanaemi がアプリにキーを送る機能（[ふだんの置き換え](/docs/settings/keys/#ふだん) など）には、アクセシビリティの許可が要ります。使うときは「システム設定 › プライバシーとセキュリティ › アクセシビリティ」で Kanaemi を許可してください。
+機能によっては、macOS の許可が要ります。[macOS の許可](#macos-の許可) を見てください。
 
 </TabItem>
 <TabItem label="Windows">
@@ -69,7 +69,7 @@ Kanaemi がアプリにキーを送る機能（[ふだんの置き換え](/docs/
 
 </Steps>
 
-設定アプリは、スタートメニューの「Kanaemi Settings」から開けます。
+設定アプリは、スタートメニューの「かなえみ設定」から開けます。
 
 </TabItem>
 <TabItem label="Linux">
@@ -96,6 +96,19 @@ X11 の GTK3 のアプリでは、IBus の入力モジュール（`ibus-gtk3`）
 
 </TabItem>
 </Tabs>
+
+## macOS の許可
+
+macOS では、次の機能を使うときだけ、「システム設定 › プライバシーとセキュリティ」で Kanaemi を許可します。使わないなら、許可は要りません。
+
+| 許可 | 要る機能 | 許可がないとき |
+| --- | --- | --- |
+| アクセシビリティ | [ふだんの置き換え](/docs/settings/keys/#ふだん)・[確定した候補を選び直す](/docs/usage/candidates/#確定した候補を選び直す) | 押したキーをそのままアプリに渡す |
+| 入力監視 | [押さえたまま](/docs/settings/keys/#押さえたまま)（SandS など） | 押さえたままに割り当てたキーは、いつも単独で押したものとして働く |
+
+- 許可が要る割り当てがあって許可がないあいだは、メニューバーの入力メニューに、許可の設定を開く項目が出ます。[設定アプリ](/docs/settings/app/#キーバインド) のキーバインドからも開けます。
+- 一覧に Kanaemi がないときは、`~/Library/Input Methods/Kanaemi.app` を一覧にドラッグして、オンにします。設定アプリから許可の設定を開くと、その場所も Finder で開きます。
+- Kanaemi はどの版も同じ証明書で署名しているので、新しい版を入れても、たいていは許可が残ります。新しくしたあとに働かなくなったときは、許可し直してください。
 
 ## 警告が出たとき
 
