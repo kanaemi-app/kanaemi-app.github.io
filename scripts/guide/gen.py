@@ -33,6 +33,7 @@ ACCENT_TINT = mix(ACCENT, PAPER, 0.3)
 KEYFILL = PAPER if not DARK else mix(INK, PAPER, 0.05)
 # Latin in Quicksand (the wordmark face), Japanese in Zen Maru Gothic (the 「か」 face).
 LATIN = "Quicksand Light"
+PRESERVE = 'xml:space="preserve"'
 KANA = "Zen Maru Gothic"
 
 
@@ -316,6 +317,72 @@ def sands_image():
     page(W, H, "".join(b), "sands")
 
 
+# ---------------------------------------------------------------- undo-commit
+def undo_image():
+    W, H = 1200, 675
+    b = [header("確定した候補を、あとから選び直す",
+                "何も打っていないときに Shift+Backspace。直前に確定した候補が、候補を選ぶ場面に戻る")]
+    cols = [(220, "確定した"), (600, "戻す"), (980, "選び直す")]
+    for cx, lab in cols:
+        b.append(chip(cx - 90, 190, lab, fill=SOFT, color=INK, size=24, w=180))
+    s, w = keys_seq(0, 0, list(";kakuchou") + ["Enter"], k=28, gap=4)
+    b.append(f'<g transform="translate({220 - w/2} 300)">{s}</g>')
+    sw, bw, gap = 104, 168, 34
+    x0 = 600 - (sw + gap + bw) / 2
+    b.append(key(x0, 286, sw, 56, "Shift", hot=True, size=20))
+    b.append(bold(x0 + sw + gap / 2, 324, "+", 28, ACCENT, "middle"))
+    b.append(key(x0 + sw + gap, 286, bw, 56, "Backspace", hot=True, size=20))
+    s, w = keys_seq(0, 0, ["Space"], k=56)
+    b.append(f'<g transform="translate({980 - w/2} 286)">{s}</g>')
+    for cx in (220, 600, 980):
+        b.append(arrow(cx, 362, cx, 400))
+    b.append(bold(220, 470, "格調", 56, INK, "middle"))
+    b.append(preedit(600, 470, "»格調", 52, "middle", color=ACCENT, width=150))
+    b.append(preedit(980, 470, "»拡張", 52, "middle", color=ACCENT, width=150))
+    for x1 in (370, 750):
+        b.append(arrow(x1, 452, x1 + 80, 452, LINE, 5))
+    b.append(text(220, 540, "違う語だった", 22, MUTED, "middle"))
+    b.append(text(600, 540, "読みも候補の並びもそのまま", 22, MUTED, "middle"))
+    b.append(text(980, 540, "Enter で確定し直す", 22, MUTED, "middle"))
+    b.append(f'<rect x="72" y="580" width="1056" height="60" rx="30" fill="{SOFT}"/>')
+    b.append(text(600, 620, "確定したあと、Kanaemi が出した文字だけが続いている間なら戻せる", 23, INK, "middle"))
+    page(W, H, "".join(b), "undo")
+
+
+# ---------------------------------------------------------------- functions
+def functions_image():
+    W, H = 1200, 675
+    b = [header("変換のたびに、Luau の関数で語を作る",
+                "辞書の表記に置き場所を書くと、変換するたびに関数を呼んで埋める")]
+    ax, aw, bx, bw, y0, h = 72, 560, 656, 472, 172, 380
+    b.append(f'<rect x="{ax}" y="{y0}" width="{aw}" height="{h}" rx="36" fill="{KEYFILL}" stroke="{INK}" stroke-width="6"/>')
+    b.append(text(ax + 36, y0 + 56, "辞書の行（TSV）", 22, MUTED))
+    rows = [("きょう   {-:date %Y-%m-%d}", ";kyou", "»2026-10-07"),
+            ("{}わ   {dai}話", ";12wa", "»第十二話")]
+    for i, (line, seq, res) in enumerate(rows):
+        yy = y0 + 108 + i * 140
+        b.append(text(ax + 36, yy, line, 28, weight="700", extra=PRESERVE))
+        s, w = keys_seq(0, 0, list(seq) + ["Space"], k=28, gap=4)
+        b.append(f'<g transform="translate({ax + 36} {yy + 26})">{s}</g>')
+        b.append(arrow(ax + 52 + w, yy + 40, ax + 88 + w, yy + 40))
+        b.append(preedit(ax + 102 + w, yy + 54, res, 32, color=ACCENT, width=sum(17 if c.isascii() else 32 for c in res)))
+    b.append(f'<rect x="{bx}" y="{y0}" width="{bw}" height="{h}" rx="36" fill="{KEYFILL}" stroke="{ACCENT}" stroke-width="6"/>')
+    b.append(text(bx + 36, y0 + 56, "functions/dai.luau", 22, ACCENT))
+    code = [
+        "local n = kanaemi.number",
+        "return function(source)",
+        "  local d = n.digits(source)",
+        "  local k = d and n.counted(d, false)",
+        "  return k and (\"第\" .. k)",
+        "end",
+    ]
+    for i, line in enumerate(code):
+        b.append(text(bx + 36, y0 + 112 + i * 42, line, 20, INK, extra=PRESERVE))
+    b.append(f'<rect x="72" y="580" width="1056" height="60" rx="30" fill="{SOFT}"/>')
+    b.append(text(600, 620, "日付・和暦・UUID などは組み込みの関数で。ファイルやほかのプログラムには触れない", 23, INK, "middle"))
+    page(W, H, "".join(b), "functions")
+
+
 # ---------------------------------------------------------------- 4. cheat sheet
 def cheatsheet_image():
     W, H = 1080, 1620
@@ -398,4 +465,6 @@ if __name__ == "__main__":
     flow_image()
     semicolon_image()
     sands_image()
+    undo_image()
+    functions_image()
     cheatsheet_image()

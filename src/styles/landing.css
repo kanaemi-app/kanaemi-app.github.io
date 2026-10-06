@@ -312,6 +312,15 @@ main h2 {
   color: var(--smile);
   box-shadow: 0 5px 0 var(--smile-tint);
 }
+/* What the keys before it turn into, at the size of the keycaps. The arrow
+   stays with the result when the row wraps. */
+.key-result {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--kanaemi-font-display);
+  font-size: 1.25rem;
+}
 .key-row dd {
   margin: 0;
 }
@@ -386,6 +395,18 @@ main h2 {
 .platform-list .choose {
   margin-top: 0.75rem;
   font-size: 0.85rem;
+}
+.platform-list .brew {
+  margin-top: 1rem;
+}
+.platform-list .brew code {
+  display: block;
+  margin-top: 0.4rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.6rem;
+  background: var(--paper);
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
 }
 
 /* The illustrations are for handing out, so the page lists them as links
