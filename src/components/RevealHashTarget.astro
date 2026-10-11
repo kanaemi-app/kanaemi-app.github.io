@@ -1,0 +1,30 @@
+---
+/**
+ * Opens the tab and the <details> that hold the element the URL's #fragment
+ * names, so a link into another OS's tab lands on visible content.
+ * Starlight's tabs do not follow the fragment on their own.
+ */
+---
+
+<script>
+  async function reveal() {
+    const id = decodeURIComponent(location.hash.slice(1));
+    const target = id ? document.getElementById(id) : null;
+    if (!target) return;
+    await customElements.whenDefined("starlight-tabs");
+    // Outer tab first, so an inner tab group is switched once it is shown.
+    const panels: HTMLElement[] = [];
+    for (let el = target.closest<HTMLElement>('[role="tabpanel"]'); el; el = el.parentElement?.closest('[role="tabpanel"]') ?? null) {
+      panels.unshift(el);
+    }
+    for (const panel of panels) {
+      if (!panel.hidden) continue;
+      document.querySelector<HTMLElement>(`[role="tab"][href="#${CSS.escape(panel.id)}"]`)?.click();
+    }
+    target.closest("details")?.setAttribute("open", "");
+    target.scrollIntoView();
+  }
+
+  reveal();
+  window.addEventListener("hashchange", reveal);
+</script>

@@ -2,15 +2,22 @@
 /**
  * The installers of Kanaemi's latest release, from its catalog, linked
  * directly on GitHub and named by OS and CPU rather than by file name.
+ * Given `os`, only that OS's installers, as a list without the OS column.
  */
 import { byOs, packageLabel, type Installers } from "../lib/installers";
 
+interface Props {
+  /** An OS id of the catalog: `macos`, `windows` or `linux`. */
+  os?: string;
+}
+
+const { os } = Astro.props;
 const found = Object.values(import.meta.glob<Installers>("../data/installers.json", { eager: true, import: "default" }));
 if (found.length === 0) {
   throw new Error("src/data/installers.json is missing; run `npm run fetch`");
 }
 const installers = found[0];
-const groups = byOs(installers.packages);
+const groups = byOs(installers.packages).filter((g) => os === undefined || g.os === os);
 const size = (bytes: number) => `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 ---
 
@@ -19,33 +26,50 @@ const size = (bytes: number) => `${(bytes / 1024 / 1024).toFixed(1)} MB`;
     <p>
       Kanaemi はまだリリースしていません。<a href={installers.releases}>GitHub のリリース</a> を見てください。
     </p>
+  ) : groups.length === 0 ? (
+    <p>
+      Kanaemi <a href={`${installers.releases}/tag/${installers.version}`}>{installers.version}</a> には、この OS 向けのインストーラーがありません。
+    </p>
   ) : (
     <>
-      <table>
-        <thead>
-          <tr>
-            <th>OS</th>
-            <th>ダウンロード</th>
-          </tr>
-        </thead>
-        <tbody>
-          {groups.map((g) => (
+      {os === undefined ? (
+        <table>
+          <thead>
             <tr>
-              <td>{g.label}</td>
-              <td>
-                {g.packages.map((p) => (
-                  <span class="installer">
-                    <a href={p.url} title={p.file}>
-                      {packageLabel(p)}
-                    </a>
-                    <span class="installer-size">{size(p.size)}</span>
-                  </span>
-                ))}
-              </td>
+              <th>OS</th>
+              <th>ダウンロード</th>
             </tr>
+          </thead>
+          <tbody>
+            {groups.map((g) => (
+              <tr>
+                <td>{g.label}</td>
+                <td>
+                  {g.packages.map((p) => (
+                    <span class="installer">
+                      <a href={p.url} title={p.file}>
+                        {packageLabel(p)}
+                      </a>
+                      <span class="installer-size">{size(p.size)}</span>
+                    </span>
+                  ))}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <ul>
+          {groups[0].packages.map((p) => (
+            <li>
+              <a href={p.url} title={p.file}>
+                {packageLabel(p)}
+              </a>
+              <span class="installer-size">{size(p.size)}</span>
+            </li>
           ))}
-        </tbody>
-      </table>
+        </ul>
+      )}
       <p class="installer-release">
         Kanaemi <a href={`${installers.releases}/tag/${installers.version}`}>{installers.version}</a> のインストーラーです。これまでの変更は <a href="/docs/releases/">リリースの履歴</a> にあります。
       </p>
