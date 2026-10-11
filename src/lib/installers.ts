@@ -3,6 +3,8 @@ export interface Package {
   file: string;
   os: string;
   arch: string;
+  /** The input method framework a Linux package runs in: ibus or fcitx5. */
+  framework?: string;
   format: string;
   size: number;
   sha256: string;
@@ -25,6 +27,12 @@ const OS: [string, string][] = [
 
 const DISTRIBUTIONS: Record<string, string> = { deb: "Debian・Ubuntu", rpm: "Fedora など" };
 
+/** In the order a Linux user meets them: IBus is what GNOME, and so most distributions, start with. */
+const FRAMEWORKS: [string, string][] = [
+  ["ibus", "IBus"],
+  ["fcitx5", "Fcitx5"],
+];
+
 /** The machine named the way its owner can check it, not by the architecture's name. */
 function cpu(p: Package): string {
   if (p.os === "macos") return p.arch === "arm64" ? "Apple シリコン（M1 以降）の Mac" : "Intel の Mac";
@@ -33,14 +41,23 @@ function cpu(p: Package): string {
   return "Arm の CPU";
 }
 
-/** What tells a user which file is theirs: the CPU, the distribution on Linux, and the format. */
+/**
+ * What tells a user which file is theirs: on Linux the input method framework
+ * and the distribution, then the CPU and the format.
+ */
 export function packageLabel(p: Package): string {
+  const framework = FRAMEWORKS.find(([id]) => id === p.framework)?.[1];
   const distribution = DISTRIBUTIONS[p.format];
-  return `${distribution ? `${distribution}、` : ""}${cpu(p)}（.${p.format}）`;
+  return `${framework ? `${framework} 用、` : ""}${distribution ? `${distribution}、` : ""}${cpu(p)}（.${p.format}）`;
 }
 
+const frameworkOrder = (p: Package) => FRAMEWORKS.findIndex(([id]) => id === p.framework);
+
+/** The packages by OS, the Linux ones by framework; otherwise in the catalog's order. */
 export function byOs(packages: Package[]): { os: string; label: string; packages: Package[] }[] {
-  return OS.map(([os, label]) => ({ os, label, packages: packages.filter((p) => p.os === os) })).filter(
-    (g) => g.packages.length > 0,
-  );
+  return OS.map(([os, label]) => ({
+    os,
+    label,
+    packages: packages.filter((p) => p.os === os).sort((a, b) => frameworkOrder(a) - frameworkOrder(b)),
+  })).filter((g) => g.packages.length > 0);
 }
