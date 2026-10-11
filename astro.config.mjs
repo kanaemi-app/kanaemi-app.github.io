@@ -1,11 +1,16 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
+import { satteri } from "@astrojs/markdown-satteri";
+import { splitTypedKeys } from "./src/lib/typed-keys.ts";
 
 const site = "https://kanaemi-app.github.io";
 
 export default defineConfig({
   site,
+  markdown: {
+    processor: satteri({ hastPlugins: [splitTypedKeys] }),
+  },
   integrations: [
     starlight({
       title: "Kanaemi",
