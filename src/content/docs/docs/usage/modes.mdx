@@ -3,6 +3,7 @@ title: モード
 description: かなモードと ABC モードを、左右の Shift で切り替える。
 ---
 
+import Since from "../../../../components/Since.astro";
 import ThemedFigure from "../../../../components/ThemedFigure.astro";
 
 Kanaemi のモードは 2 つだけです。
@@ -23,12 +24,31 @@ Kanaemi のモードは 2 つだけです。
 | 右の <kbd>Shift</kbd> を単独で押す・<kbd>かな</kbd>・<kbd>変換</kbd> | かなモードへ |
 | 左の <kbd>Shift</kbd> を単独で押す・<kbd>英数</kbd>・<kbd>無変換</kbd> | ABC モードへ |
 | 何も打っていないときの <kbd>Esc</kbd> | キーをアプリに渡して、ABC モードへ |
+| かなモードで大文字を打つ | ABC モードへ切り替えて、その大文字を打つ（[下を見る](#大文字で-abc-モードへ)） <Since feature="abc-on-capital" /> |
 
-「単独で押す」は、<kbd>Shift</kbd> だけを押して、ほかのキーを押さずに離すことです。<kbd>Shift</kbd> を押さえたまま文字を打つと、ふつうに大文字になります。押してから離すまでが 300 ミリ秒を超えると、単独押しになりません。この長さは [設定で変えられます](/docs/settings/keys/#修飾キー)。
+「単独で押す」は、<kbd>Shift</kbd> だけを押して、ほかのキーを押さずに離すことです。<kbd>Shift</kbd> を押さえたまま文字を打つと単独押しにはならず、大文字を打ちます。押してから離すまでが 300 ミリ秒を超えると、単独押しになりません。この長さは [設定で変えられます](/docs/settings/keys/#修飾キー)。
 
 押す側でモードが決まるので、今どちらのモードかを気にしなくても、打ちたいモードに入れます。
 
 打っている途中で ABC モードにすると、読みはかなのまま確定し、候補は選んでいるものを確定してから、ABC モードに切り替わります。
+
+## 大文字で ABC モードへ
+
+<Since feature="abc-on-capital" />
+
+かなモードで大文字を打つと、ABC モードに切り替わって、その大文字が入ります。英語の語を打ち始めるときに、先にモードを切り替えなくて済みます（<kbd>Shift</kbd>＋<kbd>K</kbd> から <kbd>anji</kbd> と打つと Kanji）。
+
+- 何も打っていないときと、[登録する文字列](/docs/usage/register/) を打っているときに働きます。ローマ字の打ちかけがあれば、確定してから切り替えます。
+- 読みや候補の場面では切り替えません。読みの中の大文字は、そのまま読みに入ります。
+- ローマ字の表が使う大文字と、[キーバインド](/docs/settings/keys/) で機能を割り当てた大文字は、そちらが働きます。
+- <kbd>Caps Lock</kbd> をかけたまま打っても切り替わります。
+
+切り替えたくないときは、[設定アプリ](/docs/settings/app/) の「入力」で「大文字で ABC モードへ」を切るか、[設定ファイル](/docs/settings/config/) に次のように書きます。
+
+```toml
+[keys]
+abc_on_capital = false
+```
 
 ## モードの表示
 

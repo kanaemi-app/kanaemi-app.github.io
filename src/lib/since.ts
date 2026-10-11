@@ -20,8 +20,9 @@ export const RELEASED = [
   "v0.3.0",
   "v0.4.0",
   "v0.4.1",
+  "v0.5.0",
 ] as const;
-export const NEXT_RELEASE = "v0.5.0";
+export const NEXT_RELEASE = "v0.6.0";
 
 export interface Since {
   version: string;
@@ -79,6 +80,8 @@ export const SINCE = {
   "zenkaku-caps": { version: "v0.5.0", commit: "dbdd4be" },
   // [keys.registration.kana-mode]・[keys.registration.abc-mode]
   "registration-modes": { version: "v0.5.0", commit: "9ed86b3" },
+  // かなモードで大文字を打つと ABC モードへ（[keys] abc_on_capital）
+  "abc-on-capital": { version: "v0.6.0", commit: "4f18818" },
 } satisfies Record<string, Since>;
 
 export type Feature = keyof typeof SINCE;
