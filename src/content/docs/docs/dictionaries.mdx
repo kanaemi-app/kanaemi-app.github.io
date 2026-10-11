@@ -1,10 +1,9 @@
 ---
 title: 辞書を入れる
-description: 公式辞書を設定アプリから入れる。手で入れることもできる。
+description: 公式辞書を設定アプリから入れる。
 ---
 
 import { Steps } from "@astrojs/starlight/components";
-import DictionaryDownloads from "../../../components/DictionaryDownloads.astro";
 import Since from "../../../components/Since.astro";
 
 Kanaemi は、[設定のフォルダ](/docs/settings/folder/) の `dictionaries` フォルダに置いた辞書で変換します。辞書がなくても動きますが、変換しても候補が出ません。
@@ -15,6 +14,8 @@ Kanaemi のための辞書は、[kanaemi-dict](https://github.com/kanaemi-app/ka
 
 - 基本辞書：ふだんの文章に出てくる語。活用する語と、数を含む語（「3 本」「第 2 回」）も入っています。並べ替えのモデルと組で配っています。まずはこれを入れてください。
 - 追加辞書：分野ごとの語。基本辞書にない語だけを持つので、基本辞書に足して使います。
+
+それぞれの辞書の中身と作り方は [公式辞書](/docs/reference/official-dictionaries/) にあります。
 
 ## 設定アプリで入れる
 
@@ -39,41 +40,15 @@ Kanaemi のための辞書は、[kanaemi-dict](https://github.com/kanaemi-app/ka
 
 設定アプリが通信するのは、「最新の版を確かめる」「入れる」「新しくする」を押したときだけです。Kanaemi そのものは通信しません。
 
+設定アプリを使わずに入れるときは、[公式辞書を手で入れる](/docs/reference/official-dictionaries/#手で入れる) を見てください。
+
 ### 新しくする
 
 「最新の版を確かめる」を押すと、辞書ごとに「入れていません」「最新です」「新しい版があります」のどれかが出ます。新しい版がある辞書は、「新しくする」で入れ替えられます。基本辞書は、モデルも一緒に新しくなります。
 
-## 手で入れる
-
-設定アプリを使わずに入れることもできます。ネットにつながらないマシンに入れるときなどに使ってください。
-
-<DictionaryDownloads />
-
-zip を展開すると、辞書の名前のフォルダができます。中には、辞書のファイル `kanaemi-<名前>.tsv` と、ライセンスの `LICENSE`、辞書を作るのに使った素材の表示の `NOTICE` が入っています。基本辞書のフォルダには、並べ替えのモデル `ranking.model` も入っています。
-
-<Steps>
-
-1. 辞書のファイル `kanaemi-<名前>.tsv` を、[設定のフォルダ](/docs/settings/folder/) の中の `dictionaries` フォルダに置く。フォルダがなければ作る。
-
-2. 基本辞書の `ranking.model` を、設定のフォルダに置く。`dictionaries` の中ではなく、`config.toml` と同じところに置きます。
-
-3. 追加辞書も使うときは、[設定ファイル](/docs/settings/config/) に辞書の一覧を書き、基本辞書を先に書く。
-
-   ```toml
-   dictionaries = ["custom", "kanaemi-base.tsv", "kanaemi-railway.tsv", "kanaemi-it.tsv"]
-   ```
-
-4. 入力欄をクリックし直す。
-
-</Steps>
-
-辞書の一覧を書かないと、Kanaemi は `dictionaries` の中の辞書をファイル名の順に使います。この順では、`kanaemi-2026.tsv` のような追加辞書が基本辞書より先に来ることがあり、先にある辞書の候補ほど前に出やすくなります。
-
-並べ替えのモデルは、組になっている基本辞書と一緒に使うものです。手で基本辞書を新しくしたら、`ranking.model` も同じ zip のものに替えてください。
-
 ## ライセンス
 
-公式辞書と並べ替えのモデルは、[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.ja) で配っています。辞書を作るのに使った素材の表示は、配布物の `NOTICE` にあります。設定アプリで入れたときは、辞書と同じフォルダに置かれます。
+公式辞書と並べ替えのモデルは、[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.ja) で配っています。辞書を作るのに使った素材の表示は、配布物の `NOTICE` にあります。設定アプリで入れたときは、辞書と同じフォルダに置かれます。ほかの一覧から取った項目の条件は、[公式辞書のライセンス](/docs/reference/official-dictionaries/#ライセンス) にあります。
 
 ## 読み込みを速くする
 

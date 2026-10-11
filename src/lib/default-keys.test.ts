@@ -1,5 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import GithubSlugger from "github-slugger";
 import { functionAnchor, keyLabel, parseDefaultKeys } from "./default-keys.ts";
 
 const template = `
@@ -96,13 +98,30 @@ test("keyLabel names keys the way the docs write them", () => {
 });
 
 test("functionAnchor points a function at the heading that describes it", () => {
-  assert.equal(functionAnchor("@next"), "next");
-  assert.equal(functionAnchor("@left"), "leftrighthomeend");
-  assert.equal(functionAnchor("@katakana"), "hiraganakatakanahalf-katakana");
-  assert.equal(functionAnchor("@alphanumeric"), "full-alphanumericalphanumeric");
-  assert.equal(functionAnchor("@commit-katakana"), "commit-hiraganacommit-katakanacommit-half-katakanacommit-full-alphanumericcommit-alphanumeric");
-  assert.equal(functionAnchor("@select-3"), "select-1select-9");
-  assert.equal(functionAnchor("@complete-previous"), "completecomplete-previous");
-  assert.equal(functionAnchor("@next-page"), "next-pageprevious-page");
-  assert.equal(functionAnchor("@reread-kana"), "reread-kana");
+  assert.equal(functionAnchor("@next"), "次の候補");
+  assert.equal(functionAnchor("@left"), "カーソルを動かす");
+  assert.equal(functionAnchor("@katakana"), "かなの形にして選ぶ");
+  assert.equal(functionAnchor("@commit-katakana"), "形にして確定する");
+  assert.equal(functionAnchor("@select-3"), "番号で選ぶ");
+  assert.equal(functionAnchor("@abc"), "abc-モードへ");
+  assert.equal(functionAnchor("@reread-kana"), "打ったかなを読みに戻す");
+  assert.equal(functionAnchor("@undo-commit"), "確定を選び直す");
+});
+
+test("every function a key can be bound to has its heading on the functions page", () => {
+  const page = readFileSync(new URL("../content/docs/docs/reference/functions.mdx", import.meta.url), "utf8");
+  const slugger = new GithubSlugger();
+  const anchors = new Set(
+    page
+      .split("\n")
+      .filter((line) => /^#{2,6}\s/.test(line))
+      .map((line) => slugger.slug(line.replace(/^#+\s+/, ""))),
+  );
+  const template = readFileSync(new URL("../data/config.toml", import.meta.url), "utf8");
+  const functions = new Set([...template.matchAll(/@[a-z][a-z0-9-]*/g)].map((m) => m[0]));
+  functions.delete("@none");
+  assert.ok(functions.size > 0);
+  for (const fn of functions) {
+    assert.ok(anchors.has(functionAnchor(fn)), `${fn} → #${functionAnchor(fn)}`);
+  }
 });

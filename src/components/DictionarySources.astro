@@ -1,0 +1,29 @@
+---
+/**
+ * Every official dictionary of the latest kanaemi-dict release with the
+ * sources its NOTICE names, so the list follows each release instead of the
+ * page's prose.
+ */
+import { manifest } from "../lib/dictionary-manifest";
+---
+
+{
+  manifest.dictionaries.length > 0 && (
+    <table>
+      <thead>
+        <tr>
+          <th>辞書</th>
+          <th>使った素材</th>
+        </tr>
+      </thead>
+      <tbody>
+        {manifest.dictionaries.map((d) => (
+          <tr>
+            <td>{d.label}</td>
+            <td>{d.sources.join("、")}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}

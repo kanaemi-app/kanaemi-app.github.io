@@ -8,7 +8,7 @@ import Since from "../../../../components/Since.astro";
 
 設定を書かないときの割り当てです。この表は、Kanaemi の設定ファイルのひな形をもとにしています。変え方は [キーバインド](/docs/settings/keys/) を見てください。
 
-`Cmd` は Windows と Linux では <kbd>Win</kbd> キー、`Option` は Windows と Linux では <kbd>Alt</kbd> キーです。
+<kbd>Cmd</kbd> は Windows と Linux では <kbd>Win</kbd> キー、<kbd>Option</kbd> は Windows と Linux では <kbd>Alt</kbd> キーです。
 
 ## 読みを打っているとき
 
@@ -30,7 +30,11 @@ import Since from "../../../../components/Since.astro";
 
 <DefaultKeys scene="registration" />
 
-かなモードと ABC モードとで、割り当てを分けることもできます（[登録の場面をモードごとに分ける](/docs/settings/keys/#登録の場面をモードごとに分ける)）。<Since feature="registration-modes" />
+### モードごとの割り当て
+
+<Since feature="registration-modes" />
+
+かなモードと ABC モードとで、割り当てを分けることもできます（[登録の場面をモードごとに分ける](/docs/settings/keys/#登録の場面をモードごとに分ける)）。
 
 <DefaultKeys scene="registration.kana-mode" />
 
@@ -46,20 +50,26 @@ import Since from "../../../../components/Since.astro";
 
 ## ふだん
 
-何も打っていないとき、押したキーを置き換えてアプリに送ります。どの OS にも働く置き換えに、動いている OS の置き換えを重ねます（[OS ごとの置き換え](/docs/settings/keys/#os-ごとの置き換え)）。<Since feature="os-remaps" />
+何も打っていないとき、押したキーを置き換えてアプリに送ります。
 
 <DefaultKeys scene="application" />
 
-### macOS
+### OS ごとの置き換え
 
-Ctrl＋H や Ctrl＋A などは、macOS の文字の入力欄がもともと扱うので、置き換えません。
+<Since feature="os-remaps" />
+
+どの OS にも働く置き換えに、動いている OS の置き換えを重ねます（[OS ごとの置き換え](/docs/settings/keys/#os-ごとの置き換え)）。
+
+#### macOS
+
+<kbd>Ctrl</kbd>＋<kbd>H</kbd> や <kbd>Ctrl</kbd>＋<kbd>A</kbd> などは、macOS の文字の入力欄がもともと扱うので、置き換えません。
 
 <DefaultKeys scene="application.macos" />
 
-### Windows
+#### Windows
 
 <DefaultKeys scene="application.windows" />
 
-### Linux
+#### Linux
 
 <DefaultKeys scene="application.linux" />

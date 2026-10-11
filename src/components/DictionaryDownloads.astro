@@ -5,31 +5,12 @@
  * public/dictionaries/ by scripts/fetch_dictionaries.py, linked by their
  * Japanese labels rather than their file names.
  */
-interface Dictionary {
-  name: string;
-  base: boolean;
-  file: string;
-  size: number;
-  label: string;
-  model: boolean;
-}
-interface Manifest {
-  /** null while kanaemi-dict has no release with a catalog. */
-  tag: string | null;
-  url: string;
-  dictionaries: Dictionary[];
-}
+import { sizeLabel as size } from "../lib/dictionaries";
+import { manifest } from "../lib/dictionary-manifest";
 
-const found = Object.values(import.meta.glob<Manifest>("../data/dictionaries.json", { eager: true, import: "default" }));
-if (found.length === 0) {
-  throw new Error("src/data/dictionaries.json is missing; run `npm run fetch`");
-}
-const manifest = found[0];
 const base = manifest.dictionaries.find((d) => d.base);
 const additional = manifest.dictionaries.filter((d) => !d.base);
 
-const size = (bytes: number) =>
-  bytes >= 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
 ---
 
 {

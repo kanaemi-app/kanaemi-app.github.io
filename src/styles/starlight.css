@@ -67,6 +67,18 @@ h1#_top {
   background: var(--sl-color-black);
 }
 
+/* Keys typed one after another, a key each (src/lib/typed-keys.ts). */
+.sl-markdown-content kbd + kbd {
+  margin-inline-start: 0.15em;
+}
+
+/* The key that begins a reading, which the rest of the keys hang on. */
+.sl-markdown-content kbd.key-begin {
+  border-color: var(--sl-color-accent);
+  color: var(--sl-color-accent-high);
+  background: var(--sl-color-accent-low);
+}
+
 /* The preedit as Kanaemi draws it: marks as text, no decoration besides the
    dotted underline the illustrations use. */
 .preedit {

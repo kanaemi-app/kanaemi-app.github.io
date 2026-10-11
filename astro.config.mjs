@@ -1,11 +1,16 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
+import { satteri } from "@astrojs/markdown-satteri";
+import { splitTypedKeys } from "./src/lib/typed-keys.ts";
 
 const site = "https://kanaemi-app.github.io";
 
 export default defineConfig({
   site,
+  markdown: {
+    processor: satteri({ hastPlugins: [splitTypedKeys] }),
+  },
   integrations: [
     starlight({
       title: "Kanaemi",
@@ -28,6 +33,9 @@ export default defineConfig({
       ],
       editLink: {
         baseUrl: "https://github.com/kanaemi-app/kanaemi-app.github.io/edit/main/",
+      },
+      components: {
+        PageTitle: "./src/components/PageTitle.astro",
       },
       customCss: ["./src/styles/fonts.css", "./src/styles/starlight.css"],
       sidebar: [
@@ -79,6 +87,7 @@ export default defineConfig({
             { label: "テキストの辞書の形式", slug: "docs/reference/text-dictionary" },
             { label: "表記の置き場所", slug: "docs/reference/placeholders" },
             { label: "ローマ字の表の形式", slug: "docs/reference/romaji-table" },
+            { label: "公式辞書", slug: "docs/reference/official-dictionaries" },
           ],
         },
         {

@@ -9,21 +9,23 @@ import Since from "../../../../components/Since.astro";
 
 | 打つキー | 結果 |
 | --- | --- |
-| `;ka;ku` | <span class="preedit is-candidate">»書く</span> |
-| `;ta;be` | <span class="preedit is-candidate">»食べ</span> |
-| `;kan;ji` | <span class="preedit is-candidate">»感じ</span> |
+| <kbd>;ka;ku</kbd> | <span class="preedit is-candidate">»書く</span> |
+| <kbd>;ta;be</kbd> | <span class="preedit is-candidate">»食べ</span> |
+| <kbd>;kan;ji</kbd> | <span class="preedit is-candidate">»感じ</span> |
 
 送り仮名を示さなくても、[活用した語は読みのまま変換できます](/docs/usage/convert/#活用した語)。示すと、候補が送り仮名で終わるものに絞られ、送り仮名の始まりで分かれる候補が前に出ます。
 
-[SandS で使う](/docs/settings/keys/#sands-で使う) 設定にしてあれば、Space を押さえたまま送り仮名の最初のキーを押しても、送り仮名の始まりになります。
+[SandS で使う](/docs/settings/keys/#sands-で使う) 設定にしてあれば、<kbd>Space</kbd> を押さえたまま送り仮名の最初のキーを押しても、送り仮名の始まりになります。
 
 ## 打ちかけを続ける
 
-送り仮名の「まとまり」は、ローマ字の規則 1 つ分です（`kya` → きゃ、`tta` → っ）。まとまりを打ったところで変換し、余ったローマ字は候補の後ろに残ります。
+送り仮名の「まとまり」は、ローマ字の規則 1 つ分です（<kbd>kya</kbd> → きゃ、<kbd>tta</kbd> → っ）。まとまりを打ったところで変換し、余ったローマ字は候補の後ろに残ります。
 
 ```
 ;mo;tt   → »持っ t
 ```
+
+### 続きを打って送り仮名を伸ばす
 
 <Since feature="okurigana-extend" />
 
@@ -47,4 +49,4 @@ import Since from "../../../../components/Since.astro";
 
 - 送り仮名の始まりは、カーソルが読みの末尾にあるときだけ付けられます。
 - 送り仮名を付けたあとの <kbd>;</kbd> は何もしません。
-- ローマ字の打ちかけがあれば、先にかなにしてから送り仮名の始まりを付けます（`;kan;ji` は読み「かん」と送り仮名「じ」）。
+- ローマ字の打ちかけがあれば、先にかなにしてから送り仮名の始まりを付けます（<kbd>;kan;ji</kbd> は読み「かん」と送り仮名「じ」）。

@@ -21,7 +21,7 @@ import Since from "../../../components/Since.astro";
 
 ## Shift の単独押しでモードが変わらない
 
-Shift を押してから離すまでが 300 ミリ秒を超えると、単独押しになりません。ゆっくり押す癖があるときは、`[keys] tap_timeout_ms` を長くしてください。
+<kbd>Shift</kbd> を押してから離すまでが 300 ミリ秒を超えると、単独押しになりません。ゆっくり押す癖があるときは、`[keys] tap_timeout_ms` を長くしてください。
 
 Linux の Fcitx5 では、下の [左の Shift で ABC モードにならない](#linux-の-fcitx5-で左の-shift-で-abc-モードにならない) も見てください。
 
@@ -52,13 +52,13 @@ macOS の「入力監視」で Kanaemi を許可していないと、押さえ�
 
 <Since feature="os-remaps" />
 
-macOS では、Ctrl＋H・Ctrl＋A などの Emacs 風のキーを置き換えません。macOS の文字の入力欄が、もともと同じように扱うからです。置き換えたいときは、`[keys.application.macos]` に書いてください（[OS ごとの置き換え](/docs/settings/keys/#os-ごとの置き換え)）。
+macOS では、<kbd>Ctrl</kbd>＋<kbd>H</kbd>・<kbd>Ctrl</kbd>＋<kbd>A</kbd> などの Emacs 風のキーを置き換えません。macOS の文字の入力欄が、もともと同じように扱うからです。置き換えたいときは、`[keys.application.macos]` に書いてください（[OS ごとの置き換え](/docs/settings/keys/#os-ごとの置き換え)）。
 
 ## 置き換えたくないアプリがある
 
 <Since feature="send-except" />
 
-ターミナルや Emacs のように、Ctrl＋H などを自分で扱うアプリでは、`[keys] send_except` にアプリを書くと、置き換えずにそのまま渡します（[キーを置き換えないアプリ](/docs/settings/keys/#キーを置き換えないアプリ)）。
+ターミナルや Emacs のように、<kbd>Ctrl</kbd>＋<kbd>H</kbd> などを自分で扱うアプリでは、`[keys] send_except` にアプリを書くと、置き換えずにそのまま渡します（[キーを置き換えないアプリ](/docs/settings/keys/#キーを置き換えないアプリ)）。
 
 ## macOS で日本語を打てなくなった
 
@@ -76,13 +76,13 @@ IBus 版では、IBus の入力モジュール `ibus-gtk3` が要ります。Fci
 
 <Since feature="fcitx5" />
 
-Fcitx5 の既定の設定では、左の Shift の単独押しを Fcitx5 が「入力メソッドを一時的に切り替える」キーとして取るため、Kanaemi に届きません。Fcitx5 の設定でそのキー（`~/.config/fcitx5/config` の `[Hotkey/AltTriggerKeys]`）を空にするか、ABC モードにする別のキー（<kbd>英数</kbd>・<kbd>無変換</kbd> など）を使ってください。
+Fcitx5 の既定の設定では、左の <kbd>Shift</kbd> の単独押しを Fcitx5 が「入力メソッドを一時的に切り替える」キーとして取るため、Kanaemi に届きません。Fcitx5 の設定でそのキー（`~/.config/fcitx5/config` の `[Hotkey/AltTriggerKeys]`）を空にするか、ABC モードにする別のキー（<kbd>英数</kbd>・<kbd>無変換</kbd> など）を使ってください。
 
 ## Linux の Fcitx5 で置き換えが効かない
 
 <Since feature="fcitx5" />
 
-Sway のような、Wayland の入力メソッドのプロトコルの第 2 版を使うデスクトップの Fcitx5 では、送るキーに押している修飾キーが付いてしまうため、[ふだんの置き換え](/docs/settings/keys/#ふだん) をしません。押したキーは、そのままアプリに渡ります。[確定した候補を選び直す](/docs/usage/candidates/#確定した候補を選び直す) と [打ったかなを読みに戻す](/docs/usage/convert/#打ったかなを読みに戻す) は、Backspace を送らずに入力欄の文字を消すので、そのまま使えます。
+Sway のような、Wayland の入力メソッドのプロトコルの第 2 版を使うデスクトップの Fcitx5 では、送るキーに押している修飾キーが付いてしまうため、[ふだんの置き換え](/docs/settings/keys/#ふだん) をしません。押したキーは、そのままアプリに渡ります。[確定した候補を選び直す](/docs/usage/candidates/#確定した候補を選び直す) と [打ったかなを読みに戻す](/docs/usage/convert/#打ったかなを読みに戻す) は、<kbd>Backspace</kbd> を送らずに入力欄の文字を消すので、そのまま使えます。
 
 ## Linux で入力欄を移ると打ちかけが消える
 

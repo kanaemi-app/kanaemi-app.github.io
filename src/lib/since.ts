@@ -67,6 +67,8 @@ export const SINCE = {
   "os-remaps": { version: "v0.5.0", commit: "9514615" },
   // 候補の一覧の辞書の名前と、@next-page・@previous-page、page-up・page-down
   "candidate-pages": { version: "v0.5.0", commit: "008a425" },
+  // 候補の意味を OS の辞書で引いて、候補の一覧の横に出す
+  "candidate-meanings": { version: "v0.5.0", commit: "2077164" },
   // Linux の Fcitx5 版
   fcitx5: { version: "v0.5.0", commit: "f4fb903" },
   // かなモードの Space をローマ字の表に通す
@@ -121,4 +123,14 @@ export function knownVersions(fetched: readonly string[] = []): string[] {
   const recorded = Object.values(SINCE as Record<string, Since>).map((s) => s.version);
   const plain = fetched.filter((v) => RELEASE_VERSION.test(v));
   return [...new Set([...RELEASED, NEXT_RELEASE, ...recorded, ...plain])];
+}
+
+/**
+ * Whether a feature's badge says only what the badge of the page it is on
+ * (`pageFeature`, from the page's frontmatter) already says for the whole page.
+ */
+export function repeatsPage(feature: string, pageFeature: string | undefined): boolean {
+  if (pageFeature === undefined) return false;
+  const all = SINCE as Record<string, Since>;
+  return all[feature]?.version === all[pageFeature]?.version;
 }

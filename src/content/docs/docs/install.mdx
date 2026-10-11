@@ -1,51 +1,29 @@
 ---
 title: インストール
 description: OS ごとのインストーラーで Kanaemi を入れ、入力ソースに足す。
+tableOfContents: false
 ---
 
 import { Steps, Tabs, TabItem } from "@astrojs/starlight/components";
 import InstallerDownloads from "../../../components/InstallerDownloads.astro";
+import RevealHashTarget from "../../../components/RevealHashTarget.astro";
 
-Kanaemi は、OS ごとのふつうの入れ方（インストーラーやパッケージ）で配っています。自分の OS と CPU（Linux では入力の仕組みも）に合うファイルをダウンロードしてください。macOS 向けは Apple シリコンの Mac だけで、Intel の Mac 向けはありません。
+<RevealHashTarget />
 
-<InstallerDownloads />
-
-## どれを選ぶか
-
-Windows と Linux は、パソコンの CPU によってファイルが分かれています。ほとんどのパソコンは「Intel・AMD の CPU」です。Snapdragon などの Arm の CPU を積んだパソコンだけ、「Arm の CPU」を選んでください。
-
-どちらか分からないときは、次の場所で確かめられます。
-
-| OS | 確かめる場所 | Intel・AMD の CPU | Arm の CPU |
-| --- | --- | --- | --- |
-| Windows | 「設定 › システム › バージョン情報」の「システムの種類」 | 「x64 ベース プロセッサ」 | 「ARM ベース プロセッサ」 |
-| Linux | ターミナルで `uname -m` | `x86_64` | `aarch64` |
-
-Mac は、メニューバーの Apple メニューの「この Mac について」で確かめられます。「チップ」に「Apple M1」などと出ていれば Apple シリコンです。「プロセッサ」に Intel と出る Mac では、Kanaemi は使えません。
-
-### Linux の IBus 用と Fcitx5 用
-
-Linux は、入力の仕組みによってもパッケージが分かれています。ふだん使っている入力の仕組みに合うほうを選んでください。
-
-- GNOME（Ubuntu や Fedora の標準）など、IBus を使っているなら「IBus 用」。
-- KDE Plasma など、Fcitx5 を使っているなら「Fcitx5 用」。
-
-どちらか分からないときは、ターミナルで `echo $XMODIFIERS` を流します。`@im=ibus` と出れば IBus、`@im=fcitx` と出れば Fcitx5 です。
-
-設定アプリは、どちらのパッケージにも入っています。両方を入れても、ぶつかりません。
-
-## 入れて、入力ソースに足す
-
-入れただけでは使えません。どの OS でも、入れたあとに入力ソース（キーボード）として足します。
+自分の OS を選んでください。入れたあと、入力ソース（キーボード）に Kanaemi を足すと使えます。
 
 <Tabs syncKey="os">
 <TabItem label="macOS">
 
+Apple シリコン（M1 以降）の Mac で使えます。Intel の Mac 向けはありません（Apple メニューの「この Mac について」の「チップ」に「Apple M1」などと出ていれば Apple シリコンです）。
+
+<InstallerDownloads os="macos" />
+
+### macOS に入れる
+
 <Steps>
 
-1. `Kanaemi-<版>.pkg` を開き、インストーラーに従って入れる。
-
-   はじめて開くときは、「Apple は、マルウェアが含まれていないことを検証できませんでした」のような警告が出て、開けません。[下の手順](#macos) で開いてください。
+1. `Kanaemi-<版>.pkg` を開き、インストーラーに従って入れる。はじめて開くときは警告が出て開けないので、下の「開けないとき」の手順で開く。
 
 2. 「システム設定 › キーボード › 入力ソース」の「編集…」を開き、「＋」から「日本語」の下にある Kanaemi を足す。
 
@@ -55,24 +33,78 @@ Linux は、入力の仕組みによってもパッケージが分かれてい�
 
 </Steps>
 
-[Homebrew](https://brew.sh/) を使っているなら、1 の代わりに次を流しても入れられます。この入れ方では、はじめて開くときの警告は出ません。
+[Homebrew](https://brew.sh/) なら、1 の代わりに次を流します。この入れ方では警告が出ません。
 
 ```sh
 brew install --cask kanaemi-app/tap/kanaemi
 ```
 
-インストーラーで入れた Kanaemi がすでにあると、Homebrew は上書きせずに止まります。そのときは `--force` を付けてください（`brew install --cask --force kanaemi-app/tap/kanaemi`）。置き換わるのはアプリだけで、[設定のフォルダ](/docs/settings/folder/) はそのまま残ります。
+インストーラーで入れた Kanaemi がすでにあると、Homebrew は止まります。そのときは `--force` を付けます（`brew install --cask --force kanaemi-app/tap/kanaemi`）。置き換わるのはアプリだけです。
 
-機能によっては、macOS の許可が要ります。[macOS の許可](#macos-の許可) を見てください。
+<details>
+<summary>開けないとき（「Apple は、マルウェアが含まれていないことを検証できませんでした」）</summary>
+
+インストーラーが Apple の公証を受けていないため、macOS ははじめて開くときに止めます。
+
+<Steps>
+
+1. 警告の画面で「完了」を押して閉じる。
+
+2. 「システム設定 › プライバシーとセキュリティ」の下のほうの「セキュリティ」で、`Kanaemi-<版>.pkg` についての「このまま開く」を押す。
+
+3. もう一度出る確認で「このまま開く」を押し、パスワードか Touch ID で許可する。
+
+</Steps>
+
+「このまま開く」は、警告が出てからしばらくしか出ません。見当たらなければ、もう一度 `.pkg` を開いて警告を出してから、システム設定を開き直します。
+
+ターミナルなら、ダウンロードしたファイルの印を外してから開くこともできます。
+
+```sh
+xattr -d com.apple.quarantine ~/Downloads/Kanaemi-*.pkg
+```
+
+</details>
+
+### macOS の許可
+
+次の機能を使うときだけ、「システム設定 › プライバシーとセキュリティ」で Kanaemi を許可します。
+
+| 許可 | 要る機能 | 許可がないとき |
+| --- | --- | --- |
+| アクセシビリティ | [ふだんの置き換え](/docs/settings/keys/#ふだん)・[確定した候補を選び直す](/docs/usage/candidates/#確定した候補を選び直す) | 押したキーをそのままアプリに渡す |
+| 入力監視 | [押さえたまま](/docs/settings/keys/#押さえたまま)（SandS など） | 押さえたままに割り当てたキーは、いつも単独で押したものとして働く |
+
+- 許可がないあいだは、入力メニューに許可の設定を開く項目が出ます。[設定アプリ](/docs/settings/app/#キーバインド) のキーバインドからも開けます。
+- 許可の一覧に Kanaemi がなければ、`~/Library/Input Methods/Kanaemi.app` を一覧にドラッグしてオンにします。設定アプリから許可の設定を開くと、この場所も Finder で開きます。
+- どの版も同じ証明書で署名しているので、新しい版を入れても、たいてい許可は残ります。新しくしたあとに働かなくなったら、許可し直してください。
+
+### macOS から消す
+
+入力ソースから Kanaemi を外し、`~/Library/Input Methods/Kanaemi.app` を消します。
+
+```sh
+rm -rf ~/Library/Input\ Methods/Kanaemi.app
+```
+
+Homebrew で入れたときは、`brew uninstall --cask kanaemi` で消します。
 
 </TabItem>
 <TabItem label="Windows">
 
+<InstallerDownloads os="windows" />
+
+### Windows でどれを選ぶか
+
+ほとんどのパソコンは「Intel・AMD の CPU」です。Snapdragon などの Arm の CPU のパソコンだけ、「Arm の CPU」を選びます。
+
+分からないときは、「設定 › システム › バージョン情報」の「システムの種類」を見ます。「x64 ベース プロセッサ」なら Intel・AMD、「ARM ベース プロセッサ」なら Arm です。
+
+### Windows に入れる
+
 <Steps>
 
-1. 自分のパソコンに合う `.msi`（[どれを選ぶか](#どれを選ぶか)）を開き、インストーラーに従って入れる。
-
-   はじめて開くときは、「Windows によって PC が保護されました」という警告が出ることがあります。[下の手順](#windows) で開いてください。
+1. `.msi` を開き、インストーラーに従って入れる。警告が出たら、下の「警告が出たとき」を見る。
 
 2. 「設定 › 時刻と言語 › 言語と地域」で日本語の「言語のオプション」を開き、「キーボードの追加」から Kanaemi を足す。
 
@@ -82,12 +114,40 @@ brew install --cask kanaemi-app/tap/kanaemi
 
 設定アプリは、スタートメニューの「かなえみ設定」から開けます。
 
+<details>
+<summary>警告が出たとき</summary>
+
+インストーラーは Microsoft が確かめられる署名を受けていないため、Windows やブラウザーが警告を出すことがあります。
+
+- 「Windows によって PC が保護されました」：「詳細情報」を押し、出てきた「実行」を押す。
+- 「ユーザー アカウント制御」で発行元が「不明」：「はい」を押す。
+- ブラウザー（Microsoft Edge など）がダウンロードを止めた：ダウンロードの一覧のそのファイルのメニューから「保存」や「保持する」を選ぶ。
+
+</details>
+
+### Windows から消す
+
+「設定 › アプリ」から Kanaemi をアンインストールします。
+
 </TabItem>
 <TabItem label="Linux">
 
+<InstallerDownloads os="linux" />
+
+### Linux でどれを選ぶか
+
+パッケージは、入力の仕組みと CPU で分かれています。
+
+- 入力の仕組み：GNOME（Ubuntu や Fedora の標準）など IBus なら「IBus 用」、KDE Plasma など Fcitx5 なら「Fcitx5 用」。分からないときは `echo $XMODIFIERS` を流し、`@im=ibus` なら IBus、`@im=fcitx` なら Fcitx5 です。
+- CPU：`uname -m` が `x86_64` なら「Intel・AMD の CPU」、`aarch64` なら「Arm の CPU」。
+
+設定アプリは、どちらのパッケージにも入っています。両方を入れても、ぶつかりません。
+
+### Linux に入れる
+
 <Steps>
 
-1. 使っている入力の仕組みに合うパッケージ（[IBus 用か Fcitx5 用か](#linux-の-ibus-用と-fcitx5-用)）を入れる。
+1. パッケージを入れる。
 
    ```sh
    # IBus 用：Debian・Ubuntu
@@ -110,68 +170,22 @@ brew install --cask kanaemi-app/tap/kanaemi
 
 </Steps>
 
-X11 の GTK3 のアプリでは、入力の仕組みの GTK3 の入力モジュール（IBus なら `ibus-gtk3`、Fcitx5 なら `fcitx5-frontend-gtk3`）が入っていないと、キーが Kanaemi に届きません。
+### Linux で気をつけること
 
-Fcitx5 は、既定では左の Shift の単独押しを自分で取るので、そのままでは左の Shift で ABC モードになりません。変え方は [トラブルシューティング](/docs/troubleshooting/#linux-の-fcitx5-で左の-shift-で-abc-モードにならない) にあります。
+- X11 の GTK3 のアプリでは、GTK3 の入力モジュール（IBus なら `ibus-gtk3`、Fcitx5 なら `fcitx5-frontend-gtk3`）がないと、キーが Kanaemi に届きません。
+- Fcitx5 は、既定では左の <kbd>Shift</kbd> の単独押しを自分で取るので、そのままでは左の <kbd>Shift</kbd> で ABC モードになりません。変え方は [困ったとき](/docs/troubleshooting/#linux-の-fcitx5-で左の-shift-で-abc-モードにならない) にあります。
+
+### Linux から消す
+
+入れたときと同じパッケージマネージャーで消します（`sudo apt remove ibus-kanaemi` や `sudo apt remove fcitx5-kanaemi` など）。
 
 </TabItem>
 </Tabs>
-
-## macOS の許可
-
-macOS では、次の機能を使うときだけ、「システム設定 › プライバシーとセキュリティ」で Kanaemi を許可します。使わないなら、許可は要りません。
-
-| 許可 | 要る機能 | 許可がないとき |
-| --- | --- | --- |
-| アクセシビリティ | [ふだんの置き換え](/docs/settings/keys/#ふだん)・[確定した候補を選び直す](/docs/usage/candidates/#確定した候補を選び直す) | 押したキーをそのままアプリに渡す |
-| 入力監視 | [押さえたまま](/docs/settings/keys/#押さえたまま)（SandS など） | 押さえたままに割り当てたキーは、いつも単独で押したものとして働く |
-
-- 許可が要る割り当てがあって許可がないあいだは、メニューバーの入力メニューに、許可の設定を開く項目が出ます。[設定アプリ](/docs/settings/app/#キーバインド) のキーバインドからも開けます。
-- 一覧に Kanaemi がないときは、`~/Library/Input Methods/Kanaemi.app` を一覧にドラッグして、オンにします。設定アプリから許可の設定を開くと、その場所も Finder で開きます。
-- Kanaemi はどの版も同じ証明書で署名しているので、新しい版を入れても、たいていは許可が残ります。新しくしたあとに働かなくなったときは、許可し直してください。
-
-## 警告が出たとき
-
-Kanaemi のインストーラーは、Apple の公証も Microsoft が確かめられる署名も受けていません。そのため、macOS と Windows では、はじめて開くときに警告が出ます。
-
-### macOS
-
-macOS は、はじめて開くときにインストーラーを止めます。次の手順で開けます。
-
-<Steps>
-
-1. 警告の画面で「完了」を押して閉じる。
-
-2. 「システム設定 › プライバシーとセキュリティ」を開き、下のほうの「セキュリティ」にある `Kanaemi-<版>.pkg` についての表示の「このまま開く」を押す。
-
-3. もう一度出る確認で「このまま開く」を押し、パスワードか Touch ID で許可する。インストーラーが開く。
-
-</Steps>
-
-「このまま開く」は、警告が出てからしばらくのあいだだけ表示されます。見当たらないときは、もう一度 `.pkg` を開いて警告を出してから、システム設定を開き直してください。
-
-ターミナルが使えるなら、ダウンロードしたファイルの印を外してから開くこともできます。
-
-```sh
-xattr -d com.apple.quarantine ~/Downloads/Kanaemi-*.pkg
-```
-
-### Windows
-
-開くときに、Windows やブラウザーが警告を出すことがあります。
-
-- 「Windows によって PC が保護されました」と出たら、「詳細情報」を押し、出てきた「実行」を押す。
-- 「ユーザー アカウント制御」で発行元が「不明」と出たら、「はい」を押す。
-- ブラウザー（Microsoft Edge など）がダウンロードを止めたら、ダウンロードの一覧のそのファイルのメニューから「保存」や「保持する」を選ぶ。
 
 ## 次に
 
 Kanaemi は辞書がなくても動きますが、変換しても候補が出ません。[辞書を入れる](/docs/dictionaries/) に進んでください。
 
-## 消すには
+## 消しても残るもの
 
-- macOS：入力ソースから Kanaemi を外し、`~/Library/Input Methods/Kanaemi.app` を消す（`rm -rf ~/Library/Input\ Methods/Kanaemi.app`）。Homebrew で入れたときは `brew uninstall --cask kanaemi` で消す。
-- Windows：「設定 › アプリ」から Kanaemi をアンインストールする。
-- Linux：入れたときと同じパッケージマネージャーで消す（`sudo apt remove ibus-kanaemi` や `sudo apt remove fcitx5-kanaemi` など）。
-
-どの OS でも、[設定のフォルダ](/docs/settings/folder/) は消さずに残ります。設定や登録した語ごと消すときは、このフォルダも消してください。
+Kanaemi を消しても、[設定のフォルダ](/docs/settings/folder/) は残ります。設定や登録した語ごと消すときは、このフォルダも消してください。

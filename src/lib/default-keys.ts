@@ -98,29 +98,44 @@ export function keyLabel(key: string): string[] {
 }
 
 /**
- * The functions that the reference page describes under one heading, as the
- * heading lists them. The page's anchors are its headings slugged, which drops
- * the 「・」 and 「〜」 between the names.
+ * The functions reference page heads each function, or each set of functions
+ * that work alike, with what it does; the heading's anchor is its slug.
  */
-const FUNCTION_GROUPS = [
-  ["left", "right", "home", "end"],
-  ["hiragana", "katakana", "half-katakana"],
-  ["full-alphanumeric", "alphanumeric"],
-  ["complete", "complete-previous"],
-  ["next-page", "previous-page"],
+const FUNCTION_HEADINGS: [string, string[]][] = [
+  ["次の候補", ["next"]],
+  ["前の候補", ["previous"]],
+  ["確定する", ["commit"]],
+  ["取り消す", ["cancel"]],
+  ["前の文字を消す", ["backspace"]],
+  ["後ろの文字を消す", ["delete"]],
+  ["カーソルを動かす", ["left", "right", "home", "end"]],
+  ["かなの形にして選ぶ", ["hiragana", "katakana", "half-katakana"]],
+  ["英数の形にして選ぶ", ["full-alphanumeric", "alphanumeric"]],
   [
-    "commit-hiragana",
-    "commit-katakana",
-    "commit-half-katakana",
-    "commit-full-alphanumeric",
-    "commit-alphanumeric",
+    "形にして確定する",
+    [
+      "commit-hiragana",
+      "commit-katakana",
+      "commit-half-katakana",
+      "commit-full-alphanumeric",
+      "commit-alphanumeric",
+    ],
   ],
+  ["登録する", ["register"]],
+  ["候補を出さないようにする", ["forget"]],
+  ["ページを送る", ["next-page", "previous-page"]],
+  ["補完する", ["complete", "complete-previous"]],
+  ["abc-モードへ", ["abc"]],
+  ["かなモードへ", ["kana"]],
+  ["読みを始める", ["begin"]],
+  ["打ったかなを読みに戻す", ["reread-kana"]],
+  ["確定を選び直す", ["undo-commit"]],
 ];
 
 /** The anchor on the functions reference page for a function written as `@name`. */
 export function functionAnchor(action: string): string {
   const fn = action.replace(/^@/, "");
-  if (/^select-\d$/.test(fn)) return "select-1select-9";
-  const group = FUNCTION_GROUPS.find((g) => g.includes(fn));
-  return group ? group.join("") : fn;
+  if (/^select-\d$/.test(fn)) return "番号で選ぶ";
+  const heading = FUNCTION_HEADINGS.find(([, names]) => names.includes(fn));
+  return heading ? heading[0] : fn;
 }

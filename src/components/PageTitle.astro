@@ -1,0 +1,33 @@
+---
+// Starlight's page title, with the badge of a page that is new as a whole
+// (`since` in its frontmatter) at the right end of the title's line.
+import Default from "@astrojs/starlight/components/PageTitle.astro";
+import Since from "./Since.astro";
+
+const since: string | undefined = Astro.locals.starlightRoute.entry.data.since;
+---
+
+{
+  since ? (
+    <div class="page-title">
+      <Default />
+      <Since feature={since} page />
+    </div>
+  ) : (
+    <Default />
+  )
+}
+
+<style>
+  .page-title {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .page-title :global(.since.page) {
+    flex-shrink: 0;
+    /* On the title's line rather than below its descenders. */
+    margin-block-end: 0.5rem;
+  }
+</style>
