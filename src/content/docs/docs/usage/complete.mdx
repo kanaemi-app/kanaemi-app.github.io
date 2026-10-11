@@ -1,11 +1,10 @@
 ---
 title: 読みを補完する
 description: 打った読みを、Tab でそれで始まるより長い読みに置き換える。
+since: complete
 ---
 
 import Since from "../../../../components/Since.astro";
-
-<Since feature="complete" />
 
 読みを打っている途中で <kbd>Tab</kbd> を押すと、いま打った読みを、それで始まるより長い読みに置き換えます（`かく` → `かくにん`）。長い読みを最後まで打たずに済みます。
 
@@ -17,12 +16,12 @@ import Since from "../../../../components/Since.astro";
 ;kaku → Tab → ›かくにん → Tab → ›かくご → … → ›かく
 ```
 
-1. <kbd>;</kbd> で読みを始め、読みの始めを打つ。`;kaku` → <span class="preedit">›かく</span>
+1. <kbd>;</kbd> で読みを始め、読みの始めを打つ。<kbd>;kaku</kbd> → <span class="preedit">›かく</span>
 2. <kbd>Tab</kbd> を押す。読みが置き換わり、補完の読みの一覧が出る。→ <span class="preedit">›かくにん</span>
 3. 続けて <kbd>Tab</kbd> を押すと、次の読みに置き換わる。最後の次は、打った読みに戻る。<kbd>Shift</kbd>＋<kbd>Tab</kbd> は逆向きに回る。
 4. 置き換えた読みは、打った読みと同じに扱われる。<kbd>Space</kbd> で変換も、<kbd>Enter</kbd> でかなのまま確定も、打ち足しもできる。
 
-送り仮名の始まりを付けた読み（`;ka;`）は補完しません。
+送り仮名の始まりを付けた読み（<kbd>;ka;</kbd>）は補完しません。
 
 ## 補完の読みの一覧
 

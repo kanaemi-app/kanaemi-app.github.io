@@ -12,7 +12,7 @@ import Since from "../../../../components/Since.astro";
 
 ## 打ち方
 
-1. <kbd>;</kbd> を押して、読みを打つ。`;kanji` → <span class="preedit">›かんじ</span>
+1. <kbd>;</kbd> を押して、読みを打つ。<kbd>;kanji</kbd> → <span class="preedit">›かんじ</span>
 2. <kbd>Space</kbd> で変換する。→ <span class="preedit is-candidate">»漢字</span>
 3. <kbd>Enter</kbd> で確定する。→ 漢字
 
@@ -41,29 +41,29 @@ import Since from "../../../../components/Since.astro";
 
 | いつ | すること | 例 |
 | --- | --- | --- |
-| 何も打っていないとき | 読みを始める | `;kanji` → <span class="preedit">›かんじ</span> |
-| 読みの途中 | [送り仮名](/docs/usage/okurigana/) の始まりにして、すぐ変換する | `;ka;ku` → <span class="preedit is-candidate">»書く</span> |
+| 何も打っていないとき | 読みを始める | <kbd>;kanji</kbd> → <span class="preedit">›かんじ</span> |
+| 読みの途中 | [送り仮名](/docs/usage/okurigana/) の始まりにして、すぐ変換する | <kbd>;ka;ku</kbd> → <span class="preedit is-candidate">»書く</span> |
 | 候補を選んでいるとき | 候補を確定して、次の読みを始める | <span class="preedit is-candidate">»漢字</span> <kbd>;</kbd> → 漢字<span class="preedit">›</span> |
-| 読みを始めたすぐあと | <kbd>;</kbd> の文字を打つ | `;;` → ； |
+| 読みを始めたすぐあと | <kbd>;</kbd> の文字を打つ | <kbd>;;</kbd> → ； |
 
-候補を選んでいるときの <kbd>;</kbd> を使うと、Enter を挟まずに語を続けて打っていけます。
+候補を選んでいるときの <kbd>;</kbd> を使うと、<kbd>Enter</kbd> を挟まずに語を続けて打っていけます。
 
 :::tip[SandS で打つ]
-<kbd>;</kbd> の代わりに、Space を押さえたまま打ちはじめることもできます。SKK で SandS を使ってきた人は、同じ指の動きのまま読みや送り仮名を始められます。既定では有効になっていないので、[SandS で使う](/docs/settings/keys/#sands-で使う) を見て設定を足してください。
+<kbd>;</kbd> の代わりに、<kbd>Space</kbd> を押さえたまま打ちはじめることもできます。SKK で SandS を使ってきた人は、同じ指の動きのまま読みや送り仮名を始められます。既定では有効になっていないので、[SandS で使う](/docs/settings/keys/#sands-で使う) を見て設定を足してください。
 :::
 
 ## 活用した語
 
 活用した語も、送り仮名を示さずに読みのまま変換できます。
 
-- `;kaita` <kbd>Space</kbd> → 書いた
-- `;tabenakatta` <kbd>Space</kbd> → 食べなかった
+- <kbd>;kaita</kbd> <kbd>Space</kbd> → 書いた
+- <kbd>;tabenakatta</kbd> <kbd>Space</kbd> → 食べなかった
 
 辞書にある語幹（書・食べ）と、その活用型で後ろに付いてよい読みを組み合わせて候補を作ります。送り仮名の始まりを示すと、候補が絞れて、変換もすぐに始まります（[送り仮名](/docs/usage/okurigana/)）。
 
 ## 数字や記号から始める
 
-読みは数字や記号からも始められます。`;1ko` と打つと読み <span class="preedit">›１こ</span> になり、変換すると「1個」「１個」「一個」などが出ます（[数を含む語](/docs/usage/numbers/)）。
+読みは数字や記号からも始められます。<kbd>;1ko</kbd> と打つと読み <span class="preedit">›１こ</span> になり、変換すると「1個」「１個」「一個」などが出ます（[数を含む語](/docs/usage/numbers/)）。
 
 ## 変換しない語
 
@@ -91,4 +91,4 @@ kanji → かんじ → Ctrl+; → ›かんじ → Space → »漢字
 - 読みを始めてかなのまま確定したものは戻せません。変換して確定したものは、[確定した候補を選び直す](/docs/usage/candidates/#確定した候補を選び直す) で戻します。
 - 戻すかながないときの <kbd>Ctrl</kbd>＋<kbd>;</kbd> は、そのままアプリに渡ります。
 
-入力欄の文字を消すために、Kanaemi がアプリに Backspace を送ります。macOS では、アクセシビリティの許可が要ります（[インストール](/docs/install/#macos-の許可)）。許可がないときは戻さず、キーをそのままアプリに渡します。
+入力欄の文字を消すために、Kanaemi がアプリに <kbd>Backspace</kbd> を送ります。macOS では、アクセシビリティの許可が要ります（[インストール](/docs/install/#macos-の許可)）。許可がないときは戻さず、キーをそのままアプリに渡します。
