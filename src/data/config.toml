@@ -4,8 +4,9 @@
 # 辞書とローマ字の表のファイルは、このファイルのあるフォルダの dictionaries・romaji フォルダに置き、ファイル名で書く。
 #
 # キーの書き方：修飾キー（ctrl・cmd・alt・shift）を + でつなぐ（"ctrl+h"、"shift+space"）。
-# キーは 1 文字（"a"・"0"・";"）か、space・enter・esc・backspace・delete・left・right・up・
-# down・home・end・f1〜f12・eisu（英数）・kana（かな）・henkan（変換）・muhenkan（無変換）か、
+# キーは 1 文字（"a"・"0"・";"）か、space・tab・enter・esc・backspace・delete・left・right・up・
+# down・home・end・page-up・page-down・f1〜f12・eisu（英数）・kana（かな）・henkan（変換）・muhenkan（無変換）・
+# zenkaku-hankaku（半角/全角）・caps-lock か、
 # 修飾キーの Shift・Ctrl・Cmd（Win）・Option（Alt）の左右（left-shift・right-shift・left-ctrl・right-ctrl・
 # left-cmd・right-cmd・left-alt・right-alt）。
 # 修飾キーは押したときに働き、キー自体もアプリに渡る。後ろに #tap を付けると（"left-shift#tap"）、ほかの修飾キーを
@@ -58,6 +59,9 @@
 # 入力中、割り当てのない Cmd・Ctrl・Option 付きのキーは何もしない。
 # ここに書いた修飾キー（"cmd"・"ctrl"・"alt"）のキーは、確定してからアプリに渡す。
 #pass_while_composing = []
+# [keys.application] の置き換えをしないアプリ。そのアプリでは、置き換えのないキーと同じに扱う。
+# アプリは、macOS ではバンドル ID、Windows では実行ファイル名、Linux では GTK のプログラム名で書く。大文字と小文字は区別しない。
+#send_except = []
 # 単独押し（#tap）とみなす、押してから離すまでの長さ（ミリ秒）。
 #tap_timeout_ms = 300
 
@@ -66,18 +70,20 @@
 # @backspace・@delete（1 文字消す）・@left・@right・@home・@end（カーソルを動かす）・
 # @hiragana・@katakana・@half-katakana・@full-alphanumeric・@alphanumeric（読みをその形にして選ぶ。確定はしない）・
 # @commit-hiragana・@commit-katakana・@commit-half-katakana・@commit-full-alphanumeric・@commit-alphanumeric（読みをその形にして確定する）・
-# @select-1〜@select-9（その番号の候補を確定）・
+# @select-1〜@select-9（その番号の候補を確定。補完の一覧が出ているときは、その番号の読みにする）・
 # @register（登録を始める）・@forget（その候補を以後出さない）・@abc（確定して ABC モードへ）・@kana（かなモードへ）・
 # @begin（読みを始める。読みの中では送り仮名を始め、候補を選んでいるときは確定して次の読みを始める）・
-# @undo-commit（直前に確定した候補を、選び直せるように戻す）。
-# 割り当てたキーは、ローマ字の表より先に機能として働く。場面に合わない機能は書けない。
+# @complete・@complete-previous（読みを、それで始まるより長い読みに置き換える。続けて押すと次・前の読み。候補を選んでいるときは、読みに戻して補完を続ける）・
+# @next-page・@previous-page（次・前のページの最初の候補。最後のページの次は最初のページ。補完の一覧では次・前のページの最初の読みで、端の先は打ったままの読み）・
+# @undo-commit（直前に確定した候補を、選び直せるように戻す）・
+# @reread-kana（読みを始めずに打ったかなを、読みに戻す。戻した読みでもう一度押すと、最初のかなを確定する）。
+# 割り当てたキーは、ローマ字の表より先に機能として働く。ただし、ローマ字の打ちかけの続きとして表の規則を作るキー
+# （"z " の規則があるときの z のあとの space など）は、表を先に通す。場面に合わない機能は書けない。
 
 # 読みを打っているとき
 #[keys.reading]
 #"space" = "@next"
-#"ctrl+n" = "@next"
 #"shift+space" = "@previous"
-#"ctrl+p" = "@previous"
 #"enter" = "@commit"
 #"ctrl+j" = "@commit"
 #"ctrl+m" = "@commit"
@@ -104,16 +110,37 @@
 #"eisu" = "@abc"
 #"henkan" = "@next"
 #"muhenkan" = "@katakana"
+#"tab" = "@complete"
+#"shift+tab" = "@complete-previous"
 #";" = "@begin"
+#"ctrl+;" = "@reread-kana"
+
+# 読みの補完の一覧が出ているとき。ここにないキーは、読みを打っているときと同じに働く。
+#[keys.completion]
+#"tab" = "@complete"
+#"shift+tab" = "@complete-previous"
+#"down" = "@complete"
+#"up" = "@complete-previous"
+#"ctrl+n" = "@next-page"
+#"ctrl+p" = "@previous-page"
+#"1" = "@select-1"
+#"2" = "@select-2"
+#"3" = "@select-3"
+#"4" = "@select-4"
+#"5" = "@select-5"
+#"6" = "@select-6"
+#"7" = "@select-7"
+#"8" = "@select-8"
+#"9" = "@select-9"
 
 # 候補を選んでいるとき
 #[keys.candidates]
 #"space" = "@next"
-#"ctrl+n" = "@next"
 #"shift+space" = "@previous"
-#"ctrl+p" = "@previous"
 #"down" = "@next"
 #"up" = "@previous"
+#"ctrl+n" = "@next-page"
+#"ctrl+p" = "@previous-page"
 #"enter" = "@commit"
 #"ctrl+j" = "@commit"
 #"ctrl+m" = "@commit"
@@ -141,6 +168,8 @@
 #"eisu" = "@abc"
 #"henkan" = "@next"
 #"muhenkan" = "@katakana"
+#"tab" = "@complete"
+#"shift+tab" = "@complete-previous"
 #";" = "@begin"
 
 # 語を登録しているとき（登録する文字列を打っているとき）
@@ -170,6 +199,14 @@
 #"henkan" = "@kana"
 #";" = "@begin"
 
+# モードを限った、語を登録しているときの割り当て。書き方は上と同じで、そのモードで打っているときだけ上の表のあとに当てる。
+# 同じキーならモードの表が勝ち、"@none" でそのモードでは上の割り当てを外す。
+# かなモードだけ
+#[keys.registration.kana-mode]
+
+# ABC モードだけ
+#[keys.registration.abc-mode]
+
 # かなモードで、何も打っていないとき
 #[keys.kana]
 #"left-shift#tap" = "@abc"
@@ -177,6 +214,7 @@
 #"muhenkan" = "@abc"
 #";" = "@begin"
 #"shift+backspace" = "@undo-commit"
+#"ctrl+;" = "@reread-kana"
 
 # ABC モードで、何も打っていないとき
 #[keys.abc]
@@ -186,6 +224,17 @@
 
 # ふだん（変換中の文字がないとき）。押したキーを、書いたキーに置き換えてアプリに送る。扱うキーは、文字や F キーでない、名前のあるキーだけ。
 #[keys.application]
+#"ctrl+m" = "enter"
+
+# OS を限った置き換え。書き方は上と同じで、動いている OS の表だけを上の表のあとに当てる。
+# 同じキーなら OS の表が勝ち、"@none" でその OS では上の置き換えを外す。ほかの OS の表も、書き間違いは知らせる。
+# macOS だけ。Ctrl+H や Ctrl+A などは、macOS の文字欄がもともと扱う。
+#[keys.application.macos]
+#"ctrl+backspace" = "alt+backspace"
+#"ctrl+delete" = "alt+delete"
+
+# Windows だけ
+#[keys.application.windows]
 #"ctrl+h" = "backspace"
 #"ctrl+d" = "delete"
 #"ctrl+b" = "left"
@@ -194,4 +243,14 @@
 #"ctrl+e" = "end"
 #"ctrl+n" = "down"
 #"ctrl+p" = "up"
-#"ctrl+m" = "enter"
+
+# Linux だけ
+#[keys.application.linux]
+#"ctrl+h" = "backspace"
+#"ctrl+d" = "delete"
+#"ctrl+b" = "left"
+#"ctrl+f" = "right"
+#"ctrl+a" = "home"
+#"ctrl+e" = "end"
+#"ctrl+n" = "down"
+#"ctrl+p" = "up"

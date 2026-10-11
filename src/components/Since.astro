@@ -1,0 +1,53 @@
+---
+import { Badge } from "@astrojs/starlight/components";
+import { SINCE, badgeShown, knownVersions, sinceLabel, type Since } from "../lib/since";
+
+interface Props {
+  /** A key of `SINCE` in `src/lib/since.ts`. */
+  feature: string;
+}
+
+interface FetchedRelease {
+  version: string;
+  patches?: { version: string }[];
+}
+
+// The release list is fetched from GitHub at build time and may be absent
+// (offline, or before the first fetch); the recorded versions then suffice.
+const fetchedFiles = import.meta.glob<{ default: { groups?: FetchedRelease[] } }>(
+  "../data/releases.json",
+  { eager: true },
+);
+const fetched = Object.values(fetchedFiles).flatMap(({ default: data }) =>
+  (data.groups ?? []).flatMap((g) => [g.version, ...(g.patches ?? []).map((p) => p.version)]),
+);
+
+const text = sinceLabel(Astro.props.feature);
+const { version } = (SINCE as Record<string, Since>)[Astro.props.feature];
+const shown = badgeShown(version, knownVersions(fetched));
+---
+
+{shown && <Badge text={text} variant="note" size="small" class="since" />}
+
+<style>
+  :global(.since) {
+    vertical-align: middle;
+    margin-inline-start: 0.4em;
+    white-space: nowrap;
+  }
+  /* A badge written on the line after a heading sits at the right end of the
+     heading's line, on its bottom. It stays outside the heading so that the
+     heading's text, and with it its anchor, keeps no version in it. */
+  :global(.sl-heading-wrapper:has(+ .since)) {
+    padding-inline-end: 7rem;
+  }
+  /* Floated, so it takes no height and the text under the heading keeps the
+     gap it has under any heading. */
+  :global(.sl-markdown-content .sl-heading-wrapper + .since) {
+    float: inline-end;
+    margin-block: -1.75rem 0;
+  }
+  :global(.sl-markdown-content .sl-heading-wrapper + .since + *) {
+    margin-block-start: 1rem;
+  }
+</style>

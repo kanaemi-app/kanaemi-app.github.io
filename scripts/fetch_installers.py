@@ -4,6 +4,9 @@ src/data/installers.json, so the site links each installer directly.
 The installers stay on GitHub; only the catalog is read. A release without a
 catalog counts as no release, and the site then says none is out yet.
 Without the network, the catalog read before is kept.
+
+Format 2 names, for each Linux package, the input method framework it runs
+in. Format 1 predates the Fcitx5 package, so its Linux packages are IBus ones.
 """
 import json
 import sys
@@ -13,21 +16,37 @@ from pathlib import Path
 
 REPOSITORY = "kanaemi-app/kanaemi"
 CATALOG = f"https://github.com/{REPOSITORY}/releases/latest/download/index.json"
-CATALOG_FORMAT = 1
+CATALOG_FORMATS = (1, 2)
+FRAMEWORKS = ("ibus", "fcitx5")
 MANIFEST = Path(__file__).resolve().parents[1] / "src" / "data" / "installers.json"
 
 
 def parse_catalog(data):
     catalog = json.loads(data)
-    if catalog.get("format") != CATALOG_FORMAT:
-        raise ValueError(f"the catalog is format {catalog.get('format')}; this script reads format {CATALOG_FORMAT}")
+    catalog_format = catalog.get("format")
+    if catalog_format not in CATALOG_FORMATS:
+        raise ValueError(f"the catalog is format {catalog_format}; this script reads formats {', '.join(map(str, CATALOG_FORMATS))}")
     version = catalog["version"]
     packages = catalog.get("packages") or []
     if not packages:
         raise ValueError("the catalog lists no packages")
     return version, [
-        {**p, "url": f"https://github.com/{REPOSITORY}/releases/download/{version}/{p['file']}"} for p in packages
+        {
+            **with_framework(p, catalog_format),
+            "url": f"https://github.com/{REPOSITORY}/releases/download/{version}/{p['file']}",
+        }
+        for p in packages
     ]
+
+
+def with_framework(package, catalog_format):
+    if package["os"] != "linux":
+        return package
+    if catalog_format == 1:
+        return {**package, "framework": "ibus"}
+    if package.get("framework") not in FRAMEWORKS:
+        raise ValueError(f"{package['file']} has the framework {package.get('framework')}, not one of {', '.join(FRAMEWORKS)}")
+    return package
 
 
 def main():

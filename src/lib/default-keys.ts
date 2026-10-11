@@ -10,13 +10,15 @@ export interface Scene {
   bindings: Binding[];
 }
 
-const SCENE_HEADER = /^#\[keys\.([a-z-]+)\]$/;
+const SCENE_HEADER = /^#\[keys\.([a-z-]+(?:\.[a-z-]+)?)\]$/;
 const BINDING = /^#"(.+)" = "(.+)"$/;
 
 /**
  * Read the default key bindings out of Kanaemi's settings template, where
  * every setting is a commented-out line and each `[keys.<scene>]` table is
- * introduced by a comment saying when it applies.
+ * introduced by a comment saying when it applies. A table that narrows a scene
+ * to one mode or OS (`[keys.application.macos]`) is a scene of its own, named
+ * with the dot, and may be empty.
  */
 export function parseDefaultKeys(template: string): Scene[] {
   const scenes: Scene[] = [];
@@ -65,10 +67,15 @@ const NAMES: Record<string, string> = {
   down: "↓",
   home: "Home",
   end: "End",
+  tab: "Tab",
+  "page-up": "Page Up",
+  "page-down": "Page Down",
   eisu: "英数",
   kana: "かな",
   henkan: "変換",
   muhenkan: "無変換",
+  "zenkaku-hankaku": "半角/全角",
+  "caps-lock": "Caps Lock",
 };
 
 const SIDES: Record<string, string> = { left: "左", right: "右" };
@@ -99,6 +106,8 @@ const FUNCTION_GROUPS = [
   ["left", "right", "home", "end"],
   ["hiragana", "katakana", "half-katakana"],
   ["full-alphanumeric", "alphanumeric"],
+  ["complete", "complete-previous"],
+  ["next-page", "previous-page"],
   [
     "commit-hiragana",
     "commit-katakana",

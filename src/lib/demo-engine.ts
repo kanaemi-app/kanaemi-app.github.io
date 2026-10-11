@@ -174,7 +174,6 @@ export class DemoEngine {
       this.scene = "reading";
       this.#okuri = null;
       this.#pending = "";
-      if (key === "Backspace") this.#reading = [...this.#reading].slice(0, -1).join("");
     } else if (key === ";") {
       this.#commitCandidate();
       this.#startReading();

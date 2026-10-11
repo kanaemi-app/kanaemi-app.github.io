@@ -3,6 +3,8 @@ title: 表記の置き場所
 description: 辞書の表記のうち、変換のたびに関数で埋める部分の書き方と、組み込みの関数。
 ---
 
+import Since from "../../../../components/Since.astro";
+
 置き場所は、辞書の項目の表記のうち、変換のたびに関数を呼んで埋める部分です。読みの数を好きな書き方で書ける（[数を含む語](/docs/usage/numbers/)）ほか、今日の日付のように、変換するたびに値の変わる語も書けます（[日付や時刻を打つ](/docs/usage/builtin/)）。
 
 ```tsv
@@ -12,6 +14,8 @@ description: 辞書の表記のうち、変換のたびに関数で埋める部�
 ```
 
 ## 書き方
+
+<Since feature="placeholders" />
 
 ```
 {位置:関数 引数}
@@ -66,6 +70,8 @@ Kanaemi に入っている関数です。[設定](/docs/settings/config/#書け�
 
 ### 年
 
+<Since feature="builtin-dictionaries" />
+
 | 名前 | 書くもの | 例 |
 | --- | --- | --- |
 | `wareki` | 数を西暦の年として、和暦で書く。その年の大晦日の元号で数える。引数に `1-1` のように月日を書くと、その日の元号で数える | `{wareki}年`（2019）→ 令和1年、`{wareki 1-1}年`（2019）→ 平成31年 |
@@ -73,6 +79,8 @@ Kanaemi に入っている関数です。[設定](/docs/settings/config/#書け�
 | `eto` | 今年の干支。引数を `支` にすると十二支だけ | 丙午・午 |
 
 ### 日時
+
+<Since feature="builtin-dictionaries" />
 
 `date` は、いまの日時を引数の書式で書きます。引数がなければ `%Y-%m-%d` です。書式の前に `+1`・`-2` と書くと日をずらし、`+1y`・`-1y` と書くと年をずらします（`{-:date +1 %Y-%m-%d}` は明日）。
 
@@ -93,6 +101,8 @@ Kanaemi に入っている関数です。[設定](/docs/settings/config/#書け�
 書式のほかの文字は、そのまま書きます。
 
 ### 毎回違う値
+
+<Since feature="builtin-dictionaries" />
 
 | 名前 | 書くもの |
 | --- | --- |

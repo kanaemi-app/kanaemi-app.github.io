@@ -39,6 +39,10 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          # The release history reads the GitHub API, which limits calls
+          # without a token by the runner's address.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check links
         run: npm run check-links

@@ -2,10 +2,11 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { byOs, packageLabel, type Package } from "./installers.ts";
 
-const pkg = (os: string, arch: string, format: string): Package => ({
+const pkg = (os: string, arch: string, format: string, framework?: string): Package => ({
   file: `Kanaemi-0.1.0.${format}`,
   os,
   arch,
+  ...(framework ? { framework } : {}),
   format,
   size: 1,
   sha256: "",
@@ -18,6 +19,11 @@ test("packageLabel names the CPU and the format the way a user knows them", () =
   assert.equal(packageLabel(pkg("windows", "arm64", "msi")), "Arm の CPU・Snapdragon など（.msi）");
   assert.equal(packageLabel(pkg("linux", "x64", "deb")), "Debian・Ubuntu、Intel・AMD の CPU（.deb）");
   assert.equal(packageLabel(pkg("linux", "arm64", "rpm")), "Fedora など、Arm の CPU（.rpm）");
+});
+
+test("packageLabel names the input method framework a Linux package runs in first", () => {
+  assert.equal(packageLabel(pkg("linux", "x64", "deb", "ibus")), "IBus 用、Debian・Ubuntu、Intel・AMD の CPU（.deb）");
+  assert.equal(packageLabel(pkg("linux", "arm64", "rpm", "fcitx5")), "Fcitx5 用、Fedora など、Arm の CPU（.rpm）");
 });
 
 test("byOs groups the packages by OS, in a fixed order, keeping the catalog order within", () => {
@@ -41,5 +47,18 @@ test("byOs leaves out an OS with no package", () => {
   assert.deepEqual(
     byOs([pkg("windows", "x64", "msi")]).map((g) => g.os),
     ["windows"],
+  );
+});
+
+test("byOs puts the IBus packages of Linux before the Fcitx5 ones, keeping the catalog order within", () => {
+  const groups = byOs([
+    pkg("linux", "x64", "deb", "fcitx5"),
+    pkg("linux", "x64", "deb", "ibus"),
+    pkg("linux", "arm64", "rpm", "fcitx5"),
+    pkg("linux", "arm64", "rpm", "ibus"),
+  ]);
+  assert.deepEqual(
+    groups[0].packages.map((p) => `${p.framework} ${p.arch}`),
+    ["ibus x64", "ibus arm64", "fcitx5 x64", "fcitx5 arm64"],
   );
 });

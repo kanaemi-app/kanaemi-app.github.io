@@ -5,6 +5,7 @@ description: 公式辞書を設定アプリから入れる。手で入れるこ�
 
 import { Steps } from "@astrojs/starlight/components";
 import DictionaryDownloads from "../../../components/DictionaryDownloads.astro";
+import Since from "../../../components/Since.astro";
 
 Kanaemi は、[設定のフォルダ](/docs/settings/folder/) の `dictionaries` フォルダに置いた辞書で変換します。辞書がなくても動きますが、変換しても候補が出ません。
 
@@ -78,9 +79,44 @@ zip を展開すると、辞書の名前のフォルダができます。中に�
 
 テキストの辞書（`.tsv`）は、[設定アプリ](/docs/settings/app/) でバイナリの辞書（`.kdic`）に変換できます。バイナリの辞書は、中身はテキストの辞書と同じで、読み込みが速く、使うメモリも少なくなります。設定アプリで入れた公式辞書は、はじめからバイナリの辞書になっています。
 
-## SKK の辞書を使う
+## ほかの IME の辞書を使う
 
-SKK の辞書（`SKK-JISYO.L` など）は、[設定アプリ](/docs/settings/app/) で取り込めます。設定アプリが Kanaemi の形式に変換し、`dictionaries` に「元の名前.tsv」として置きます。
+<Since feature="import-export" />
+
+ほかの IME で育てた辞書は、[設定アプリ](/docs/settings/app/) の「辞書」の画面の「ほかの IME の辞書」で取り込めます。取り込んだ辞書は、ユーザーカスタム辞書とは別の辞書として、`dictionaries` フォルダに置きます。
+
+| 形式 | 取り込むもの |
+| --- | --- |
+| MS-IME | ユーザー辞書ツールの「一覧の出力」で書き出したテキスト |
+| Google 日本語入力 | 辞書ツールの「エクスポート」で書き出したテキスト |
+| ATOK | 辞書ユーティリティで単語の一覧を書き出したテキスト |
+| macOS | macOS で動かしているときは、システム設定の「キーボード」のユーザ辞書（テキスト置換）をそのまま読む。ほかの OS では、その一覧からドラッグして書き出した plist |
+| macSKK・AquaSKK・ibus-skk・fcitx5-skk・fcitx5-cskk・CorvusSKK・DDSKK・skkeleton | その SKK のユーザー辞書を、置き場所から探してそのまま読む |
+| SKK 辞書 | `SKK-JISYO.L` のような辞書や SKK のユーザー辞書のファイル。文字コードは 1 行目の `coding:` で決まり、ないときは EUC-JP |
+
+<Steps>
+
+1. 「ほかの IME の辞書」で形式を選び、「取り込む」を押す。ファイルを選ぶ形式では、ファイルを選ぶ。
+
+2. 取り込む語と、取り込まないものとそのわけが出る。確かめて「取り込む」を押すと、辞書を置く。やめれば何も書かない。
+
+3. 入力欄をクリックし直す。
+
+</Steps>
+
+- 取り込まないのは、読めない行、Kanaemi で表せない語（Kanaemi で打てない読みの語など）、語を隠す指定（抑制単語）です。取り込んだ辞書では語を隠せないためです。
+- 品詞は、Kanaemi の活用型に当たるものだけを使い、ほかは語として移します。
+- 取り込んだ辞書の 1 行目の説明に、どこから取り込んだかを書きます。すでにある辞書とユーザーカスタム辞書は書き換えません。
+- 文字コードを取り違えているおそれのあるファイル（読めないバイトがある）は、何も取り込みません。
+- 取り込んだ辞書は、ほかの辞書と同じに [辞書の一覧](/docs/settings/dictionaries/) で並べ、使うかどうかを選べます。
+
+### 書き出す
+
+「書き出す…」で、[登録した語](/docs/usage/register/)（ユーザーカスタム辞書の語）を、選んだ形式でそのまま読み込めるファイルに書き出せます。Kanaemi から別の IME に移るときや、ほかの IME と同じ語を使いたいときに使います。
+
+- 書き出す形式で表せない語は書かず、その数を示します。
+- 取り込んだ辞書の語は書き出しません。
+- SKK の形式の文字コードは、書き出す先に合わせます。macSKK・AquaSKK・skkeleton・CorvusSKK には UTF-8 で、ibus-skk・fcitx5-skk・fcitx5-cskk・DDSKK と「SKK 辞書」には EUC-JP で書きます。
 
 ## 自分で書く
 

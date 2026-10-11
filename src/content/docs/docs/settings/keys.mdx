@@ -1,9 +1,10 @@
 ---
 title: キーバインド
-description: 場面ごとに、押したキーへ機能を割り当てる。修飾キーの単独押し、押さえたまま、ふだんの置き換え。
+description: 場面ごとに、押したキーへ機能を割り当てる。修飾キーの単独押し、押さえたまま、ふだんの置き換えと OS ごとの違い。
 ---
 
 import ThemedFigure from "../../../../components/ThemedFigure.astro";
+import Since from "../../../../components/Since.astro";
 
 Kanaemi のキーは、すべて設定で変えられます。修飾キーの単独押しも含めて、どのキーの割り当ても同じように外したり、別の機能に付け替えたりできます。
 
@@ -22,22 +23,27 @@ Kanaemi のキーは、すべて設定で変えられます。修飾キーの単
 | 場面 | いつ |
 | --- | --- |
 | `reading` | 読みを打っているとき |
+| `completion` | 読みの [補完](/docs/usage/complete/) の一覧が出ているとき。ここにないキーは `reading` のとおりに働く <Since feature="completion-list" /> |
 | `candidates` | 候補を選んでいるとき |
 | `registration` | 語を登録しているとき（登録する文字列を打っているとき） |
+| `registration.kana-mode`・`registration.abc-mode` | 語を登録しているときのうち、かなモード・ABC モードで打っているとき（[下を見る](#登録の場面をモードごとに分ける)） <Since feature="registration-modes" /> |
 | `kana` | かなモードで、何も打っていないとき |
 | `abc` | ABC モードで、何も打っていないとき |
 | `application` | ふだん。何も打っていないときに、押したキーを別のキーに置き換えて送る（[下を見る](#ふだん)） |
+| `application.macos`・`application.windows`・`application.linux` | ふだんの置き換えのうち、その OS でだけ働くもの（[下を見る](#os-ごとの置き換え)） <Since feature="os-remaps" /> |
 
 場面に合わない機能は書けません。どの場面でどの機能が使えるかは [機能](/docs/reference/functions/) にあります。
 
 ### キーの名前
 
 - 1 文字のキー：`"a"`・`"0"`・`";"`
-- 名前のあるキー：`space`・`enter`・`esc`・`backspace`・`delete`・`left`・`right`・`up`・`down`・`home`・`end`・`f1`〜`f12`・`eisu`（英数）・`kana`（かな）・`henkan`（変換）・`muhenkan`（無変換）
+- 名前のあるキー：`space`・`tab`・`enter`・`esc`・`backspace`・`delete`・`left`・`right`・`up`・`down`・`home`・`end`・`page-up`・`page-down`・`f1`〜`f12`・`eisu`（英数）・`kana`（かな）・`henkan`（変換）・`muhenkan`（無変換）・`zenkaku-hankaku`（半角/全角）<Since feature="zenkaku-caps" />・`caps-lock` <Since feature="zenkaku-caps" />
 - 修飾キーとの組み合わせ：`+` でつなぐ。修飾キーは `ctrl`・`cmd`・`alt`・`shift`（`"ctrl+h"`・`"shift+space"`）
 - 左右の修飾キーそのもの：`left-shift`・`right-shift`・`left-ctrl`・`right-ctrl`・`left-cmd`・`right-cmd`・`left-alt`・`right-alt`
 
 `cmd` は Windows と Linux では <kbd>Win</kbd> キー、`alt` は macOS では <kbd>Option</kbd> です。
+
+`caps-lock` に機能を割り当てても、OS の Caps Lock はそのまま切り替わります。Windows の日本語キーボードでは Caps Lock を <kbd>Shift</kbd>＋<kbd>英数</kbd> で押すので、`"shift+caps-lock"` と書きます。
 
 ## 修飾キー
 
@@ -59,7 +65,8 @@ Shift・Ctrl・Cmd（Win）・Option（Alt）は、左右それぞれに、押�
 - 速く打ってキーが重なったときは、文字のキーを先に離せば押さえたまま、押さえたキーを先に離せば単独で押してから文字を打ったものとします。ほぼ同時に離したときは、文字のキーを先に離したもの（押さえたまま）とします。
 - `tap_timeout_ms` より長く押さえて、何も打たずに離したときは、何もしません。
 - 押さえている間にモードが切り替わると、そのキーは離したものとします。押さえたまま打って待っていた文字は、単独で押したものとして先に打ちます。
-- 押さえたままか単独で押したのかが決まるまで、未確定文字列の末尾に [押さえたままの印](/docs/settings/config/#未確定文字列の印) を出します。既定の印は空です。
+- 押さえたままか単独で押したのかが決まるまで、未確定文字列の末尾に [押さえたままの印](/docs/settings/config/#未確定文字列の印) を出します。既定の印は空です。<Since feature="hold-mark" />
+- ローマ字の打ちかけの続きとして表の規則を作るキーは、押さえたままの割り当てを働かせず、表を通します。<Since feature="unfinished-romaji-first" />
 
 macOS では、キーを離したことを知るのに「入力監視」の許可が要ります。許可がないあいだ、押さえたままに割り当てたキーは、いつも単独で押したものとして働きます（[macOS の許可](/docs/install/#macos-の許可)）。
 
@@ -101,9 +108,10 @@ Space を単独で押したときは、これまでどおり変換・次の候�
 ## 割り当てのないキー
 
 - 文字のキーは、その文字を打ちます。候補を選んでいるときは、選んでいる候補を確定してから打ちます。
+- かなモードの Space は、[ローマ字の表](/docs/settings/romaji/#space-を表で決める) に空白を入力に含む規則があれば、文字のキーと同じに表を通します。<Since feature="romaji-space" />
 - Space・Enter・矢印などは、読み・候補・登録する文字列があるあいだは何もしません。
 - Ctrl・Cmd（Win）・Option（Alt）付きのキーは、入力中は何もしません。`[keys] pass_while_composing` に書いた修飾キー（`"cmd"`・`"ctrl"`・`"alt"`）付きのキーは、確定してからアプリに渡します。
-- ほかのキー（Tab など）は、未確定文字列をそのままにしてアプリに渡します。
+- ほかのキー（割り当てのない Tab など）は、未確定文字列をそのままにしてアプリに渡します。
 
 ```toml
 [keys]
@@ -121,9 +129,60 @@ pass_while_composing = ["cmd"]  # 入力中に Cmd+S を押しても、確定し
 "ctrl+p" = "up"
 ```
 
-既定では、Emacs 風の <kbd>Ctrl</kbd>＋<kbd>H</kbd>・<kbd>D</kbd>・<kbd>B</kbd>・<kbd>F</kbd>・<kbd>A</kbd>・<kbd>E</kbd>・<kbd>N</kbd>・<kbd>P</kbd>・<kbd>M</kbd> を置き換えます（[既定のキー](/docs/reference/default-keys/#ふだん)）。置き換えの対象は、文字のキーや F キーを除いた、名前のあるキーだけです。
+置き換えの対象は、文字のキーや F キーを除いた、名前のあるキーだけです。置き換えのないキーと、キーを送れないときは、押したキーをそのままアプリに渡します。
 
-macOS では、キーを送るのにアクセシビリティの許可が要ります。許可がないときは、押したキーをそのままアプリに渡します（[macOS の許可](/docs/install/#macos-の許可)）。
+- macOS では、キーを送るのにアクセシビリティの許可が要ります（[macOS の許可](/docs/install/#macos-の許可)）。
+- Linux の Fcitx5 で、Sway のような Wayland の入力メソッドのプロトコルの第 2 版を使うデスクトップでは、送るキーに押している修飾キーが付いてしまうため、置き換えません。
+
+### OS ごとの置き換え
+
+<Since feature="os-remaps" />
+
+置き換えは、OS ごとにも決められます。`[keys.application]` はどの OS にも働き、`[keys.application.macos]`・`[keys.application.windows]`・`[keys.application.linux]` は、その OS で動いているときだけ上に重なります。同じキーなら OS の表が勝ち、`"@none"` でその OS でだけ置き換えを外せます。
+
+```toml
+[keys.application]
+"ctrl+m" = "enter"
+
+[keys.application.macos]
+"ctrl+m" = "@none"   # macOS では置き換えない
+
+[keys.application.windows]
+"ctrl+h" = "backspace"
+```
+
+既定では次のとおりです（[既定のキー](/docs/reference/default-keys/#ふだん)）。
+
+| OS | 既定の置き換え |
+| --- | --- |
+| どの OS でも | <kbd>Ctrl</kbd>＋<kbd>M</kbd> を <kbd>Enter</kbd> に |
+| macOS | <kbd>Ctrl</kbd>＋<kbd>Backspace</kbd>・<kbd>Ctrl</kbd>＋<kbd>Delete</kbd> を、語ごとに消す <kbd>Option</kbd>＋<kbd>Backspace</kbd>・<kbd>Option</kbd>＋<kbd>Delete</kbd> に。<kbd>Ctrl</kbd>＋<kbd>H</kbd> などは、macOS の入力欄がもともと扱うので置き換えない |
+| Windows・Linux | Emacs 風の <kbd>Ctrl</kbd>＋<kbd>H</kbd>・<kbd>D</kbd>・<kbd>B</kbd>・<kbd>F</kbd>・<kbd>A</kbd>・<kbd>E</kbd>・<kbd>N</kbd>・<kbd>P</kbd> を、Backspace・Delete・矢印・Home・End に |
+
+ほかの OS の表に書き間違いがあっても、ログと設定アプリで知らせます。設定ファイルを OS の違うマシンに持っていっても、そのまま使えます。
+
+### キーを置き換えないアプリ
+
+<Since feature="send-except" />
+
+ターミナルや Emacs のように、Ctrl＋H などを自分で扱うアプリでは、置き換えないほうが都合のよいことがあります。`[keys] send_except` に並べたアプリでは、置き換えのあるキーも、置き換えのないキーと同じにそのままアプリに渡します。
+
+```toml
+[keys]
+send_except = ["com.apple.Terminal", "org.gnu.Emacs"]
+```
+
+アプリは、OS がアプリを見分ける名前で書きます。大文字と小文字は区別しません。
+
+| OS | 書くもの | 例 |
+| --- | --- | --- |
+| macOS | バンドル ID | `com.apple.Terminal` |
+| Windows | 実行ファイル名 | `WindowsTerminal.exe` |
+| Linux | GTK のプログラム名 | `gnome-terminal-server` |
+
+Linux では、プログラム名を伝えないアプリ（XIM を通るものなど）は見分けられず、いつも置き換えます。
+
+[設定アプリ](/docs/settings/app/#キーバインド) では、アプリを名前とアイコンで選んで足せます。
 
 ## AZIK で使う
 
@@ -151,3 +210,17 @@ tables = ["full-width", "hepburn", "kunrei", "input-aids", "z-symbols", "azik"]
 ```
 
 この例では、右の Option（Alt）の単独押しで読みを始めます。
+
+## 登録の場面をモードごとに分ける
+
+<Since feature="registration-modes" />
+
+語を登録しているときの割り当ては、かなモードで打っているときと ABC モードで打っているときとで分けられます。`[keys.registration]` はどちらのモードにも働き、`[keys.registration.kana-mode]`・`[keys.registration.abc-mode]` は、そのモードで打っているときだけ上に重なります。同じキーならモードの表が勝ち、`"@none"` でそのモードでだけ割り当てを外せます。
+
+```toml
+# 英字で登録する文字列を打っているときは、; を読みの始まりにせず、そのまま打つ
+[keys.registration.abc-mode]
+";" = "@none"
+```
+
+既定では、どちらのモードの表も空です。登録の場面の中で読み・候補の場面に入っているあいだは、その場面の割り当てが働きます。
