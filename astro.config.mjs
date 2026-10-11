@@ -29,6 +29,9 @@ export default defineConfig({
       editLink: {
         baseUrl: "https://github.com/kanaemi-app/kanaemi-app.github.io/edit/main/",
       },
+      components: {
+        PageTitle: "./src/components/PageTitle.astro",
+      },
       customCss: ["./src/styles/fonts.css", "./src/styles/starlight.css"],
       sidebar: [
         {

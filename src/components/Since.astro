@@ -1,10 +1,19 @@
 ---
 import { Badge } from "@astrojs/starlight/components";
-import { SINCE, badgeShown, knownVersions, sinceLabel, type Since } from "../lib/since";
+import {
+  SINCE,
+  badgeShown,
+  knownVersions,
+  repeatsPage,
+  sinceLabel,
+  type Since,
+} from "../lib/since";
 
 interface Props {
   /** A key of `SINCE` in `src/lib/since.ts`. */
   feature: string;
+  /** The badge of the whole page, shown with its title. */
+  page?: boolean;
 }
 
 interface FetchedRelease {
@@ -24,10 +33,13 @@ const fetched = Object.values(fetchedFiles).flatMap(({ default: data }) =>
 
 const text = sinceLabel(Astro.props.feature);
 const { version } = (SINCE as Record<string, Since>)[Astro.props.feature];
-const shown = badgeShown(version, knownVersions(fetched));
+const pageFeature: string | undefined = Astro.locals.starlightRoute?.entry.data.since;
+const shown =
+  badgeShown(version, knownVersions(fetched)) &&
+  (Astro.props.page || !repeatsPage(Astro.props.feature, pageFeature));
 ---
 
-{shown && <Badge text={text} variant="note" size="small" class="since" />}
+{shown && <Badge text={text} variant="note" size="small" class={Astro.props.page ? "since page" : "since"} />}
 
 <style>
   :global(.since) {

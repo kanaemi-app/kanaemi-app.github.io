@@ -7,6 +7,7 @@ import {
   SINCE,
   badgeShown,
   knownVersions,
+  repeatsPage,
   sinceLabel,
 } from "./since.ts";
 
@@ -71,4 +72,11 @@ test("knownVersions joins the recorded releases, the upcoming one and any fetche
 
 test("knownVersions leaves out fetched tags that are not plain versions, such as a release candidate", () => {
   assert.ok(!knownVersions(["v0.6.0-rc.1"]).includes("v0.6.0-rc.1"));
+});
+
+test("a badge saying what the page's own badge says is not repeated on the page", () => {
+  assert.equal(repeatsPage("completion-list", "complete"), true, "both v0.5.0");
+  assert.equal(repeatsPage("complete", "complete"), true);
+  assert.equal(repeatsPage("os-remaps", "builtin-dictionaries"), false, "v0.5.0 on a v0.3.0 page");
+  assert.equal(repeatsPage("complete", undefined), false, "a page without a badge");
 });
