@@ -3,6 +3,10 @@ title: 日付や時刻を打つ
 description: 「きょう」で今日の日付、「いま」で今の時刻。Kanaemi に入っている組み込みの辞書。
 ---
 
+import Since from "../../../../components/Since.astro";
+
+<Since feature="builtin-dictionaries" />
+
 Kanaemi には、変換するたびに値の決まる語の辞書が入っています。辞書を入れなくても使えます。
 
 ```
@@ -46,4 +50,4 @@ Kanaemi には、変換するたびに値の決まる語の辞書が入ってい
 しめきり	{-:date +7 %-m月%-d日}
 ```
 
-[語を登録する](/docs/usage/register/) ときに、登録する文字列に置き場所を書いても登録できます（<span class="preedit">»しめきり « {-:date +7 %-m月%-d日}</span>）。置き場所の記号は、ABC モードにして打ちます。
+[語を登録する](/docs/usage/register/) ときに、登録する文字列に置き場所を書いても登録できます（<span class="preedit">»しめきり « &#123;-:date +7 %-m月%-d日&#125;</span>）。置き場所の記号は、ABC モードにして打ちます。

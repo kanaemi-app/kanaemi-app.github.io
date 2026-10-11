@@ -4,6 +4,7 @@ description: ; で読みを始め、Space で変換し、Enter で確定する�
 ---
 
 import ThemedFigure from "../../../../components/ThemedFigure.astro";
+import Since from "../../../../components/Since.astro";
 
 かなモードでは、打ったかながそのまま確定します。漢字にしたい語だけ、<kbd>;</kbd> から打ちます。
 
@@ -21,8 +22,9 @@ import ThemedFigure from "../../../../components/ThemedFigure.astro";
 
 | キー | すること |
 | --- | --- |
-| <kbd>Space</kbd>・<kbd>Ctrl</kbd>＋<kbd>N</kbd>・<kbd>変換</kbd> | 変換する |
-| <kbd>Shift</kbd>＋<kbd>Space</kbd>・<kbd>Ctrl</kbd>＋<kbd>P</kbd> | 変換して、最後の候補を選ぶ |
+| <kbd>Space</kbd>・<kbd>変換</kbd> | 変換する |
+| <kbd>Shift</kbd>＋<kbd>Space</kbd> | 変換して、最後の候補を選ぶ |
+| <kbd>Tab</kbd>・<kbd>Shift</kbd>＋<kbd>Tab</kbd> | 読みを、それで始まるより長い読みに置き換える（[読みを補完する](/docs/usage/complete/)）<Since feature="complete" /> |
 | <kbd>Enter</kbd>・<kbd>Ctrl</kbd>＋<kbd>J</kbd> | 読みをかなのまま確定する |
 | <kbd>Esc</kbd>・<kbd>Ctrl</kbd>＋<kbd>G</kbd> | 読みを取り消す |
 | <kbd>Backspace</kbd>・<kbd>Ctrl</kbd>＋<kbd>H</kbd> | カーソルの前の 1 文字を消す |
@@ -71,3 +73,22 @@ import ThemedFigure from "../../../../components/ThemedFigure.astro";
 watashiha;kanji
 → わたしは›かんじ
 ```
+
+## 打ったかなを読みに戻す
+
+<Since feature="reread-kana" />
+
+<kbd>;</kbd> を打ち忘れてかなのまま打ってしまったときは、何も打っていないときに <kbd>Ctrl</kbd>＋<kbd>;</kbd> を押します。打ったばかりのかなが入力欄から消え、読みに戻ります。
+
+```
+kanji → かんじ → Ctrl+; → ›かんじ → Space → »漢字
+```
+
+- 戻すのは、かなモードで何も打っていないときに打ったかなのうち、最後のひと続きです。Kanaemi が入力欄にかな以外の文字や候補を出すと、ひと続きはそこで切れます。
+- 戻した読みに手を付ける前に、もう一度 <kbd>Ctrl</kbd>＋<kbd>;</kbd> を押すと、読みの最初のかなを確定して、残りを読みにします（<span class="preedit">›はかんじ</span> → 「は」を確定して <span class="preedit">›かんじ</span>）。助詞まで続けて打ったときに使います。
+- 戻した読みは、ふつうの読みと同じに変換も補完もできます。<kbd>Esc</kbd> を押すと、元のかなを確定し直して終わります。
+- 戻せるのは、そのかなの後ろに Kanaemi が出した文字だけが続いている間です。ほかのキーがアプリに渡ったとき、入力欄を移ったとき、マウスのボタンを押したときには戻せなくなります。
+- 読みを始めてかなのまま確定したものは戻せません。変換して確定したものは、[確定した候補を選び直す](/docs/usage/candidates/#確定した候補を選び直す) で戻します。
+- 戻すかながないときの <kbd>Ctrl</kbd>＋<kbd>;</kbd> は、そのままアプリに渡ります。
+
+入力欄の文字を消すために、Kanaemi がアプリに Backspace を送ります。macOS では、アクセシビリティの許可が要ります（[インストール](/docs/install/#macos-の許可)）。許可がないときは戻さず、キーをそのままアプリに渡します。

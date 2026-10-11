@@ -6,7 +6,7 @@ description: OS ごとのインストーラーで Kanaemi を入れ、入力ソ�
 import { Steps, Tabs, TabItem } from "@astrojs/starlight/components";
 import InstallerDownloads from "../../../components/InstallerDownloads.astro";
 
-Kanaemi は、OS ごとのふつうの入れ方（インストーラーやパッケージ）で配っています。自分の OS と CPU に合うファイルをダウンロードしてください。macOS 向けは Apple シリコンの Mac だけで、Intel の Mac 向けはありません。
+Kanaemi は、OS ごとのふつうの入れ方（インストーラーやパッケージ）で配っています。自分の OS と CPU（Linux では入力の仕組みも）に合うファイルをダウンロードしてください。macOS 向けは Apple シリコンの Mac だけで、Intel の Mac 向けはありません。
 
 <InstallerDownloads />
 
@@ -22,6 +22,17 @@ Windows と Linux は、パソコンの CPU によってファイルが分かれ
 | Linux | ターミナルで `uname -m` | `x86_64` | `aarch64` |
 
 Mac は、メニューバーの Apple メニューの「この Mac について」で確かめられます。「チップ」に「Apple M1」などと出ていれば Apple シリコンです。「プロセッサ」に Intel と出る Mac では、Kanaemi は使えません。
+
+### Linux の IBus 用と Fcitx5 用
+
+Linux は、入力の仕組みによってもパッケージが分かれています。ふだん使っている入力の仕組みに合うほうを選んでください。
+
+- GNOME（Ubuntu や Fedora の標準）など、IBus を使っているなら「IBus 用」。
+- KDE Plasma など、Fcitx5 を使っているなら「Fcitx5 用」。
+
+どちらか分からないときは、ターミナルで `echo $XMODIFIERS` を流します。`@im=ibus` と出れば IBus、`@im=fcitx` と出れば Fcitx5 です。
+
+設定アプリは、どちらのパッケージにも入っています。両方を入れても、ぶつかりません。
 
 ## 入れて、入力ソースに足す
 
@@ -76,23 +87,32 @@ brew install --cask kanaemi-app/tap/kanaemi
 
 <Steps>
 
-1. パッケージを入れる。
+1. 使っている入力の仕組みに合うパッケージ（[IBus 用か Fcitx5 用か](#linux-の-ibus-用と-fcitx5-用)）を入れる。
 
    ```sh
-   # Debian・Ubuntu
-   sudo apt install ./kanaemi_*.deb
+   # IBus 用：Debian・Ubuntu
+   sudo apt install ./ibus-kanaemi_*.deb
+   # IBus 用：Fedora など
+   sudo dnf install ./ibus-kanaemi-*.rpm
 
-   # Fedora など
-   sudo dnf install ./kanaemi-*.rpm
+   # Fcitx5 用：Debian・Ubuntu
+   sudo apt install ./fcitx5-kanaemi_*.deb
+   # Fcitx5 用：Fedora など
+   sudo dnf install ./fcitx5-kanaemi-*.rpm
    ```
 
-2. GNOME なら、「設定 › キーボード › 入力ソース」の「＋」から「日本語」の下にある Kanaemi を足す。ほかのデスクトップでは、IBus の設定（`ibus-setup`）から足す。
+2. 入力ソースに Kanaemi を足す。
+
+   - IBus 用：GNOME なら、「設定 › キーボード › 入力ソース」の「＋」から「日本語」の下にある Kanaemi を足す。ほかのデスクトップでは、IBus の設定（`ibus-setup`）から足す。
+   - Fcitx5 用：Fcitx5 の設定（`fcitx5-configtool`）の「入力メソッド」で、Kanaemi を右の一覧に足す。
 
 3. 入力ソースを Kanaemi に切り替える。
 
 </Steps>
 
-X11 の GTK3 のアプリでは、IBus の入力モジュール（`ibus-gtk3`）が入っていないと、キーが Kanaemi に届きません。
+X11 の GTK3 のアプリでは、入力の仕組みの GTK3 の入力モジュール（IBus なら `ibus-gtk3`、Fcitx5 なら `fcitx5-frontend-gtk3`）が入っていないと、キーが Kanaemi に届きません。
+
+Fcitx5 は、既定では左の Shift の単独押しを自分で取るので、そのままでは左の Shift で ABC モードになりません。変え方は [トラブルシューティング](/docs/troubleshooting/#linux-の-fcitx5-で左の-shift-で-abc-モードにならない) にあります。
 
 </TabItem>
 </Tabs>
@@ -152,6 +172,6 @@ Kanaemi は辞書がなくても動きますが、変換しても候補が出ま
 
 - macOS：入力ソースから Kanaemi を外し、`~/Library/Input Methods/Kanaemi.app` を消す（`rm -rf ~/Library/Input\ Methods/Kanaemi.app`）。Homebrew で入れたときは `brew uninstall --cask kanaemi` で消す。
 - Windows：「設定 › アプリ」から Kanaemi をアンインストールする。
-- Linux：入れたときと同じパッケージマネージャーで消す（`sudo apt remove kanaemi` など）。
+- Linux：入れたときと同じパッケージマネージャーで消す（`sudo apt remove ibus-kanaemi` や `sudo apt remove fcitx5-kanaemi` など）。
 
 どの OS でも、[設定のフォルダ](/docs/settings/folder/) は消さずに残ります。設定や登録した語ごと消すときは、このフォルダも消してください。

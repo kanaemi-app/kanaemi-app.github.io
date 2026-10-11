@@ -3,6 +3,8 @@ title: 送り仮名
 description: 読みの途中の ; で送り仮名の始まりを示し、その場で変換する。
 ---
 
+import Since from "../../../../components/Since.astro";
+
 読みの途中で <kbd>;</kbd> を押すと、そこが送り仮名の始まりになります。送り仮名の最初のかなを打った時点で、すぐ変換します。
 
 | 打つキー | 結果 |
@@ -23,6 +25,8 @@ description: 読みの途中の ; で送り仮名の始まりを示し、その�
 ;mo;tt   → »持っ t
 ```
 
+<Since feature="okurigana-extend" />
+
 打ちかけの続きを打って、かなが仕上がると、仕上がったかなを送り仮名に足して変換し直します。
 
 ```
@@ -36,8 +40,8 @@ description: 読みの途中の ; で送り仮名の始まりを示し、その�
 
 ## 消す・戻る
 
-- <kbd>Backspace</kbd> は、打ちかけ、送り仮名、送り仮名の始まりの順に消します。打ちかけの続きで足したかなは、打ちかけに戻して消し、変換し直します（<span class="preedit is-candidate">»勝った</span> → <span class="preedit is-candidate">»勝っ t</span>）。
-- 候補を選んでいるときの <kbd>Esc</kbd> は、送り仮名を残したまま読みに戻ります。
+- 候補を選んでいるときの <kbd>Esc</kbd> と <kbd>Backspace</kbd> は、送り仮名を残したまま読みに戻ります（<span class="preedit is-candidate">»書く</span> → <span class="preedit">›か*く</span>）。候補の後ろに残っていた打ちかけは消えます。
+- 読みを打っているときの <kbd>Backspace</kbd> は、打ちかけ、送り仮名、送り仮名の始まりの順に消します（<span class="preedit">›か*k</span> → <span class="preedit">›か*</span> → <span class="preedit">›か</span>）。
 
 ## 決まりごと
 

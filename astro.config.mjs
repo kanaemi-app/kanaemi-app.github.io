@@ -44,6 +44,7 @@ export default defineConfig({
           items: [
             { label: "モード", slug: "docs/usage/modes" },
             { label: "読みと変換", slug: "docs/usage/convert" },
+            { label: "読みを補完する", slug: "docs/usage/complete" },
             { label: "送り仮名", slug: "docs/usage/okurigana" },
             { label: "候補を選ぶ", slug: "docs/usage/candidates" },
             { label: "語を登録する", slug: "docs/usage/register" },

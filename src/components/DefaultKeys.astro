@@ -15,43 +15,45 @@ const { scene, title, bindings } = found;
 ---
 
 <p>{title}。設定ファイルでは <code>[keys.{scene}]</code>。</p>
-<table>
-  <thead>
-    <tr>
-      <th>{scene === "application" ? "送るキー" : "機能"}</th>
-      <th>キー</th>
-    </tr>
-  </thead>
-  <tbody>
-    {
-      bindings.map(({ action, keys }) => (
-        <tr>
-          <td>
-            {action.startsWith("@") ? (
-              <a href={`/docs/reference/functions/#${functionAnchor(action)}`}>
-                <code>{action}</code>
-              </a>
-            ) : (
-              <code>{keyLabel(action).join("＋")}</code>
-            )}
-          </td>
-          <td class="caps">
-            {keys.map((key) => (
-              <span class="chord" title={key}>
-                {keyLabel(key).map((cap, i) => (
-                  <>
-                    {i > 0 && "＋"}
-                    <kbd>{cap}</kbd>
-                  </>
-                ))}
-              </span>
-            ))}
-          </td>
-        </tr>
-      ))
-    }
-  </tbody>
-</table>
+{bindings.length === 0 ? <p>既定の割り当てはありません。</p> : (
+  <table>
+    <thead>
+      <tr>
+        <th>{scene.split(".")[0] === "application" ? "送るキー" : "機能"}</th>
+        <th>キー</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        bindings.map(({ action, keys }) => (
+          <tr>
+            <td>
+              {action.startsWith("@") ? (
+                <a href={`/docs/reference/functions/#${functionAnchor(action)}`}>
+                  <code>{action}</code>
+                </a>
+              ) : (
+                <code>{keyLabel(action).join("＋")}</code>
+              )}
+            </td>
+            <td class="caps">
+              {keys.map((key) => (
+                <span class="chord" title={key}>
+                  {keyLabel(key).map((cap, i) => (
+                    <>
+                      {i > 0 && "＋"}
+                      <kbd>{cap}</kbd>
+                    </>
+                  ))}
+                </span>
+              ))}
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+)}
 
 <style>
   .caps {

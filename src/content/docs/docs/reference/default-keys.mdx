@@ -4,6 +4,7 @@ description: 設定を書かないときの、場面ごとのキーの割り当�
 ---
 
 import DefaultKeys from "../../../../components/DefaultKeys.astro";
+import Since from "../../../../components/Since.astro";
 
 設定を書かないときの割り当てです。この表は、Kanaemi の設定ファイルのひな形をもとにしています。変え方は [キーバインド](/docs/settings/keys/) を見てください。
 
@@ -13,6 +14,14 @@ import DefaultKeys from "../../../../components/DefaultKeys.astro";
 
 <DefaultKeys scene="reading" />
 
+## 補完の一覧が出ているとき
+
+<Since feature="completion-list" />
+
+ここにないキーは、読みを打っているときと同じに働きます（[読みを補完する](/docs/usage/complete/)）。
+
+<DefaultKeys scene="completion" />
+
 ## 候補を選んでいるとき
 
 <DefaultKeys scene="candidates" />
@@ -20,6 +29,12 @@ import DefaultKeys from "../../../../components/DefaultKeys.astro";
 ## 語を登録しているとき
 
 <DefaultKeys scene="registration" />
+
+かなモードと ABC モードとで、割り当てを分けることもできます（[登録の場面をモードごとに分ける](/docs/settings/keys/#登録の場面をモードごとに分ける)）。<Since feature="registration-modes" />
+
+<DefaultKeys scene="registration.kana-mode" />
+
+<DefaultKeys scene="registration.abc-mode" />
 
 ## かなモードで何も打っていないとき
 
@@ -31,6 +46,20 @@ import DefaultKeys from "../../../../components/DefaultKeys.astro";
 
 ## ふだん
 
-何も打っていないとき、押したキーを置き換えてアプリに送ります。
+何も打っていないとき、押したキーを置き換えてアプリに送ります。どの OS にも働く置き換えに、動いている OS の置き換えを重ねます（[OS ごとの置き換え](/docs/settings/keys/#os-ごとの置き換え)）。<Since feature="os-remaps" />
 
 <DefaultKeys scene="application" />
+
+### macOS
+
+Ctrl＋H や Ctrl＋A などは、macOS の文字の入力欄がもともと扱うので、置き換えません。
+
+<DefaultKeys scene="application.macos" />
+
+### Windows
+
+<DefaultKeys scene="application.windows" />
+
+### Linux
+
+<DefaultKeys scene="application.linux" />

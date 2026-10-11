@@ -3,24 +3,33 @@ title: 候補を選ぶ
 description: 候補を回り、番号で選び、カタカナや英数で確定する。候補の並び方。
 ---
 
+import Since from "../../../../components/Since.astro";
+
 変換すると、候補を選ぶ場面に入ります。選んでいる候補には `»` の印が付きます。
 
 ## 選ぶ
 
 | キー | すること |
 | --- | --- |
-| <kbd>Space</kbd>・<kbd>↓</kbd>・<kbd>Ctrl</kbd>＋<kbd>N</kbd> | 次の候補。最後の次は [語の登録](/docs/usage/register/) |
-| <kbd>Shift</kbd>＋<kbd>Space</kbd>・<kbd>↑</kbd>・<kbd>Ctrl</kbd>＋<kbd>P</kbd> | 前の候補。最初の前は最後 |
+| <kbd>Space</kbd>・<kbd>↓</kbd> | 次の候補。最後の次は [語の登録](/docs/usage/register/) |
+| <kbd>Shift</kbd>＋<kbd>Space</kbd>・<kbd>↑</kbd> | 前の候補。最初の前は最後 |
+| <kbd>Ctrl</kbd>＋<kbd>N</kbd>・<kbd>Ctrl</kbd>＋<kbd>P</kbd> | 次・前のページの最初の候補。最後のページの次は最初のページ <Since feature="candidate-pages" /> |
 | <kbd>1</kbd>〜<kbd>9</kbd> | 出ているページの、その番号の候補を確定する |
 | <kbd>Enter</kbd>・<kbd>Ctrl</kbd>＋<kbd>J</kbd> | 選んでいる候補を確定する |
 | <kbd>;</kbd> | 選んでいる候補を確定して、次の読みを始める |
 | 文字のキー | 選んでいる候補を確定して、その文字を打つ |
-| <kbd>Esc</kbd>・<kbd>Ctrl</kbd>＋<kbd>G</kbd> | 読みに戻る |
-| <kbd>Backspace</kbd> | 読みに戻り、読みを 1 文字消す |
+| <kbd>Esc</kbd>・<kbd>Ctrl</kbd>＋<kbd>G</kbd>・<kbd>Backspace</kbd> | 読みに戻る。読みは消さない |
+| <kbd>Tab</kbd>・<kbd>Shift</kbd>＋<kbd>Tab</kbd> | 読みに戻って、[補完](/docs/usage/complete/) を続ける <Since feature="complete" /> |
 | <kbd>0</kbd> | その読みで [語を登録する](/docs/usage/register/) |
 | <kbd>Shift</kbd>＋<kbd>Delete</kbd> | 選んでいる候補を、以後出さない（もう一度押して確かめる） |
 
-候補の一覧は 9 個ずつのページで出ます。番号はページの中で 1 から振ります。候補が 1 つだけのときは、一覧を出しません。一覧の候補はマウスでも選べます。
+## 候補の一覧
+
+候補は、番号と表記の一覧で、9 個ずつのページに分けて出ます。番号はページの中で 1 から振ります。候補が 1 つだけのときは、一覧を出しません。一覧の候補はマウスでも選べ、選んだ候補を確定します。
+
+- ページが 2 つ以上あるときは、出しているページと全体のページ数を示します。<Since feature="candidate-pages" />
+- 辞書から来た候補には、その辞書の名前を添えます。名前は、辞書の 1 行目の説明か、ファイルの名前です。<Since feature="candidate-pages" />
+- OS の辞書で意味を引ける環境では、意味のある候補にそのことを示し、選んでいる候補の意味を一覧の横に出します。
 
 ## カタカナや英数で確定する
 
@@ -66,9 +75,11 @@ description: 候補を回り、番号で選び、カタカナや英数で確定�
 - キーを押したままにして繰り返される入力は、もう一度押したことになりません。うっかり長押ししても消えません。
 - 読みから作った候補（カタカナや英数）は、出さないようにできません。
 
-戻すときは [設定アプリ](/docs/settings/app/#辞書) を使います。自分で登録した語なら、登録ごと消すこともできます。
+戻すときは [設定アプリ](/docs/settings/app/#辞書) を使います。自分で登録した語なら、登録ごと消すこともできます。<Since feature="remove-registration" />
 
 ## 確定した候補を選び直す
+
+<Since feature="undo-commit" />
 
 確定してから違う候補だったと気づいたら、何も打っていないときに <kbd>Shift</kbd>＋<kbd>Backspace</kbd> を押します。直前に確定した候補が、候補を選ぶ場面に戻ります。読み・候補の並び・選んでいた候補は、確定したときのままです。
 
@@ -81,5 +92,7 @@ description: 候補を回り、番号で選び、カタカナや英数で確定�
 - 戻したあとは、ふつうの候補・読みの場面と同じに選び直せます。<kbd>Esc</kbd> を押すと、元の文字列を確定し直して終わります。
 - 取り消した確定は、[並び方](#並び方) の記録からも外します。
 - 戻せる確定がないときの <kbd>Shift</kbd>＋<kbd>Backspace</kbd> は、ふつうにアプリへ渡ります。
+
+<kbd>;</kbd> を打ち忘れて、かなのまま打ってしまったときは [打ったかなを読みに戻す](/docs/usage/convert/#打ったかなを読みに戻す) を使います。
 
 入力欄の文字を消すために、Kanaemi がアプリに Backspace を送ります。macOS では、アクセシビリティの許可が要ります（[インストール](/docs/install/#macos-の許可)）。許可がないときは戻さず、キーをそのままアプリに渡します。

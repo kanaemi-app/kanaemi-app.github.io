@@ -102,6 +102,12 @@ test("Backspace removes the last kana of a reading, then leaves it", () => {
   assert.equal(e.scene, "kana");
 });
 
+test("Backspace on a candidate goes back to the whole reading, as Escape does", () => {
+  const e = typed([...chars(";kanji"), "Space", "Backspace"]);
+  assert.equal(e.preedit, "›かんじ");
+  assert.equal(e.scene, "reading");
+});
+
 test("Backspace in kana mode deletes committed text", () => {
   const e = typed([...chars("kana"), "Backspace"]);
   assert.equal(e.committed, "か");
