@@ -1,0 +1,192 @@
+---
+title: 公式辞書
+description: 公式辞書それぞれの中身と作り方、ライセンス、手で入れる方法。
+---
+
+import { Steps } from "@astrojs/starlight/components";
+import DictionaryDownloads from "../../../../components/DictionaryDownloads.astro";
+import DictionaryFact from "../../../../components/DictionaryFact.astro";
+import DictionarySources from "../../../../components/DictionarySources.astro";
+
+公式辞書は、Kanaemi のために [kanaemi-dict](https://github.com/kanaemi-app/kanaemi-dict) で作っている辞書です。ふつうは [設定アプリで入れます](/docs/dictionaries/#設定アプリで入れる)。
+
+- 基本辞書：ふだんの文章に出てくる語の辞書。候補の並べ替えのモデルと組で配っています。
+- 追加辞書：分野の語や地名、人名のような、基本辞書にない語だけを持つ辞書。基本辞書の後ろに置いて、基本辞書に足して使います。
+
+## 作り方
+
+- 集めた文章を解析器（Sudachi と SudachiDict）で読み、実際に使われた語から辞書を作ります。読みも解析器が付けたものです。
+- 文章は、語を選び、出てきた回数を数え、並べ替えを学習するためにだけ読みます。辞書には読みと表記の組と並び順だけが入り、文章そのものは入りません。
+- 漢字一字の読みや記号、地名、人名のように文章からは作れない語だけは、再配布と改変が認められたほかの一覧から取ります。
+- よく使われる語ほど、候補の前に出やすいコストになります。
+- 並べ替えのモデルは、基本辞書と同じ文章で学習しています。
+
+## 一覧
+
+項目の数と大きさは、下の [ダウンロード](#ダウンロード) にある版のものです。
+
+| 辞書 | 中身 | 項目の数 | 大きさ |
+| --- | --- | ---: | ---: |
+| [基本](#基本辞書) | ふだんの文章の語、漢字一字の読み | <DictionaryFact name="base" fact="entries" /> | <DictionaryFact name="base" fact="size" /> |
+| [料理](#分野の辞書) | 料理、食品、飲料 | <DictionaryFact name="cooking" fact="entries" /> | <DictionaryFact name="cooking" fact="size" /> |
+| [経済](#分野の辞書) | 経済、金融、会計、税 | <DictionaryFact name="economy" fact="entries" /> | <DictionaryFact name="economy" fact="size" /> |
+| [ゲーム](#分野の辞書) | ゲーム、ボードゲーム、カードゲーム | <DictionaryFact name="games" fact="entries" /> | <DictionaryFact name="games" fact="size" /> |
+| [IT](#分野の辞書) | ソフトウェア、プログラミング、ネットワーク | <DictionaryFact name="it" fact="entries" /> | <DictionaryFact name="it" fact="size" /> |
+| [医療](#分野の辞書) | 医学、疾患、医薬品 | <DictionaryFact name="medical" fact="entries" /> | <DictionaryFact name="medical" fact="size" /> |
+| [音楽](#分野の辞書) | 楽器、楽曲、作曲家、歌手 | <DictionaryFact name="music" fact="entries" /> | <DictionaryFact name="music" fact="size" /> |
+| [鉄道](#分野の辞書) | 鉄道、駅、路線、車両 | <DictionaryFact name="railway" fact="entries" /> | <DictionaryFact name="railway" fact="size" /> |
+| [科学](#分野の辞書) | 化学、物理学、生物学、数学、天文学 | <DictionaryFact name="science" fact="entries" /> | <DictionaryFact name="science" fact="size" /> |
+| [スポーツ](#分野の辞書) | スポーツの競技と選手 | <DictionaryFact name="sports" fact="entries" /> | <DictionaryFact name="sports" fact="size" /> |
+| [法律](#法律) | 法令の語 | <DictionaryFact name="law" fact="entries" /> | <DictionaryFact name="law" fact="size" /> |
+| [2026年の新語](#その年の新語) | 2026 年に新しく使われだした語 | <DictionaryFact name="2026" fact="entries" /> | <DictionaryFact name="2026" fact="size" /> |
+| [地名](#地名) | 都道府県、市区町村、町域の名前 | <DictionaryFact name="place" fact="entries" /> | <DictionaryFact name="place" fact="size" /> |
+| [人名](#人名) | 人物のフルネーム、姓、名 | <DictionaryFact name="person" fact="entries" /> | <DictionaryFact name="person" fact="size" /> |
+| [送り仮名の揺れ](#送り仮名の揺れ) | 小い、行なう のような送り仮名 | <DictionaryFact name="okurigana" fact="entries" /> | <DictionaryFact name="okurigana" fact="size" /> |
+| [記号](#記号絵文字顔文字) | 記号 | <DictionaryFact name="symbol" fact="entries" /> | <DictionaryFact name="symbol" fact="size" /> |
+| [絵文字](#記号絵文字顔文字) | 絵文字 | <DictionaryFact name="emoji" fact="entries" /> | <DictionaryFact name="emoji" fact="size" /> |
+| [顔文字](#記号絵文字顔文字) | 顔文字 | <DictionaryFact name="emoticon" fact="entries" /> | <DictionaryFact name="emoticon" fact="size" /> |
+
+項目の数は、辞書のファイルの行のうち、説明の行を除いたものです。大きさは zip の大きさです。
+
+## 基本辞書
+
+ふだんの文章に出てくる語の辞書です。まずはこれを入れてください。
+
+- 広い分野の文章から作ります。百科事典やニュース、文学作品、法令、Web の文章、プログラミング言語のドキュメントなどです。どの素材かは [使った素材](#使った素材) にあります。
+- 文章に出てきた語に加えて、UniDic の語も入れています。文章に出てこない UniDic の語は、文章に出た語より後ろに並びます。
+- 活用する語（語幹と活用型）、文章に出た活用形、複合語（平安時代）、ウィキペディアの記事の見出しと語の組（多種多様）、数を含む語（「3 本」「第 2 回」）が入っています。
+- 送り仮名を指定して打てるように、送り仮名付きの語（書く、明らか）には送り仮名の区切りを付けた行もあります。
+- 標準と違う送り仮名（小い、行なう）は入れていません。[送り仮名の揺れ](#送り仮名の揺れ) の辞書にあります。
+- 漢字一字の読み（すで 既）は、Mozc の単漢字の表から取っています。Mozc の表にない字の音読みは、Unicode の Unihan データベースから取っています。どれも語より後ろに並びます。
+- 取った一覧の条件：Mozc は BSD-3-Clause、Unihan は Unicode License v3。
+
+### 並べ替えのモデル
+
+基本辞書の zip には、候補の並べ替えのモデル `ranking.model` が入っています。基本辞書と同じ文章で学習したもので、組になっている基本辞書と一緒に使います。
+
+## 分野の辞書
+
+日本語版ウィキペディアのうち、カテゴリの名前に下の語のどれかを含む記事の本文から作ります。
+
+- 曖昧さ回避の記事は使いません。
+- 記事の見出しのうち、本文に語として出るもの（解析器がいくつかの語に分けてしまう複合語）も入れます。読みは記事の本文から取ります。
+- 基本辞書と同じ語は持ちません。
+
+| 辞書 | カテゴリの名前に含む語 |
+| --- | --- |
+| 料理 | 料理、食品、調味料、菓子、飲料、食材、麺、食文化、酒 |
+| 経済 | 経済、金融、会計、経営、税、証券、銀行、株式、保険、貿易 |
+| ゲーム | ゲーム、ゲームソフト、ボードゲーム、カードゲーム |
+| IT | ソフトウェア（ゲームを含むカテゴリを除く）、プログラミング、オペレーティングシステム、データベース、データ構造、アルゴリズム、人工知能、機械学習、プロトコル、暗号技術、情報技術、コンピュータネットワーク、コンピュータ・ネットワーク、コンピュータセキュリティ、コンピュータの、ウェブアプリケーション、クラウドコンピューティング、ファイルフォーマット、マークアップ言語、文字コード、ユーザインタフェース、計算機科学、半導体。カテゴリ「コンピュータ」「インターネット」そのもの |
+| 医療 | 医学、医療、疾患、疾病、症候群、感染症、病気、症状、医薬品、薬理、治療、外科、内科、解剖学、看護、歯科、精神医学、臓器 |
+| 音楽 | 音楽、楽器、作曲家、歌手、楽曲、アルバム、音楽ジャンル、バンド、指揮者 |
+| 鉄道 | 鉄道、路線、車両、電車、気動車、機関車、地下鉄、新幹線。名前が「駅」で終わるカテゴリ |
+| 科学 | 化学、化合物、元素、物理学、生物学、生化学、分子生物学、遺伝、細胞、数学、天文学、宇宙、地質学、鉱物、気象、生態学、植物学、動物学 |
+| スポーツ | スポーツ、野球、サッカー、競技、相撲、ラグビー、テニス、ゴルフ、格闘技、選手 |
+
+## 法律
+
+[e-Gov 法令検索](https://laws.e-gov.go.jp/) が配る法令の本文から作ります。基本辞書と同じ語は持ちません。
+
+## その年の新語
+
+その年に新しく使われだした語の辞書です。年ごとに作ります。
+
+- その年に日本語版ウィキペディアで新しく作られた記事の見出しを候補にします。記事が作られた年は、記事の番号（ページ ID）で分けます。その年の最初に作られた記事の番号から、次の年の最初の記事の番号の手前までを、その年の記事とします。
+- そのうち、その年の Web の文章（はてなブックマークの日ごとの人気エントリーの見出しと要約）に語として出るものを入れます。
+- その年の文章で、それより古い文章よりはっきり多く使われる語だけを残します。古くからある語がその年によく出ただけでは入れません。
+
+## 地名
+
+日本郵便の [郵便番号データ](https://www.post.japanpost.jp/zipcode/) の、都道府県・市区町村・町域の表記と読みから作ります。
+
+- 町や字の名前はほとんど文章に出てこないので、文章を通さずに一覧から作ります。
+- その地名を持つ郵便番号データの行が多いほど、前に出やすくなります。
+- 郵便番号データにない地名（旧地名や通称）は入っていません。
+- 郵便番号データの条件：日本郵便は著作権を主張せず、自由に配布できるとしています。
+
+## 人名
+
+[Wikidata](https://www.wikidata.org/) の人物の項目の、日本語のラベルと読み仮名から作ります。
+
+- フルネーム（姓の読みと名の読みを続けたもの）と、姓、名が入っています。
+- 姓と名は、表記に漢字を含み、2 人以上の人物が持つものだけです。
+- 読み仮名が姓と名に区切られていない人物は、読みがラベル全体に当てはまるときだけ、フルネームとして入れます。
+- 読み仮名が姓と名の間に の を挟むときと、源・平・藤原 のような古代の氏で 1600 年より前に生まれた人物は、の を挟んだ読み（みなもとのよりとも）でも引けます。
+- Wikidata のサイトリンク（各言語版のウィキペディアなどの記事）が多い人物ほど、前に出やすくなります。日本語版ウィキペディアに記事がある人物は、さらに前に出やすくなります。
+- ラベルを姓と名に分けるときに、Mozc の単漢字の表の読みを使っています。
+- Wikidata の条件：CC0 1.0。
+
+## 送り仮名の揺れ
+
+標準と違う送り仮名で書いた活用する語（小い、行なう、取組む）だけを集めた辞書です。古い文章を書き写すときや、許容の送り仮名を使うときに足します。
+
+- 基本辞書と同じ文章から、送り仮名の揺れだけを数えて作ります。
+- 揺れかどうかは、解析器が揃えた表記と比べて、読みと漢字が同じで送り仮名だけが違うかで決めます。
+- 受付、申込 のような活用しない語は、基本辞書に入っています。
+
+## 記号・絵文字・顔文字
+
+記号、絵文字、顔文字は、それぞれ別の辞書です。どれも Mozc の表から、記号や絵文字とその読みを取って作ります。
+
+- 記号：Mozc の記号の表から。変体仮名は入れていません。
+- 絵文字：Mozc の絵文字の表から。読みは、Mozc が Unicode CLDR の注釈から作ったものです。
+- 顔文字：Mozc の顔文字の表から。
+- 読みは、既定のローマ字の表で打てる形に直しています。
+- 表の条件：Mozc は BSD-3-Clause。絵文字の読みのもとの Unicode CLDR は Unicode License v3。
+
+## 使った素材
+
+それぞれの辞書の zip の `NOTICE` に書かれている素材です。読みを付ける解析器の辞書（SudachiDict）も含みます。
+
+<DictionarySources />
+
+## ライセンス
+
+- 辞書と並べ替えのモデル：[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.ja)
+- 辞書を作る道具のコード：MIT
+- 素材の文章は、辞書にもモデルにも含みません。
+- 辞書の読みは、Sudachi と SudachiDict（Apache License 2.0）で解析して付けています。
+- ほかの一覧から取った項目は、その一覧の条件に従って辞書に含みます。
+
+| 辞書 | 取った一覧 | 条件 |
+| --- | --- | --- |
+| 基本 | Mozc の単漢字の表、Unicode の Unihan データベース | BSD-3-Clause、Unicode License v3 |
+| 記号・顔文字 | Mozc の記号の表、顔文字の表 | BSD-3-Clause |
+| 絵文字 | Mozc の絵文字の表（読みは Unicode CLDR から） | BSD-3-Clause、Unicode License v3 |
+| 地名 | 日本郵便の郵便番号データ | 日本郵便は著作権を主張せず、自由に配布できる |
+| 人名 | Wikidata の人物の読み仮名 | CC0 1.0 |
+
+ライセンスの全文は、それぞれの zip の `LICENSE` にあります。素材ごとの表示と、取った一覧の条件の全文は、zip の `NOTICE` にあります。[設定アプリで入れた](/docs/dictionaries/#設定アプリで入れる) ときは、辞書と同じフォルダに置かれます。
+
+## 手で入れる
+
+設定アプリを使わずに入れることもできます。ネットにつながらないマシンに入れるときなどに使ってください。
+
+### ダウンロード
+
+<DictionaryDownloads />
+
+zip を展開すると、辞書の名前のフォルダができます。中には、辞書のファイル `kanaemi-<名前>.tsv` と、ライセンスの `LICENSE`、辞書を作るのに使った素材の表示の `NOTICE` が入っています。基本辞書のフォルダには、並べ替えのモデル `ranking.model` も入っています。
+
+### 置く
+
+<Steps>
+
+1. 辞書のファイル `kanaemi-<名前>.tsv` を、[設定のフォルダ](/docs/settings/folder/) の中の `dictionaries` フォルダに置く。フォルダがなければ作る。
+
+2. 基本辞書の `ranking.model` を、設定のフォルダに置く。`dictionaries` の中ではなく、`config.toml` と同じところに置きます。
+
+3. 追加辞書も使うときは、[設定ファイル](/docs/settings/config/) に [辞書の一覧](/docs/settings/dictionaries/) を書き、基本辞書を先に書く。
+
+   ```toml
+   dictionaries = ["custom", "kanaemi-base.tsv", "kanaemi-railway.tsv", "kanaemi-it.tsv"]
+   ```
+
+4. 入力欄をクリックし直す。
+
+</Steps>
+
+辞書の一覧を書かないと、Kanaemi は `dictionaries` の中の辞書をファイル名の順に使います。この順では、`kanaemi-2026.tsv` のような追加辞書が基本辞書より先に来ることがあり、先にある辞書の候補ほど前に出やすくなります。
+
+並べ替えのモデルは、組になっている基本辞書と一緒に使うものです。手で基本辞書を新しくしたら、`ranking.model` も同じ zip のものに替えてください。

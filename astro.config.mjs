@@ -82,6 +82,7 @@ export default defineConfig({
             { label: "テキストの辞書の形式", slug: "docs/reference/text-dictionary" },
             { label: "表記の置き場所", slug: "docs/reference/placeholders" },
             { label: "ローマ字の表の形式", slug: "docs/reference/romaji-table" },
+            { label: "公式辞書", slug: "docs/reference/official-dictionaries" },
           ],
         },
         {

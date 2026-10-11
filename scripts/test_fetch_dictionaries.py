@@ -4,7 +4,7 @@ import json
 import unittest
 import zipfile
 
-from fetch_dictionaries import parse_catalog, short_label, verify
+from fetch_dictionaries import describe, parse_catalog, short_label, verify
 
 
 def sha256(data):
@@ -75,6 +75,52 @@ class Verify(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "kanaemi-base.tsv"):
             verify(BASE, data)
 
+
+NOTICE = """この辞書は、次の素材を使って作った。素材の文章は辞書に含まない。
+
+----------------------------------------------------------------------
+
+ウィキペディア日本語版の寄稿者
+https://ja.wikipedia.org/
+
+記事の本文から、語とその出現回数を数えた。
+
+----------------------------------------------------------------------
+
+SudachiDict full
+https://github.com/WorksApplications/SudachiDict
+
+LEGAL NOTICE INFORMATION
+========================
+""".encode()
+
+
+class Describe(unittest.TestCase):
+    def test_records_what_the_download_table_shows(self):
+        data = archive({"base/kanaemi-base.tsv": TSV, "base/ranking.model": MODEL})
+        described = describe(BASE, data)
+        self.assertEqual(
+            {k: described[k] for k in ("name", "base", "label", "file", "size", "model")},
+            {"name": "base", "base": True, "label": "基本", "file": "kanaemi-base.zip", "size": len(data), "model": True},
+        )
+
+    def test_counts_the_item_lines_of_the_dictionary_leaving_out_comments_and_blank_lines(self):
+        tsv = "# Kanaemi 公式辞書・基本（kanaemi-dict）\nきしゃ\t記者\t\t20\n\n# メモ\nか\t書\t五段-カ行\t30\n".encode()
+        described = describe({**BASE, "model": None}, archive({"base/kanaemi-base.tsv": tsv}))
+        self.assertEqual(described["entries"], 2)
+
+    def test_lists_the_sources_named_in_the_notice_in_its_order(self):
+        data = archive({"base/kanaemi-base.tsv": TSV, "base/NOTICE": NOTICE})
+        self.assertEqual(describe(BASE, data)["sources"], ["ウィキペディア日本語版の寄稿者", "SudachiDict full"])
+
+    def test_does_not_take_a_heading_underlined_with_hyphens_inside_a_source_for_another_source(self):
+        notice = NOTICE + "\nPYTHON SOFTWARE FOUNDATION LICENSE VERSION 2\n--------------------------------------------\n\n1. This LICENSE AGREEMENT\n".encode()
+        data = archive({"base/kanaemi-base.tsv": TSV, "base/NOTICE": notice})
+        self.assertEqual(describe(BASE, data)["sources"], ["ウィキペディア日本語版の寄稿者", "SudachiDict full"])
+
+    def test_lists_no_sources_when_the_archive_has_no_notice(self):
+        data = archive({"base/kanaemi-base.tsv": TSV})
+        self.assertEqual(describe(BASE, data)["sources"], [])
 
 
 if __name__ == "__main__":

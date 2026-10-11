@@ -67,6 +67,41 @@ def verify(entry, data):
                 raise ValueError(f"{file} in {entry['archive']} does not match the catalog")
 
 
+# The NOTICE of a distribution sets each source apart with a line of hyphens
+# standing alone between blank lines, and names it on the first line after. A
+# license quoted inside may underline its own headings with hyphens; those lines
+# follow their heading directly.
+NOTICE_SEPARATOR = re.compile(r"(?:\A|\n\s*\n)-{10,}\n")
+
+
+def sources(notice):
+    """The names of the sources a NOTICE lists, in its order."""
+    names = []
+    for section in NOTICE_SEPARATOR.split(notice)[1:]:
+        lines = [line.strip() for line in section.splitlines() if line.strip()]
+        if lines:
+            names.append(lines[0])
+    return names
+
+
+def describe(entry, data):
+    """What the site shows of one dictionary: the catalog's facts, and from the
+    archive the number of item lines in the dictionary and the sources its
+    NOTICE names."""
+    with zipfile.ZipFile(io.BytesIO(data)) as archive:
+        tsv = archive.read(member(archive, entry["dictionary"]["file"])).decode("utf-8")
+        notice = member(archive, "NOTICE")
+        notice = archive.read(notice).decode("utf-8") if notice else ""
+    return {
+        "name": entry["name"],
+        "base": bool(entry.get("base")),
+        "label": short_label(entry.get("label", ""), entry["name"]),
+        "file": entry["archive"],
+        "size": len(data),
+        "model": bool(entry.get("model")),
+        "entries": sum(1 for line in tsv.splitlines() if line.strip() and not line.startswith("#")),
+        "sources": sources(notice),
+    }
 
 class NoRelease(Exception):
     """kanaemi-dict has no release with a catalog to fetch."""
@@ -114,16 +149,7 @@ def from_catalog(base_url, catalog):
             data, _ = request(f"{base_url}/{entry['archive']}")
             verify(entry, data)
             path.write_bytes(data)
-        entries.append(
-            {
-                "name": entry["name"],
-                "base": bool(entry.get("base")),
-                "label": short_label(entry.get("label", ""), entry["name"]),
-                "file": entry["archive"],
-                "size": len(data),
-                "model": bool(entry.get("model")),
-            }
-        )
+        entries.append(describe(entry, data))
     return entries
 
 

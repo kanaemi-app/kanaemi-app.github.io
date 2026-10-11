@@ -1,0 +1,20 @@
+---
+/**
+ * One figure of an official dictionary in the latest kanaemi-dict release, for
+ * use inside prose or a table: how many item lines it holds, or how large its
+ * zip is. A dictionary the release does not have shows a dash.
+ */
+import { entriesLabel, sizeLabel } from "../lib/dictionaries";
+import { manifest } from "../lib/dictionary-manifest";
+
+interface Props {
+  name: string;
+  fact: "entries" | "size";
+}
+
+const { name, fact } = Astro.props;
+const dictionary = manifest.dictionaries.find((d) => d.name === name);
+const text = dictionary === undefined ? "—" : fact === "entries" ? entriesLabel(dictionary.entries) : sizeLabel(dictionary.size);
+---
+
+{text}
