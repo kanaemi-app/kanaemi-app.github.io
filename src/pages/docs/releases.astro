@@ -1,0 +1,93 @@
+---
+/**
+ * Every published release of Kanaemi, newest first, with its notes from
+ * GitHub. A patch release sits folded in the section of its X.Y release.
+ */
+import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
+import { Badge } from "@astrojs/starlight/components";
+import { renderNotes, type Releases } from "../../lib/releases";
+
+const history = Object.values(
+  import.meta.glob<Releases>("../../data/releases.json", { eager: true, import: "default" }),
+)[0];
+if (!history) {
+  throw new Error("src/data/releases.json is missing; run `npm run fetch`");
+}
+const { groups } = history;
+---
+
+<StarlightPage
+  frontmatter={{
+    title: "リリースの履歴",
+    description: "Kanaemi のこれまでのリリースと、それぞれで変わったこと。",
+    editUrl: false,
+  }}
+  headings={groups.map((g) => ({ depth: 2, slug: g.version, text: g.version }))}
+>
+  {
+    groups.length === 0 ? (
+      <p>
+        Kanaemi はまだリリースしていません。<a href={history.releases}>GitHub のリリース</a> を見てください。
+      </p>
+    ) : (
+      <p>
+        Kanaemi のリリースを、新しい順に並べています。変わったことは、GitHub のリリースに書いたものをそのまま載せています。修正だけのリリース（v0.4.1 など）は、元になったリリース（v0.4.0）の中にたたんであります。
+      </p>
+    )
+  }
+  {
+    groups.map((g) => (
+      <section class="release" aria-labelledby={g.version}>
+        <h2 id={g.version}>
+          {g.version}
+          {g.prerelease && <Badge text="プレリリース" variant="caution" />}
+        </h2>
+        <p class="release-meta">
+          <time datetime={g.published_at}>{g.date}</time>
+          <a href={g.url}>GitHub のリリース</a>
+        </p>
+        <Fragment set:html={renderNotes(g.body)} />
+        {g.patches.map((p) => (
+          <details>
+            <summary>
+              {p.version}
+              {p.prerelease && <Badge text="プレリリース" variant="caution" />}
+              <span class="release-meta">
+                <time datetime={p.published_at}>{p.date}</time>
+              </span>
+            </summary>
+            <p class="release-meta">
+              <a href={p.url}>GitHub のリリース</a>
+            </p>
+            <Fragment set:html={renderNotes(p.body)} />
+          </details>
+        ))}
+      </section>
+    ))
+  }
+</StarlightPage>
+
+<style>
+  .release {
+    margin-block-start: 1.5rem;
+    padding: 1.25rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+  }
+  .release h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+  }
+  .release-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25em 1em;
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-3);
+  }
+  summary .release-meta {
+    display: inline;
+    margin-inline-start: 0.6em;
+  }
+</style>

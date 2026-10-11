@@ -85,6 +85,7 @@ export default defineConfig({
           items: [
             { label: "考え方", slug: "docs/concept" },
             { label: "困ったとき", slug: "docs/troubleshooting" },
+            { label: "リリースの履歴", link: "/docs/releases/" },
           ],
         },
       ],

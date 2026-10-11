@@ -67,7 +67,7 @@ const platforms = [
     brew: "brew install --cask kanaemi-app/tap/kanaemi",
   },
   { os: "windows", name: "Windows", via: "Text Services Framework" },
-  { os: "linux", name: "Linux", via: "IBus・GNOME ほか" },
+  { os: "linux", name: "Linux", via: "IBus・Fcitx5" },
 ];
 ---
 
@@ -273,7 +273,7 @@ const platforms = [
                     ))}
                   </ul>
                 )}
-                {new Set((packagesByOs.get(p.os) ?? []).map((pkg) => pkg.arch)).size > 1 && (
+                {new Set((packagesByOs.get(p.os) ?? []).map((pkg) => `${pkg.arch} ${pkg.framework}`)).size > 1 && (
                   <p class="choose">
                     <a href="/docs/install/#どれを選ぶか">どれを選ぶか分からないとき</a>
                   </p>
@@ -295,7 +295,7 @@ const platforms = [
             </p>
           ) : (
             <p class="section-lede">
-              Kanaemi <a href={`${installers.releases}/tag/${installers.version}`}>{installers.version}</a> のインストーラーです。
+              Kanaemi <a href={`${installers.releases}/tag/${installers.version}`}>{installers.version}</a> のインストーラーです。これまでの変更は <a href="/docs/releases/">リリースの履歴</a> にあります。
             </p>
           )
         }

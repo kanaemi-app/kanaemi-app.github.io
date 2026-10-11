@@ -24,7 +24,9 @@ just preview   # serve dist/
 
 ```
 src/
-├── pages/index.astro          # landing page
+├── pages/
+│   ├── index.astro            # landing page
+│   └── docs/releases.astro    # release history, built from src/data/releases.json
 ├── components/
 │   ├── landing/Demo.astro     # the typing demo in the hero
 │   ├── ThemedFigure.astro     # light/dark illustration pair for the docs
@@ -34,7 +36,9 @@ src/
 ├── data/config.toml           # Kanaemi's settings template, copied from the kanaemi repository
 ├── lib/
 │   ├── demo-engine.ts         # a small imitation of Kanaemi's typing, for the demo
-│   └── default-keys.ts        # reads the default keys out of the template
+│   ├── default-keys.ts        # reads the default keys out of the template
+│   ├── installers.ts          # names the installers for the download lists
+│   └── releases.ts            # renders the release notes
 └── styles/                    # fonts, Starlight theme, landing page
 public/
 ├── guide/                     # usage illustrations (generated)
@@ -44,6 +48,7 @@ scripts/
 ├── sync-config.sh             # copies the settings template
 ├── fetch_dictionaries.py      # fetches the latest kanaemi-dict release (runs before dev and build)
 ├── fetch_installers.py        # reads the catalog of Kanaemi's latest release (runs before dev and build)
+├── fetch_releases.py          # reads every release of Kanaemi and its notes (runs before dev and build)
 └── check-links.py             # checks every internal link and #fragment in dist/
 ```
 
@@ -66,7 +71,11 @@ The site serves the dictionaries of the latest [kanaemi-dict](https://github.com
 
 ## The installers
 
-`scripts/fetch_installers.py` reads the catalog (`index.json`) of Kanaemi's latest release into `src/data/installers.json`, from which the landing page and `/docs/install/` link each installer directly on GitHub, named by OS and CPU. The installers themselves are not copied. A release without a catalog counts as none, and the pages then say no release is out yet.
+`scripts/fetch_installers.py` reads the catalog (`index.json`) of Kanaemi's latest release into `src/data/installers.json`, from which the landing page and `/docs/install/` link each installer directly on GitHub, named by OS and CPU, and on Linux by the input method framework (IBus or Fcitx5). The installers themselves are not copied. A release without a catalog counts as none, and the pages then say no release is out yet. It reads catalog formats 1 and 2; format 1 has no framework, and its Linux packages are IBus ones.
+
+## The release history
+
+`scripts/fetch_releases.py` reads every published release of Kanaemi from the GitHub API into `src/data/releases.json`, from which `/docs/releases/` lists them with their notes as written on GitHub. A patch release is folded into its X.Y.0 release. The notes are rendered at build time with raw HTML dropped. The file is generated and not committed; without the network, the history read before is used. Set `GITHUB_TOKEN` to raise the API's rate limit; the deploy workflow passes its own.
 
 The releases of Kanaemi and kanaemi-dict run the deploy workflow (`workflow_dispatch`) once their files are attached, so the site reads the new catalogs right away.
 
