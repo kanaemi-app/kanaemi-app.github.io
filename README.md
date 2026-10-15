@@ -1,106 +1,106 @@
 # Kanaemi Site
 
-The landing page and the user documentation for [Kanaemi](https://github.com/kanaemi-app/kanaemi), published at [kanaemi-app.github.io](https://kanaemi-app.github.io).
+[Kanaemi](https://github.com/kanaemi-app/kanaemi) のランディングページと利用者向けのドキュメント。[kanaemi-app.github.io](https://kanaemi-app.github.io) で公開している。
 
-## Tech stack
+## 使っているもの
 
-- [Astro](https://astro.build) with [Starlight](https://starlight.astro.build) for the documentation: sidebar, full-text search (Pagefind), light and dark themes and the table of contents come with it.
-- The landing page (`src/pages/index.astro`) is a plain Astro page with its own styles, outside Starlight.
-- Fonts are the brand's faces, Quicksand and Zen Maru Gothic, self-hosted through Fontsource.
-- Deployed to GitHub Pages by `.github/workflows/deploy.yml` on every push to `main`.
+- ドキュメントは [Astro](https://astro.build) と [Starlight](https://starlight.astro.build) で作る。サイドバー、全文検索（Pagefind）、ライトとダークのテーマ、目次は Starlight に付いてくる。
+- ランディングページ（`src/pages/index.astro`）は Starlight の外にある、独自のスタイルを持つふつうの Astro のページ。
+- フォントはブランドの書体、Quicksand と Zen Maru Gothic。Fontsource を通して、このサイトから配る。
+- `main` に push するたびに、`.github/workflows/deploy.yml` が GitHub Pages に公開する。
 
-## Development
+## 開発
 
-With Nix, `nix develop` gives Node.js, just, Python and resvg. Without it, Node.js 24 is enough for everything but redrawing the illustrations.
+Nix があれば、`nix develop` で Node.js、just、Python、resvg がそろう。なければ、図を描き直すほかは Node.js 24 だけで足りる。
 
 ```sh
 just install   # npm install
-just dev       # dev server with hot reload
-just check     # unit tests, type check, build, link check
-just preview   # serve dist/
+just dev       # 書き換えをすぐ反映する開発サーバー
+just check     # 単体テスト、型チェック、ビルド、リンクチェック
+just preview   # dist/ を配る
 ```
 
-## Layout
+## 構成
 
 ```
 src/
 ├── pages/
-│   ├── index.astro            # landing page
-│   └── docs/releases.astro    # release history, built from src/data/releases.json
+│   ├── index.astro            # ランディングページ
+│   └── docs/releases.astro    # リリースの履歴。src/data/releases.json から作る
 ├── components/
-│   ├── landing/Demo.astro     # the typing demo in the hero
-│   ├── ThemedFigure.astro     # light/dark illustration pair for the docs
-│   ├── Screencast.astro       # a short recording of Kanaemi at work on macOS
-│   ├── Screenshot.astro       # light/dark screenshot pair of the settings app
-│   ├── DefaultKeys.astro      # default key table, built from src/data/config.toml
-│   └── DictionaryDownloads.astro # download table of the official dictionaries
-├── content/docs/docs/         # the documentation, served under /docs/
-├── data/config.toml           # Kanaemi's settings template, copied from the kanaemi repository
+│   ├── landing/Demo.astro     # 冒頭の打鍵のデモ
+│   ├── ThemedFigure.astro     # ドキュメントの図（ライトとダークの組）
+│   ├── Screencast.astro       # macOS で Kanaemi を使っているところの短い動画
+│   ├── Screenshot.astro       # 設定アプリの画面（ライトとダークの組）
+│   ├── DefaultKeys.astro      # 既定のキーの表。src/data/config.toml から作る
+│   └── DictionaryDownloads.astro # 公式辞書のダウンロードの表
+├── content/docs/docs/         # ドキュメント。/docs/ の下に出る
+├── data/config.toml           # Kanaemi の設定のテンプレート。kanaemi のリポジトリから写す
 ├── lib/
-│   ├── demo-engine.ts         # a small imitation of Kanaemi's typing, for the demo
-│   ├── default-keys.ts        # reads the default keys out of the template
-│   ├── installers.ts          # names the installers for the download lists
-│   └── releases.ts            # renders the release notes
-└── styles/                    # fonts, Starlight theme, landing page
+│   ├── demo-engine.ts         # デモのための、Kanaemi の打ち方の小さな模倣
+│   ├── default-keys.ts        # テンプレートから既定のキーを読む
+│   ├── installers.ts          # ダウンロードの一覧に出すインストーラーの名前を付ける
+│   └── releases.ts            # リリースノートを描く
+└── styles/                    # フォント、Starlight のテーマ、ランディングページ
 public/
-├── guide/                     # usage illustrations (generated)
-├── screencasts/               # recordings of Kanaemi on macOS (recorded)
-├── screenshots/               # screens of the settings app on macOS (captured)
-└── logo/                      # brand logos, from kanaemi-brand
+├── guide/                     # 使い方の図（描いたもの）
+├── screencasts/               # macOS の Kanaemi の動画（撮ったもの）
+├── screenshots/               # macOS の設定アプリの画面（撮ったもの）
+└── logo/                      # ブランドのロゴ。kanaemi-brand から
 scripts/
-├── guide/                     # draws public/guide
-├── screencast/                # records the scenes in it and cuts them into public/screencasts
-├── sync-config.sh             # copies the settings template
-├── fetch_dictionaries.py      # fetches the latest kanaemi-dict release (runs before dev and build)
-├── fetch_installers.py        # reads the catalog of Kanaemi's latest release (runs before dev and build)
-├── fetch_releases.py          # reads every release of Kanaemi and its notes (runs before dev and build)
-└── check-links.py             # checks every internal link and #fragment in dist/
+├── guide/                     # public/guide を描く
+├── screencast/                # 中の場面を撮り、public/screencasts に切り出す
+├── sync-config.sh             # 設定のテンプレートを写す
+├── fetch_dictionaries.py      # kanaemi-dict の最新のリリースを取ってくる（dev と build の前に動く）
+├── fetch_installers.py        # Kanaemi の最新のリリースの目録を読む（dev と build の前に動く）
+├── fetch_releases.py          # Kanaemi のすべてのリリースとそのノートを読む（dev と build の前に動く）
+└── check-links.py             # dist/ の中のリンクと #fragment をすべて確かめる
 ```
 
-## Keeping up with Kanaemi
+## Kanaemi に合わせる
 
-The documentation describes Kanaemi's behaviour in the words of a user; its source of truth is `docs/spec/` in the kanaemi repository. When the behaviour changes there, change the page that describes it here.
+ドキュメントは、Kanaemi のふるまいを利用者の言葉で書く。ふるまいのよりどころは、kanaemi のリポジトリの `docs/spec/`。そこでふるまいが変わったら、それを説明しているこちらのページを直す。
 
-The default keys are not written by hand. `src/data/config.toml` is a copy of Kanaemi's settings template, and `/docs/reference/default-keys/` is built from it. When the defaults change:
+既定のキーは手で書かない。`src/data/config.toml` は Kanaemi の設定のテンプレートの写しで、`/docs/reference/default-keys/` はそこから作る。既定が変わったら、写し直す。
 
 ```sh
-just sync-config            # from ../kanaemi
+just sync-config            # ../kanaemi から
 just sync-config ~/src/kanaemi
 ```
 
-The usage illustrations in `public/guide/` show the default keys too. Change `scripts/guide/gen.py` and redraw them with `just guide`.
+`public/guide/` の使い方の図も既定のキーを描いている。`scripts/guide/gen.py` を直して、`just guide` で描き直す。
 
-The screencasts in `public/screencasts/` are recordings of Kanaemi itself. Each is played from a scene in `scripts/screencast/scenes/`, which lists the keys to send and a caption for each step. When the behaviour a scene shows changes, record it again on a Mac, then cut the recordings into what the pages show:
+`public/screencasts/` の動画は、Kanaemi そのものを撮ったもの。どれも `scripts/screencast/scenes/` の場面を再生して撮る。場面には、送るキーと、段ごとの説明の文を書く。場面で見せているふるまいが変わったら、Mac で撮り直して、ページに出す動画に切り出す。
 
 ```sh
-just screencast                     # record every scene
-just screencast convert             # record the named scenes
-just screencast-publish             # cut every recording into public/screencasts
-just screencast-publish convert     # cut the named ones
+just screencast                     # すべての場面を撮る
+just screencast convert             # 名前を挙げた場面だけ撮る
+just screencast-publish             # すべての録画を public/screencasts に切り出す
+just screencast-publish convert     # 名前を挙げたものだけ切り出す
 ```
 
-Each scene is recorded with [CleanShot X](https://cleanshot.com) as a Studio project (`.cache/screencast/<name>.cleanshotvideo`, or `$SCREENCAST_PROJECTS`), kept so the recording can still be edited. `just screencast-publish` cuts the recording in it from just after the first caption to a moment after the last change, without the title bar and the marks CleanShot draws on the corners, and takes the poster from its last moment.
+場面は [CleanShot X](https://cleanshot.com) の Studio のプロジェクト（`.cache/screencast/<name>.cleanshotvideo`、または `$SCREENCAST_PROJECTS`）として撮る。録画をあとから編集できるように残しておく。`just screencast-publish` は、その中の録画を、最初の説明の文が出た直後から最後に画面が変わった少しあとまで切り出す。タイトルバーと、CleanShot が範囲の四隅に描く印は落とし、最後の場面をポスターの画像にする。
 
-A scene takes over the keyboard and the screen while it plays, and switches the input source to Kanaemi. If a window of another app, such as a dialog or a notification, shows over the stage while a scene plays, the take is thrown away and the recording stops. The candidates come from the settings folder Kanaemi reads, so record with a folder that holds only the official dictionaries, not your own words and history. Kanaemi needs to be the release the pages describe.
+場面を再生しているあいだは、キーボードと画面を使い、入力ソースを Kanaemi に切り替える。ダイアログや通知のような、ほかのアプリのウインドウが舞台の上に出たら、その回は捨てて撮るのをやめる。候補は Kanaemi が読む設定のフォルダから出るので、公式の辞書だけを入れたフォルダで撮る。自分の語や履歴は入れない。Kanaemi は、ページが説明している版にしておく。
 
-The screenshots in `public/screenshots/` are screens of the settings app on macOS, each cut down to what its section explains, as `<name>.webp` and `<name>-dark.webp`. Capture them from the settings app of the release the pages describe, run on a HOME that holds only the official dictionaries and a few sample words, so nothing of your own shows; the screen 「かなえみについて」 shows the settings folder's path, so leave it out.
+`public/screenshots/` の画像は、macOS の設定アプリの画面。どれも、その節が説明しているところだけに切り、`<name>.webp` と `<name>-dark.webp` の組にする。ページが説明している版の設定アプリを、公式の辞書といくつかのサンプルの語だけを入れた HOME で起動して撮り、自分のものが映らないようにする。「かなえみについて」の画面は設定のフォルダの場所が出るので、使わない。
 
-## The official dictionaries
+## 公式の辞書
 
-The site serves the dictionaries of the latest [kanaemi-dict](https://github.com/kanaemi-app/kanaemi-dict) release itself. `scripts/fetch_dictionaries.py` runs before `npm run dev` and `npm run build`: it reads the release's catalog (`index.json`, the one the settings app of Kanaemi reads), downloads the zips into `public/dictionaries/`, checks their files against the catalog's SHA-256, and describes them, with their Japanese labels, in `src/data/dictionaries.json`. Both are generated and not committed. Without the network, the files fetched before are used; set `KANAEMI_DICT_RELEASE` to fetch from another release URL.
+このサイトは、[kanaemi-dict](https://github.com/kanaemi-app/kanaemi-dict) の最新のリリースの辞書を自分で配る。`scripts/fetch_dictionaries.py` は `npm run dev` と `npm run build` の前に動き、リリースの目録（Kanaemi の設定アプリが読むのと同じ `index.json`）を読んで、zip を `public/dictionaries/` に落とす。ファイルを目録の SHA-256 で確かめ、日本語の名前と一緒に `src/data/dictionaries.json` に書く。どちらも作るもので、コミットしない。ネットワークがなければ、前に取ってきたものを使う。別のリリースの URL から取るときは、`KANAEMI_DICT_RELEASE` を決める。
 
-## The installers
+## インストーラー
 
-`scripts/fetch_installers.py` reads the catalog (`index.json`) of Kanaemi's latest release into `src/data/installers.json`, from which the landing page and `/docs/install/` link each installer directly on GitHub, named by OS and CPU, and on Linux by the input method framework (IBus or Fcitx5). The installers themselves are not copied. A release without a catalog counts as none, and the pages then say no release is out yet. It reads catalog formats 1 and 2; format 1 has no framework, and its Linux packages are IBus ones.
+`scripts/fetch_installers.py` は、Kanaemi の最新のリリースの目録（`index.json`）を `src/data/installers.json` に読む。ランディングページと `/docs/install/` は、そこから各インストーラーへ GitHub のリンクを直接張る。名前は OS と CPU で、Linux では入力方式の仕組み（IBus か Fcitx5）でも付ける。インストーラーそのものは写さない。目録のないリリースはないものとして数え、そのときページはまだリリースがないと書く。目録の形式は 1 と 2 を読む。形式 1 には仕組みがなく、その Linux のパッケージは IBus のもの。
 
-## The release history
+## リリースの履歴
 
-`scripts/fetch_releases.py` reads every published release of Kanaemi from the GitHub API into `src/data/releases.json`, from which `/docs/releases/` lists them with their notes as written on GitHub. A patch release is folded into its X.Y.0 release. The notes are rendered at build time with raw HTML dropped. The file is generated and not committed; without the network, the history read before is used. Set `GITHUB_TOKEN` to raise the API's rate limit; the deploy workflow passes its own.
+`scripts/fetch_releases.py` は、公開した Kanaemi のすべてのリリースを GitHub の API から `src/data/releases.json` に読む。`/docs/releases/` は、そこから GitHub に書いたとおりのノートと一緒に一覧にする。パッチのリリースは、その X.Y.0 のリリースにまとめる。ノートはビルドのときに描き、生の HTML は落とす。このファイルも作るもので、コミットしない。ネットワークがなければ、前に読んだ履歴を使う。API の回数の上限を上げるには `GITHUB_TOKEN` を決める。デプロイのワークフローは自分のものを渡す。
 
-The releases of Kanaemi and kanaemi-dict run the deploy workflow (`workflow_dispatch`) once their files are attached, so the site reads the new catalogs right away.
+Kanaemi と kanaemi-dict のリリースは、ファイルを付け終えるとデプロイのワークフロー（`workflow_dispatch`）を動かす。サイトは新しい目録をすぐに読む。
 
-## Writing the documentation
+## ドキュメントを書く
 
-- Write in Japanese, in the plain style of Kanaemi's own documents: short sentences, everyday words, the function names (`@next`) only where the reader writes them.
-- Link between pages with absolute paths (`/docs/usage/convert/`). `just check` fails on a link to a page or a heading that does not exist.
-- Illustrations come in a light and a dark pair; use `ThemedFigure` so the page shows the one matching the site's theme. Screenshots of the settings app do too, through `Screenshot`.
+- 日本語で、Kanaemi 自身の文書と同じ平らな書き方で書く。文は短く、ふだんの言葉で書く。機能の名前（`@next`）は、読み手がそれを書くところでだけ使う。
+- ページのあいだは絶対パス（`/docs/usage/convert/`）でリンクする。ないページや見出しへのリンクがあると、`just check` が失敗する。
+- 図はライトとダークの組で用意する。`ThemedFigure` を使い、サイトのテーマに合うほうを出す。設定アプリの画面も、`Screenshot` で同じようにする。
