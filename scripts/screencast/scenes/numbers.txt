@@ -1,0 +1,19 @@
+# 数を含む語：数字から読みを始める
+caption 数字から読みを始めて、変換する
+type ;3ko
+wait 600
+key space
+wait 1500
+caption Space で、数の書き方の違う候補へ
+key space
+wait 1200
+key return
+wait 600
+key return
+caption どの数を打っても、同じように変換する
+type ;12gatu
+wait 600
+key space
+wait 1500
+key return
+wait 1200

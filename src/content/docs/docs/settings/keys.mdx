@@ -5,6 +5,7 @@ description: 場面ごとに、押したキーへ機能を割り当てる。修�
 
 import ThemedFigure from "../../../../components/ThemedFigure.astro";
 import Since from "../../../../components/Since.astro";
+import Screenshot from "../../../../components/Screenshot.astro";
 
 Kanaemi のキーは、すべて設定で変えられます。修飾キーの単独押しも含めて、どのキーの割り当ても同じように外したり、別の機能に付け替えたりできます。
 
@@ -183,6 +184,8 @@ send_except = ["com.apple.Terminal", "org.gnu.Emacs"]
 Linux では、プログラム名を伝えないアプリ（XIM を通るものなど）は見分けられず、いつも置き換えます。
 
 [設定アプリ](/docs/settings/app/#キーバインド) では、アプリを名前とアイコンで選んで足せます。
+
+<Screenshot name="settings-keys-send-except" alt="「キーバインド」の画面の「キーを置き換えないアプリ」。並べたアプリでは、ふだんのキーの置き換えをしない。下に「アプリを足す…」のボタンがある" />
 
 ## AZIK で使う
 

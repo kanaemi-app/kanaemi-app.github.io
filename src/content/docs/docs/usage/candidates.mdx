@@ -4,8 +4,11 @@ description: 候補を回り、番号で選び、カタカナや英数で確定�
 ---
 
 import Since from "../../../../components/Since.astro";
+import Screencast from "../../../../components/Screencast.astro";
 
 変換すると、候補を選ぶ場面に入ります。選んでいる候補には `»` の印が付きます。
+
+<Screencast name="candidates" alt=";kousei を変換して Space を押していくと、候補の一覧が出て選んでいる候補が移る。2 を押すと一覧の 2 番の候補を確定する。続けて ;kanji と打ち、F7 で「カンジ」と確定する" />
 
 ## 選ぶ
 
@@ -94,6 +97,8 @@ import Since from "../../../../components/Since.astro";
 ```
 ;kakuchou → »格調 を確定 → Shift+Backspace → »格調 → Space → »拡張
 ```
+
+<Screencast name="undo-commit" alt=";kikan を変換して Enter で確定したあと、Shift+Backspace で候補を選ぶ場面に戻し、Space で次の候補を選んで確定し直す" />
 
 - 戻せるのは、確定したあとに Kanaemi が出した文字だけが続いている間です（「格調する」の「する」は、候補の後ろに戻ります）。ほかのキーがアプリに渡ったとき、入力欄を移ったとき、マウスのボタンを押したときには戻せなくなります。
 - 戻せるのは、変換して確定した最後の 1 語だけです。読みをかなのまま確定したものと、登録して確定したものは戻せません。

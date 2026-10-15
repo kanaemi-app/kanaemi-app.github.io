@@ -4,8 +4,11 @@ description: 読みの途中の ; で送り仮名の始まりを示し、その�
 ---
 
 import Since from "../../../../components/Since.astro";
+import Screencast from "../../../../components/Screencast.astro";
 
 読みの途中で <kbd>;</kbd> を押すと、そこが送り仮名の始まりになります。送り仮名の最初のかなを打った時点で、すぐ変換します。
+
+<Screencast name="okurigana" alt=";ka;tt と打つと「»買っ t」に変換し、a を足すと送り仮名を「った」に伸ばして「»買った」を選び直す。Space で次の候補「»勝った」に移り、Enter で確定する" />
 
 | 打つキー | 結果 |
 | --- | --- |

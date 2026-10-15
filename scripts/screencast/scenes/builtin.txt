@@ -1,0 +1,12 @@
+# 組み込みの辞書：日付や時刻を関数で作る
+caption 「にちじ」を変換すると、今の日時が候補に出る
+type ;nichiji
+key space
+wait 1800
+caption Space で、書き方を選ぶ
+key space
+wait 900
+key space
+wait 1500
+key return
+wait 1200

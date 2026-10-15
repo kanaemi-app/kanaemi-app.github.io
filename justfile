@@ -33,6 +33,14 @@ sync-config kanaemi="":
 guide:
   scripts/guide/build.sh
 
+# Record the screencasts as CleanShot Studio projects on this Mac, all or the named scenes
+screencast *scenes:
+  scripts/screencast/record.sh {{scenes}}
+
+# Cut the recorded screencasts into public/screencasts, all or the named scenes
+screencast-publish *scenes:
+  scripts/screencast/publish.sh {{scenes}}
+
 # Remove build output
 clean:
   rm -rf dist .astro

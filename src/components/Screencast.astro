@@ -1,0 +1,54 @@
+---
+interface Props {
+  /** File name under public/screencasts without the extension; recorded from scripts/screencast/scenes/<name>.txt. */
+  name: string;
+  /** What happens in the screencast, for those who cannot watch it. */
+  alt: string;
+  caption?: string;
+}
+
+const { name, alt, caption } = Astro.props;
+---
+
+<figure class="screencast">
+  <video
+    src={`/screencasts/${name}.mp4`}
+    poster={`/screencasts/${name}.webp`}
+    width="936"
+    height="528"
+    aria-label={alt}
+    autoplay
+    muted
+    loop
+    playsinline
+    controls
+    preload="metadata"
+  ></video>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<script>
+  // Moving pictures wait for a click from those who asked for less motion.
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    for (const video of document.querySelectorAll<HTMLVideoElement>(".screencast video")) {
+      video.autoplay = false;
+      video.pause();
+    }
+  }
+</script>
+
+<style>
+  .screencast video {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 0.5rem;
+    background: #fff;
+  }
+  .screencast figcaption {
+    margin-top: 0.5rem;
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-3);
+  }
+</style>

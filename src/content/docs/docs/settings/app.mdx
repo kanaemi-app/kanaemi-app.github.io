@@ -4,6 +4,7 @@ description: 設定ファイルと辞書を、画面で変える。
 ---
 
 import Since from "../../../../components/Since.astro";
+import Screenshot from "../../../../components/Screenshot.astro";
 
 設定アプリは、[設定ファイル](/docs/settings/config/) と [設定のフォルダ](/docs/settings/folder/) のファイルを画面で変えるプログラムです。
 
@@ -14,6 +15,8 @@ import Since from "../../../../components/Since.astro";
 | Linux | 入力ソースのメニューで「設定を開く…」 |
 
 変えた設定は、その場でファイルに書きます。Kanaemi は、次に入力欄にフォーカスが入るときに読み直します。
+
+<Screenshot name="settings-display" alt="設定アプリの「表示」の画面。左に「表示」「入力」「辞書」「関数」「キーバインド」が並び、右に入力モードの表示の切り替えと、変換中の文字に付ける印の設定が並ぶ" />
 
 ## 設定ファイルを書く
 
@@ -34,11 +37,19 @@ import Since from "../../../../components/Since.astro";
 - [出さないようにした語](/docs/usage/candidates/#出さないようにする) を見て、戻せます。自分で登録した語なら、登録ごと消すこともできます。<Since feature="remove-registration" />
 - [何度も選んだ候補](/docs/usage/candidates/#並び方) の記録を消せます。
 
+<Screenshot name="settings-dictionaries" alt="「辞書」の画面の「使う辞書」。ユーザー辞書、公式辞書・基本、組み込みの日付・時刻・年・毎回違う値の辞書が並び、それぞれに使うかどうかのスイッチと、語を見るボタンがある" />
+
+<Screenshot name="settings-browse" alt="公式辞書・基本の語を、読みと表記と活用の型の一覧で見ている画面。上に読みで絞り込む欄がある" />
+
+<Screenshot name="settings-dictionaries-more" alt="「辞書」の画面の下のほう。「ほかの IME の辞書」で形式を選んで取り込み・書き出しでき、その下に「出さない候補」と「よく選ぶ候補」の記録を消すボタンがある" />
+
 ### 登録した語
 
 <Since feature="edit-words" />
 
 「使う辞書」でユーザー辞書の語を見るところを開くと、[登録した語](/docs/usage/register/#登録した語を直す) の一覧が出ます。
+
+<Screenshot name="settings-words" alt="ユーザー辞書の画面。登録した語が読みと表記で並び、語ごとに「直す」「消す」、下に「語を足す」のボタンがある" />
 
 - 語を足し、読みと表記を直し、消せます。書けるのは、変換中の登録で書けるのと同じ形の語です。読みはひらがなで書き、送り仮名のある語は送り仮名の前に `*` を入れます。数の入る語は、読みに `{}` を、表記に置き場所を書きます。
 - Kanaemi が読めない語は書かず、そのわけを示します。同じ語がもうあれば足しません。
@@ -55,6 +66,8 @@ import Since from "../../../../components/Since.astro";
 - 関数ごとに、中身（Luau のソース）を見られます。
 - `functions` フォルダを開けます。
 
+<Screenshot name="settings-functions" alt="「関数」の画面。wareki・seireki・eto などの組み込みの関数が説明つきで並び、それぞれに使うかどうかのスイッチと、中身を見るボタンがある" />
+
 ## キーバインド
 
 - 「かんたん」では、やりたいこと（読みを始める、変換する、補完する、ページを送る、確定する、モードを切り替えるなど）ごとにキーを決めます。足したキーは、そのやりたいことが働く場面すべてに割り当て、外したキーは、どの場面からも外します。一部の場面にだけ割り当ててあるキーは、そう示します。
@@ -64,7 +77,13 @@ import Since from "../../../../components/Since.astro";
 - キーは、名前を打つか、そのキーを押して入れます。押し方（押したとき・単独押し・押さえたまま）は、そのキーに使えるものから選びます。
 - macOS で、割り当てに要る許可がないときは、そのことを示し、許可の設定を開けます（[macOS の許可](/docs/install/#macos-の許可)）。<Since feature="permission-notice" />
 
+<Screenshot name="settings-keys" alt="「キーバインド」の「かんたん」。読みを始める、変換する・次の候補、補完するなど、やりたいことごとに割り当てたキーが並び、キーを足したり外したりできる" />
+
+<Screenshot name="settings-keys-advanced" alt="「キーバインド」の「アドバンスド」。読みを打っているときの場面で、押すキーと機能の組が一覧で並ぶ" />
+
 ## そのほか
 
 - ローマ字の表を選び、重ねる順を変えられます。用意された表には、組み込みであることを示します。表ごとに説明と読めない行を示し、中身も見られます。
 - Kanaemi のログの末尾を、新しい順に見られます。
+
+<Screenshot name="settings-input" alt="「入力」の画面。重ねて使うローマ字の表（full-width・hepburn・kunrei・input-aids・z-symbols・azik）が並び、使うかどうかと重ねる順を変えられる" />

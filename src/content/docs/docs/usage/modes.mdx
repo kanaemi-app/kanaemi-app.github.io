@@ -5,6 +5,8 @@ description: かなモードと ABC モードを、左右の Shift で切り替�
 
 import Since from "../../../../components/Since.astro";
 import ThemedFigure from "../../../../components/ThemedFigure.astro";
+import Screencast from "../../../../components/Screencast.astro";
+import Screenshot from "../../../../components/Screenshot.astro";
 
 Kanaemi のモードは 2 つだけです。
 
@@ -18,6 +20,8 @@ Kanaemi のモードは 2 つだけです。
 ## 切り替える
 
 <ThemedFigure name="shift" alt="左の Shift だけをポンと押して離すと ABC モード、右の Shift だけを押して離すとかなモードになる" />
+
+<Screencast name="modes" alt="かなモードで koreha と打つと「これは」が入る。左の Shift を単独で押すと ABC モードになり、Kanaemi と英字で入る。右の Shift を単独で押すとかなモードに戻り、desu. で「です。」が入る" />
 
 | キー | 結果 |
 | --- | --- |
@@ -49,6 +53,8 @@ Kanaemi のモードは 2 つだけです。
 [keys]
 abc_on_capital = false
 ```
+
+<Screenshot name="settings-input-capital" alt="「入力」の画面の「大文字」にある「大文字で ABC モードへ」のスイッチ" />
 
 ## モードの表示
 

@@ -5,6 +5,7 @@ description: 公式辞書を設定アプリから入れる。
 
 import { Steps } from "@astrojs/starlight/components";
 import Since from "../../../components/Since.astro";
+import Screenshot from "../../../components/Screenshot.astro";
 
 Kanaemi は、[設定のフォルダ](/docs/settings/folder/) の `dictionaries` フォルダに置いた辞書で変換します。辞書がなくても動きますが、変換しても候補が出ません。
 
@@ -30,6 +31,8 @@ Kanaemi のための辞書は、[kanaemi-dict](https://github.com/kanaemi-app/ka
 3. 入力欄をクリックし直す。Kanaemi は、入力欄にフォーカスが入るときに、変わった辞書とモデルを読み直します。
 
 </Steps>
+
+<Screenshot name="settings-official" alt="「辞書」の画面の「公式の辞書」で「最新の版を確かめる」を押したあと。基本辞書は「最新です」、追加辞書は「入れていません」と出て、それぞれに「入れる」ボタンがある" />
 
 設定アプリは、入れるときに次のことをまとめて行います。
 
@@ -59,6 +62,8 @@ Kanaemi のための辞書は、[kanaemi-dict](https://github.com/kanaemi-app/ka
 <Since feature="import-export" />
 
 ほかの IME で育てた辞書は、[設定アプリ](/docs/settings/app/) の「辞書」の画面の「ほかの IME の辞書」で取り込めます。取り込んだ辞書は、ユーザーカスタム辞書とは別の辞書として、`dictionaries` フォルダに置きます。
+
+<Screenshot name="settings-import" alt="「辞書」の画面の「ほかの IME の辞書」。形式（macOS など）を選んで「取り込む」「書き出す…」を押す" />
 
 | 形式 | 取り込むもの |
 | --- | --- |

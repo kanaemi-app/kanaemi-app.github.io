@@ -5,6 +5,7 @@ since: complete
 ---
 
 import Since from "../../../../components/Since.astro";
+import Screencast from "../../../../components/Screencast.astro";
 
 読みを打っている途中で <kbd>Tab</kbd> を押すと、いま打った読みを、それで始まるより長い読みに置き換えます（`かく` → `かくにん`）。長い読みを最後まで打たずに済みます。
 
@@ -15,6 +16,8 @@ import Since from "../../../../components/Since.astro";
 ```
 ;kaku → Tab → ›かくにん → Tab → ›かくご → … → ›かく
 ```
+
+<Screencast name="complete" alt=";kaku と打って Tab を押すと、読みが長い読みに置き換わり補完の読みの一覧が出る。Tab を押すたびに次の読みに移り、Space で変換して Enter で確定する" />
 
 1. <kbd>;</kbd> で読みを始め、読みの始めを打つ。<kbd>;kaku</kbd> → <span class="preedit">›かく</span>
 2. <kbd>Tab</kbd> を押す。読みが置き換わり、補完の読みの一覧が出る。→ <span class="preedit">›かくにん</span>
