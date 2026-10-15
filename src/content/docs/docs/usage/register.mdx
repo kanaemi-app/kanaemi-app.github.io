@@ -32,6 +32,9 @@ import Since from "../../../../components/Since.astro";
 | <kbd>;</kbd> | 登録する文字列の中で、読みを始める |
 | 左の <kbd>Shift</kbd>（単独）・<kbd>英数</kbd>・<kbd>無変換</kbd> | ABC モードへ |
 | 右の <kbd>Shift</kbd>（単独）・<kbd>かな</kbd>・<kbd>変換</kbd> | かなモードへ |
+| <kbd>Ctrl</kbd>＋<kbd>Y</kbd>・<kbd>Ctrl</kbd>＋<kbd>V</kbd> | クリップボードの文字列を貼る（[下を見る](#ほかの所から写して登録する)） <Since feature="paste" /> |
+
+登録の場面にいるあいだは、カーソルの近くに「辞書登録中」と出ます。登録する文字列を打っているときは、登録せずに抜けるキーと、貼り付けるキーも添えます。
 
 登録する文字列には、空白も打てます。
 
@@ -40,6 +43,14 @@ import Since from "../../../../components/Since.astro";
 <Since feature="registration-modes" />
 
 登録の場面のキーは、かなモードと ABC モードとで分けて決めることもできます。たとえば、英字を打っているときだけ <kbd>;</kbd> を文字として打つ、といった割り当てです（[登録の場面をモードごとに分ける](/docs/settings/keys/#登録の場面をモードごとに分ける)）。
+
+## ほかの所から写して登録する
+
+<Since feature="paste" />
+
+登録したい語をほかの所でコピーしておけば、登録する文字列を打っているときに <kbd>Ctrl</kbd>＋<kbd>Y</kbd> か <kbd>Ctrl</kbd>＋<kbd>V</kbd> で、カーソルの位置に貼れます。
+
+アプリのメニューや、アプリ自身の貼り付けのキーで貼ると、登録する文字列ではなく、入力欄に入ってしまいます。macOS の <kbd>Cmd</kbd>＋<kbd>V</kbd> は、アプリが自分で貼るので、既定には入れていません。[キーバインド](/docs/settings/keys/) で `@paste` に割り当てることはできますが、そのキーでは貼れないことが多く、設定アプリが警告を出します。
 
 ## 送り仮名付きの語
 
