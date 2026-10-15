@@ -130,6 +130,7 @@ const FUNCTION_HEADINGS: [string, string[]][] = [
   ["読みを始める", ["begin"]],
   ["打ったかなを読みに戻す", ["reread-kana"]],
   ["確定を選び直す", ["undo-commit"]],
+  ["クリップボードから貼る", ["paste"]],
 ];
 
 /** The anchor on the functions reference page for a function written as `@name`. */

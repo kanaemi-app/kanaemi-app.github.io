@@ -106,6 +106,7 @@ test("functionAnchor points a function at the heading that describes it", () => 
   assert.equal(functionAnchor("@abc"), "abc-モードへ");
   assert.equal(functionAnchor("@reread-kana"), "打ったかなを読みに戻す");
   assert.equal(functionAnchor("@undo-commit"), "確定を選び直す");
+  assert.equal(functionAnchor("@paste"), "クリップボードから貼る");
 });
 
 test("every function a key can be bound to has its heading on the functions page", () => {

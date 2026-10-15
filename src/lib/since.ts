@@ -21,8 +21,12 @@ export const RELEASED = [
   "v0.4.0",
   "v0.4.1",
   "v0.5.0",
+  "v0.6.0",
+  "v0.7.0",
+  "v0.8.0",
+  "v0.8.1",
 ] as const;
-export const NEXT_RELEASE = "v0.6.0";
+export const NEXT_RELEASE = "v0.9.0";
 
 export interface Since {
   version: string;
@@ -82,7 +86,8 @@ export const SINCE = {
   "registration-modes": { version: "v0.5.0", commit: "9ed86b3" },
   // かなモードで大文字を打つと ABC モードへ（[keys] abc_on_capital）
   "abc-on-capital": { version: "v0.6.0", commit: "4f18818" },
-} satisfies Record<string, Since>;
+  // @paste（クリップボードの文字列を、登録する文字列に貼る）
+  paste: { version: "v0.8.0", commit: "1cf73f3" },} satisfies Record<string, Since>;
 
 export type Feature = keyof typeof SINCE;
 
