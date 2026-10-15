@@ -1,0 +1,30 @@
+---
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import { webpSize } from "../lib/webp-size.ts";
+
+interface Props {
+  /** File name under public/screenshots without the extension; the `-dark` pair must exist. */
+  name: string;
+  alt: string;
+  caption?: string;
+}
+
+const { name, alt, caption } = Astro.props;
+// Each screenshot is cut to what its section explains, so their sizes differ.
+// Read from the project root, where the site is built: once bundled, this
+// module no longer sits next to public/.
+const { width, height } = webpSize(readFileSync(join(process.cwd(), "public", "screenshots", `${name}.webp`)));
+---
+
+<figure class="figure-themed figure-screenshot">
+  <img class="on-light" src={`/screenshots/${name}.webp`} alt={alt} width={width} height={height} loading="lazy" />
+  <img class="on-dark" src={`/screenshots/${name}-dark.webp`} alt={alt} width={width} height={height} loading="lazy" />
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .figure-screenshot img {
+    border-radius: 0.75rem;
+  }
+</style>

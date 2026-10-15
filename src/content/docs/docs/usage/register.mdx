@@ -5,6 +5,7 @@ description: 候補がなければ、その場で語を登録して確定まで�
 
 import Since from "../../../../components/Since.astro";
 import Screencast from "../../../../components/Screencast.astro";
+import Screenshot from "../../../../components/Screenshot.astro";
 
 候補に打ちたい語がなければ、その場で登録できます。登録すると、そのまま確定まで進むので、打つのを中断せずに続けられます。
 
@@ -76,6 +77,8 @@ import Screencast from "../../../../components/Screencast.astro";
 <Since feature="edit-words" />
 
 [設定アプリ](/docs/settings/app/#登録した語) で、登録した語を一覧で見て、足し、直し、消せます。「辞書」の画面で、ユーザー辞書の語を見るところを開きます。
+
+<Screenshot name="settings-words" alt="ユーザー辞書の画面。登録した語が読みと表記で並び、語ごとに「直す」「消す」、下に「語を足す」のボタンがある" />
 
 - 語は、読みと表記で書きます。読みはひらがなで書き、送り仮名のある語は送り仮名の前に `*` を入れます（`か*く`・`書く`）。
 - 数の入る語は、読みに `{}` を、表記に `{kanji}` のような [置き場所](/docs/reference/placeholders/) を書きます。

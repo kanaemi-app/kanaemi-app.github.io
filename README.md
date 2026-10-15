@@ -31,6 +31,7 @@ src/
 │   ├── landing/Demo.astro     # the typing demo in the hero
 │   ├── ThemedFigure.astro     # light/dark illustration pair for the docs
 │   ├── Screencast.astro       # a short recording of Kanaemi at work on macOS
+│   ├── Screenshot.astro       # light/dark screenshot pair of the settings app
 │   ├── DefaultKeys.astro      # default key table, built from src/data/config.toml
 │   └── DictionaryDownloads.astro # download table of the official dictionaries
 ├── content/docs/docs/         # the documentation, served under /docs/
@@ -44,6 +45,7 @@ src/
 public/
 ├── guide/                     # usage illustrations (generated)
 ├── screencasts/               # recordings of Kanaemi on macOS (recorded)
+├── screenshots/               # screens of the settings app on macOS (captured)
 └── logo/                      # brand logos, from kanaemi-brand
 scripts/
 ├── guide/                     # draws public/guide
@@ -81,6 +83,8 @@ Each scene is recorded with [CleanShot X](https://cleanshot.com) as a Studio pro
 
 A scene takes over the keyboard and the screen while it plays, and switches the input source to Kanaemi. If a window of another app, such as a dialog or a notification, shows over the stage while a scene plays, the take is thrown away and the recording stops. The candidates come from the settings folder Kanaemi reads, so record with a folder that holds only the official dictionaries, not your own words and history. Kanaemi needs to be the release the pages describe.
 
+The screenshots in `public/screenshots/` are screens of the settings app on macOS, each cut down to what its section explains, as `<name>.webp` and `<name>-dark.webp`. Capture them from the settings app of the release the pages describe, run on a HOME that holds only the official dictionaries and a few sample words, so nothing of your own shows; the screen 「かなえみについて」 shows the settings folder's path, so leave it out.
+
 ## The official dictionaries
 
 The site serves the dictionaries of the latest [kanaemi-dict](https://github.com/kanaemi-app/kanaemi-dict) release itself. `scripts/fetch_dictionaries.py` runs before `npm run dev` and `npm run build`: it reads the release's catalog (`index.json`, the one the settings app of Kanaemi reads), downloads the zips into `public/dictionaries/`, checks their files against the catalog's SHA-256, and describes them, with their Japanese labels, in `src/data/dictionaries.json`. Both are generated and not committed. Without the network, the files fetched before are used; set `KANAEMI_DICT_RELEASE` to fetch from another release URL.
@@ -99,4 +103,4 @@ The releases of Kanaemi and kanaemi-dict run the deploy workflow (`workflow_disp
 
 - Write in Japanese, in the plain style of Kanaemi's own documents: short sentences, everyday words, the function names (`@next`) only where the reader writes them.
 - Link between pages with absolute paths (`/docs/usage/convert/`). `just check` fails on a link to a page or a heading that does not exist.
-- Illustrations come in a light and a dark pair; use `ThemedFigure` so the page shows the one matching the site's theme.
+- Illustrations come in a light and a dark pair; use `ThemedFigure` so the page shows the one matching the site's theme. Screenshots of the settings app do too, through `Screenshot`.
