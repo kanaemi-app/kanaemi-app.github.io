@@ -1,0 +1,21 @@
+# 語を登録する：候補になければ、その場で登録して確定まで進む
+clipboard Kanaemi
+caption 候補に打ちたい語がなければ、0 で登録の場面に入る
+type ;kanaemi
+key space
+wait 1200
+key 0
+wait 1500
+caption コピーしておいた「Kanaemi」を、Ctrl+Y で貼る
+key ctrl+y
+wait 1200
+caption Enter で登録して、そのまま確定する
+key return
+wait 1500
+key return
+caption 次からは候補に出る
+type ;kanaemi
+key space
+wait 1800
+key return
+wait 1000

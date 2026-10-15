@@ -1,0 +1,12 @@
+# 打ったかなを読みに戻す：Ctrl+;
+caption ; を打ち忘れて、かなのまま打ってしまったら
+type kanji
+wait 1000
+caption Ctrl+; で、打ったかなを読みに戻す
+key ctrl+semicolon
+wait 1500
+caption そのまま変換して確定する
+key space
+wait 1200
+key return
+wait 1200

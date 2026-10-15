@@ -1,0 +1,18 @@
+# 読みと変換：; で読みを始め、Space で変換し、Enter で確定する
+caption ; で読みを始めて、漢字にしたい語だけ読みを打つ
+type ;kanji
+wait 800
+caption Space で変換する。もう一度押すと次の候補
+key space
+wait 1200
+key space
+wait 1200
+caption 続けて文字を打つと、選んでいた候補を確定する
+type wo
+wait 1200
+caption 読みの途中の ; は送り仮名の始まり。すぐ変換する
+type ;ka;ku
+wait 1200
+caption Enter で確定する
+key return
+wait 1500

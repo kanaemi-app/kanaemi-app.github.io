@@ -1,0 +1,14 @@
+# モード：左右の Shift の単独押しで切り替える
+caption かなモードでは、打ったかなをそのまま確定する
+type koreha
+wait 600
+caption 左の Shift を単独で押すと ABC モード
+tap lshift
+wait 900
+type Kanaemi
+wait 600
+caption 右の Shift を単独で押すと、かなモードに戻る
+tap rshift
+wait 900
+type desu.
+wait 1500

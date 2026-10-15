@@ -1,0 +1,16 @@
+# 補完：Tab で、読みをそれで始まるより長い読みに置き換える
+caption 読みの始めを打って、Tab で補完する
+type ;kaku
+wait 600
+key tab
+wait 1500
+caption Tab を押すたびに、次の読み
+key tab
+wait 1000
+key tab
+wait 1200
+caption Space で変換して、Enter で確定する
+key space
+wait 1200
+key return
+wait 1200

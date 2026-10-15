@@ -1,0 +1,15 @@
+# 確定した候補を選び直す：Shift+Backspace
+caption 変換して確定したあとで、違う候補だったと気づいたら
+type ;kikan
+key space
+wait 800
+key return
+wait 1000
+caption Shift+Backspace で、候補を選ぶ場面に戻る
+key shift+backspace
+wait 1500
+caption 選び直して確定する
+key space
+wait 1200
+key return
+wait 1200

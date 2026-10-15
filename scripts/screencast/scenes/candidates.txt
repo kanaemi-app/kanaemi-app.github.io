@@ -1,0 +1,18 @@
+# 候補を選ぶ：Space で回り、一覧から番号で選ぶ
+caption Space を押すたびに次の候補。一覧が出る
+type ;kousei
+key space
+wait 600
+key space
+wait 600
+key space
+wait 1500
+caption 一覧の番号で、その候補を確定する
+key 2
+wait 1500
+key return
+caption F7 で、読みをカタカナにして確定する
+type ;kanji
+wait 400
+key f7
+wait 1500

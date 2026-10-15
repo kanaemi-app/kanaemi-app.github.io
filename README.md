@@ -30,6 +30,7 @@ src/
 ├── components/
 │   ├── landing/Demo.astro     # the typing demo in the hero
 │   ├── ThemedFigure.astro     # light/dark illustration pair for the docs
+│   ├── Screencast.astro       # a short recording of Kanaemi at work on macOS
 │   ├── DefaultKeys.astro      # default key table, built from src/data/config.toml
 │   └── DictionaryDownloads.astro # download table of the official dictionaries
 ├── content/docs/docs/         # the documentation, served under /docs/
@@ -42,9 +43,11 @@ src/
 └── styles/                    # fonts, Starlight theme, landing page
 public/
 ├── guide/                     # usage illustrations (generated)
+├── screencasts/               # recordings of Kanaemi on macOS (recorded)
 └── logo/                      # brand logos, from kanaemi-brand
 scripts/
 ├── guide/                     # draws public/guide
+├── screencast/                # records the scenes in it and cuts them into public/screencasts
 ├── sync-config.sh             # copies the settings template
 ├── fetch_dictionaries.py      # fetches the latest kanaemi-dict release (runs before dev and build)
 ├── fetch_installers.py        # reads the catalog of Kanaemi's latest release (runs before dev and build)
@@ -64,6 +67,19 @@ just sync-config ~/src/kanaemi
 ```
 
 The usage illustrations in `public/guide/` show the default keys too. Change `scripts/guide/gen.py` and redraw them with `just guide`.
+
+The screencasts in `public/screencasts/` are recordings of Kanaemi itself. Each is played from a scene in `scripts/screencast/scenes/`, which lists the keys to send and a caption for each step. When the behaviour a scene shows changes, record it again on a Mac, then cut the recordings into what the pages show:
+
+```sh
+just screencast                     # record every scene
+just screencast convert             # record the named scenes
+just screencast-publish             # cut every recording into public/screencasts
+just screencast-publish convert     # cut the named ones
+```
+
+Each scene is recorded with [CleanShot X](https://cleanshot.com) as a Studio project (`.cache/screencast/<name>.cleanshotvideo`, or `$SCREENCAST_PROJECTS`), kept so the recording can still be edited. `just screencast-publish` cuts the recording in it from just after the first caption to a moment after the last change, without the title bar and the marks CleanShot draws on the corners, and takes the poster from its last moment.
+
+A scene takes over the keyboard and the screen while it plays, and switches the input source to Kanaemi. If a window of another app, such as a dialog or a notification, shows over the stage while a scene plays, the take is thrown away and the recording stops. The candidates come from the settings folder Kanaemi reads, so record with a folder that holds only the official dictionaries, not your own words and history. Kanaemi needs to be the release the pages describe.
 
 ## The official dictionaries
 

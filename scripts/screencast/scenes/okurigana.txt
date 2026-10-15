@@ -1,0 +1,12 @@
+# 送り仮名：読みの途中の ; で送り仮名の始まりを示す
+caption 読みの途中の ; で送り仮名を示すと、すぐ変換する
+type ;ka;tt
+wait 1500
+caption 続きを打つと、送り仮名を伸ばして選び直す
+type a
+wait 1500
+caption Space で次の候補
+key space
+wait 1500
+key return
+wait 1200
