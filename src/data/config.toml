@@ -50,6 +50,27 @@
 #[control]
 #port = 50123
 
+# 候補の並べ替え。model は、並べ替えのモデル（ranking.model）を使うか。
+# false なら、モデルがないときと同じに並べる。候補を選んでいるときに @toggle-model でも切り替えられる。
+#[ranking]
+#model = true
+
+# 打った語を含むファイルの場所。custom はユーザーカスタム辞書、selections はよく選ぶ候補の記録。
+# 絶対パスか、このファイルのあるフォルダからの相対パスで書く。先頭の ~ はホームフォルダ。
+# 同期フォルダに置くと、ほかの端末と同じ辞書を使える。場所を変えても、前の場所のファイルは動かさない。
+# 書いたフォルダがなければ作らない。そのあいだは空として扱い、書けるようになったら書く。
+#[files]
+#custom = "custom.tsv"
+#selections = "selections.tsv"
+
+# OS を限った場所。書き方は上と同じで、動いている OS の表だけを上の表のあとに当てる。
+# 書いていないファイルは上の場所のまま。ほかの OS の表も、書き間違いは知らせる。
+# たとえば macOS で iCloud Drive に置くなら、[files.macos] に
+# custom = "~/Library/Mobile Documents/com~apple~CloudDocs/kanaemi/custom.tsv" と書く。
+#[files.macos]
+#[files.windows]
+#[files.linux]
+
 # 使わない関数。functions フォルダの関数はファイル名（拡張子を除く）で、組み込みの関数は "builtin:名前" で書く。
 # functions フォルダの関数を外すと、同じ名前の組み込みの関数があればそれを使う。
 #[functions]
@@ -80,7 +101,8 @@
 # @next-page・@previous-page（次・前のページの最初の候補。最後のページの次は最初のページ。補完の一覧では次・前のページの最初の読みで、端の先は打ったままの読み）・
 # @undo-commit（直前に確定した候補を、選び直せるように戻す）・
 # @reread-kana（読みを始めずに打ったかなを、読みに戻す。戻した読みでもう一度押すと、最初のかなを確定する）・
-# @paste（クリップボードの文字列を、登録する文字列に貼る）。
+# @paste（クリップボードの文字列を、登録する文字列に貼る）・
+# @toggle-model（並べ替えのモデルを使うかどうかを切り替えて、候補を並べ直す）。
 # 割り当てたキーは、ローマ字の表より先に機能として働く。ただし、ローマ字の打ちかけの続きとして表の規則を作るキー
 # （"z " の規則があるときの z のあとの space など）は、表を先に通す。場面に合わない機能は書けない。
 
@@ -168,6 +190,7 @@
 #"9" = "@select-9"
 #"0" = "@register"
 #"shift+delete" = "@forget"
+#"ctrl+r" = "@toggle-model"
 #"left-shift#tap" = "@abc"
 #"eisu" = "@abc"
 #"henkan" = "@next"
