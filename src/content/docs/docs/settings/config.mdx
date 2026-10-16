@@ -32,6 +32,8 @@ Kanaemi は設定なしで使えるように作ってあります。変えたい
 | `[romaji] tables` | `["full-width", "hepburn", "kunrei", "input-aids", "z-symbols"]` | 重ねるローマ字の表。[ローマ字の表](/docs/settings/romaji/) |
 | `[romaji] keep_unfinished` <Since feature="keep-unfinished" /> | `true` | 読みの外で確定するとき、かなにならないローマ字の打ちかけを打ったとおりに残すか。[表にないとき](/docs/settings/romaji/#表にないとき) |
 | `[control] port` | （書かない） | 外からの操作を待つポート。[外からの操作](/docs/integrations/control/) |
+| `[ranking] model` <Since feature="toggle-model" /> | `true` | 候補を並べ替えのモデルで並べるか。[モデルを使わずに並べる](/docs/usage/candidates/#モデルを使わずに並べる) |
+| `[files] custom`・`[files] selections` <Since feature="files" /> | （設定のフォルダの中） | ユーザーカスタム辞書と、何度も選んだ候補の記録の場所。`[files.macos]` などで OS ごとにも書ける。[打った語を含むファイルをほかの場所に置く](/docs/settings/folder/#打った語を含むファイルをほかの場所に置く) |
 | `[functions] disabled` <Since feature="builtin-dictionaries" /> | `[]` | 使わない関数。[関数を足す](/docs/settings/functions/#使わないようにする) |
 | `[keys] pass_while_composing` | `[]` | ここに書いた修飾キー（`"cmd"`・`"ctrl"`・`"alt"`）付きで割り当てのないキーを、入力中は確定してからアプリに渡す |
 | `[keys] send_except` <Since feature="send-except" /> | `[]` | ふだんの置き換えをしないアプリ。[キーを置き換えないアプリ](/docs/settings/keys/#キーを置き換えないアプリ) |

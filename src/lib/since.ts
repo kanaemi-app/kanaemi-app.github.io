@@ -87,7 +87,12 @@ export const SINCE = {
   // かなモードで大文字を打つと ABC モードへ（[keys] abc_on_capital）
   "abc-on-capital": { version: "v0.6.0", commit: "4f18818" },
   // @paste（クリップボードの文字列を、登録する文字列に貼る）
-  paste: { version: "v0.8.0", commit: "1cf73f3" },} satisfies Record<string, Since>;
+  paste: { version: "v0.8.0", commit: "1cf73f3" },
+  // [ranking] model と @toggle-model、候補の一覧に並べ方を示す
+  "toggle-model": { version: "v0.9.0", commit: "2e324ba" },
+  // [files] と [files.<OS>] で、打った語を含むファイルの場所を変える
+  files: { version: "v0.9.0", commit: "021a437" },
+} satisfies Record<string, Since>;
 
 export type Feature = keyof typeof SINCE;
 
