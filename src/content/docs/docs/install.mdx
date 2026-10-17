@@ -41,6 +41,17 @@ brew install --cask kanaemi-app/tap/kanaemi
 
 インストーラーで入れた Kanaemi がすでにあると、Homebrew は止まります。そのときは `--force` を付けます（`brew install --cask --force kanaemi-app/tap/kanaemi`）。置き換わるのはアプリだけです。
 
+[Nix](https://nixos.org/) なら、1 の代わりに次を流します。`<版>` には [リリース](/docs/releases/) の版を入れます。組み立て済みのものを [kanaemi.cachix.org](https://kanaemi.cachix.org) から取ってくるので、手元でビルドしません。このキャッシュを使ってよいか Nix が尋ねたら、許してください。
+
+```sh
+nix build github:kanaemi-app/kanaemi/v<版>
+rm -rf ~/Library/Input\ Methods/Kanaemi.app
+cp -R result/Applications/Kanaemi.app ~/Library/Input\ Methods/
+chmod -R u+w ~/Library/Input\ Methods/Kanaemi.app
+```
+
+新しくするときは、新しい版で同じものを流します。Nix で組み立てた Kanaemi はリリースの証明書で署名していないので、新しくするたびに [許可](#macos-の許可) をし直します。
+
 <details>
 <summary>開けないとき（「Apple は、マルウェアが含まれていないことを検証できませんでした」）</summary>
 
@@ -170,6 +181,27 @@ Homebrew で入れたときは、`brew uninstall --cask kanaemi` で消します
 
 </Steps>
 
+### NixOS に入れる
+
+NixOS では、1 のパッケージの代わりに flake を使います。flake の inputs に `kanaemi.url = "github:kanaemi-app/kanaemi/v<版>";` を足し（`<版>` は [リリース](/docs/releases/) の版）、使う入力の仕組みにパッケージを渡します。IBus 用と Fcitx5 用は同じパッケージです。組み立て済みのものを [kanaemi.cachix.org](https://kanaemi.cachix.org) から取ってくるよう、キャッシュも足します。
+
+```nix
+{ inputs, pkgs, ... }:
+let
+  kanaemi = inputs.kanaemi.packages.${pkgs.stdenv.hostPlatform.system}.kanaemi;
+in
+{
+  i18n.inputMethod.ibus.engines = [ kanaemi ]; # IBus のとき
+  i18n.inputMethod.fcitx5.addons = [ kanaemi ]; # Fcitx5 のとき
+  nix.settings = {
+    extra-substituters = [ "https://kanaemi.cachix.org" ];
+    extra-trusted-public-keys = [ "kanaemi.cachix.org-1:TIkDbHQ6HmPzHQBXdOVhLSTff2LiCWJOJhKdIUWC238=" ];
+  };
+}
+```
+
+設定を反映したら、2 から続けます。新しくするときは、`kanaemi.url` の版を書き換えてから、flake の inputs を更新します（`nix flake update kanaemi`）。
+
 ### Linux で気をつけること
 
 - X11 の GTK3 のアプリでは、GTK3 の入力モジュール（IBus なら `ibus-gtk3`、Fcitx5 なら `fcitx5-frontend-gtk3`）がないと、キーが Kanaemi に届きません。
@@ -177,7 +209,7 @@ Homebrew で入れたときは、`brew uninstall --cask kanaemi` で消します
 
 ### Linux から消す
 
-入れたときと同じパッケージマネージャーで消します（`sudo apt remove ibus-kanaemi` や `sudo apt remove fcitx5-kanaemi` など）。
+入れたときと同じパッケージマネージャーで消します（`sudo apt remove ibus-kanaemi` や `sudo apt remove fcitx5-kanaemi` など）。NixOS では、設定からパッケージを外して反映します。
 
 </TabItem>
 </Tabs>
